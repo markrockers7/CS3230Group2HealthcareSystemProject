@@ -1,3 +1,6 @@
 <Solution>
+  <Folder Name="/Database/">
+    <File Path="../../Database/sqlToCreateAndPopulateDatabase.sql" />
+  </Folder>
   <Project Path="HealthcareSystemProjectCS3230.csproj" />
 </Solution>
