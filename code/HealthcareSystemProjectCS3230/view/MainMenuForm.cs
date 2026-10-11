@@ -22,6 +22,15 @@ namespace HealthcareSystemProjectCS3230.view
             var appointmentForm = new AppointmentForm();
             appointmentForm.ShowDialog();
 
+            Show();
+        }
+
+        private void nurseManagerButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            var nurseForm = new NurseForm();
+            nurseForm.ShowDialog();
 
             Show();
         }

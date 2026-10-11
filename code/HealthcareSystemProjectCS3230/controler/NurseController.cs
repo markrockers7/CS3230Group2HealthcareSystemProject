@@ -24,5 +24,22 @@ namespace HealthcareSystemProjectCS3230.controler
                 throw new Exception("Nurse could not be added");
             }
         }
+
+        public List<Nurse> GetAllNurses()
+        {
+            return NurseDAL.GetAllNurses();
+        }
+
+        public void UpdateNurse(string oldUsername, string newUsername)
+        {
+            if (newUsername.Length > 50)
+            {
+                throw new ArgumentException("Username must be 50 or less characters");
+            }
+            if (!NurseDAL.UpdateNurse(oldUsername, newUsername))
+            {
+                throw new Exception("Nurse could not be updated");
+            }
+        }
     }
 }
