@@ -29,11 +29,12 @@
         private void InitializeComponent()
         {
             appointmentButton = new Button();
+            patientSearchButton = new Button();
             SuspendLayout();
             // 
             // appointmentButton
             // 
-            appointmentButton.Location = new Point(49, 76);
+            appointmentButton.Location = new Point(12, 147);
             appointmentButton.Name = "appointmentButton";
             appointmentButton.Size = new Size(126, 40);
             appointmentButton.TabIndex = 0;
@@ -41,11 +42,22 @@
             appointmentButton.UseVisualStyleBackColor = true;
             appointmentButton.Click += appointmentButton_Click;
             // 
+            // patientSearchButton
+            // 
+            patientSearchButton.Location = new Point(12, 193);
+            patientSearchButton.Name = "patientSearchButton";
+            patientSearchButton.Size = new Size(126, 40);
+            patientSearchButton.TabIndex = 1;
+            patientSearchButton.Text = "Search Patients";
+            patientSearchButton.UseVisualStyleBackColor = true;
+            patientSearchButton.Click += patientSearchButton_Click;
+            // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(patientSearchButton);
             Controls.Add(appointmentButton);
             Name = "MainMenuForm";
             Text = "MainMenuForm";
@@ -55,5 +67,6 @@
         #endregion
 
         private Button appointmentButton;
+        private Button patientSearchButton;
     }
 }

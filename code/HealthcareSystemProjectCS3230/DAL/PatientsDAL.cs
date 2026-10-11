@@ -31,6 +31,98 @@ namespace HealthcareSystemProjectCS3230.DAL
             return results;
         }
 
+        public static List<Patient> GetPatientsByName(string? firstName, string? lastName)
+        {
+            if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
+            {
+                throw new ArgumentException("Both first and last name are required to search by name.");
+
+            }
+
+            return FindPatients(firstName, lastName, null);
+        }
+
+        public static List<Patient> GetPatientsByDateOfBirth(DateTime dateOfBirth)
+        {
+            return FindPatients(null, null, dateOfBirth);
+        }
+
+        public static List<Patient> GetPatientsByNameAndDateOfBirth(
+            string? firstName,
+            string? lastName,
+            DateTime dateOfBirth)
+        {
+            if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
+            {
+                throw new ArgumentException("Both first and last name are required to search by name.");
+
+            }
+
+            return FindPatients(firstName, lastName, dateOfBirth);
+        }
+
+        private static List<Patient> FindPatients(string? firstName, string? lastName, DateTime? dateOfBirth)
+        {
+            var results = new List<Patient>();
+            using var connection = new MySqlConnection(Connection.ConnectionString);
+            connection.Open();
+
+            var query =
+                "SELECT p.id AS patient_id, p.isActive, p.person_id, per.first_name, per.last_name, " +
+                "per.birthdate, per.phone_number, per.address_id, a.street, a.city, a.zipcode, a.state " +
+                "FROM Patient p " +
+                "JOIN Person per ON p.person_id = per.person_id " +
+                "JOIN Address a ON per.address_id = a.address_id " +
+                "WHERE 1 = 1";
+
+            using var command = new MySqlCommand();
+            command.Connection = connection;
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+            {
+                query += " AND per.first_name = @firstName";
+                command.Parameters.Add("@firstName", MySqlDbType.VarChar).Value = firstName.Trim();
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastName))
+            {
+                query += " AND per.last_name = @lastName";
+                command.Parameters.Add("@lastName", MySqlDbType.VarChar).Value = lastName.Trim();
+            }
+
+            if (dateOfBirth.HasValue)
+            {
+                query += " AND per.birthdate = @dateOfBirth";
+                command.Parameters.Add("@dateOfBirth", MySqlDbType.Date).Value = dateOfBirth.Value.Date;
+            }
+
+            command.CommandText = query;
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                results.Add(new Patient
+                {
+                    Id = reader.GetInt32("patient_id"),
+                    IsActive = reader.GetBoolean("isActive"),
+                    PersonId = reader.GetInt32("person_id"),
+                    FirstName = reader.GetString("first_name"),
+                    LastName = reader.GetString("last_name"),
+                    Birthdate = reader.GetDateTime("birthdate"),
+                    PhoneNumber = reader.GetString("phone_number"),
+                    Address = new Address
+                    {
+                        AddressId = reader.GetInt32("address_id"),
+                        Street = reader.GetString("street"),
+                        City = reader.GetString("city"),
+                        Zipcode = reader.GetString("zipcode"),
+                        State = reader.GetString("state")
+                    }
+                });
+            }
+
+            return results;
+        }
+
         public static Patient? GetPatientByPatientId(int patientId)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
