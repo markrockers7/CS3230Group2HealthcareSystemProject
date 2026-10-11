@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             appointmentButton = new Button();
-            nurseManagerButton = new Button();
             SuspendLayout();
             // 
             // appointmentButton
@@ -42,22 +41,11 @@
             appointmentButton.UseVisualStyleBackColor = true;
             appointmentButton.Click += appointmentButton_Click;
             // 
-            // nurseManagerButton
-            // 
-            nurseManagerButton.Location = new Point(349, 76);
-            nurseManagerButton.Name = "nurseManagerButton";
-            nurseManagerButton.Size = new Size(126, 40);
-            nurseManagerButton.TabIndex = 1;
-            nurseManagerButton.Text = "Nurse Manager (Admin Only)";
-            nurseManagerButton.UseVisualStyleBackColor = true;
-            nurseManagerButton.Click += nurseManagerButton_Click;
-            // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(nurseManagerButton);
             Controls.Add(appointmentButton);
             Name = "MainMenuForm";
             Text = "MainMenuForm";
@@ -67,6 +55,5 @@
         #endregion
 
         private Button appointmentButton;
-        private Button nurseManagerButton;
     }
 }
