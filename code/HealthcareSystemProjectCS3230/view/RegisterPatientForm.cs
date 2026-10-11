@@ -75,10 +75,13 @@ namespace HealthcareSystemProjectCS3230.view
                 LastName = lastNameTextBox.Text.Trim(),
                 Birthdate = birthdatePicker.Value.Date,
                 PhoneNumber = phoneTextBox.Text.Trim(),
-                Street = streetTextBox.Text.Trim(),
-                City = cityTextBox.Text.Trim(),
-                State = stateComboBox.SelectedItem?.ToString() ?? string.Empty,
-                Zipcode = zipcodeTextBox.Text.Trim(),
+                Address = new Address
+                {
+                    Street = streetTextBox.Text.Trim(),
+                    City = cityTextBox.Text.Trim(),
+                    State = stateComboBox.SelectedItem?.ToString() ?? string.Empty,
+                    Zipcode = zipcodeTextBox.Text.Trim()
+                },
                 IsActive = true
             };
 

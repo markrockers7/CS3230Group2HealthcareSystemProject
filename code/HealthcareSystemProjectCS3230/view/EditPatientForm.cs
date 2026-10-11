@@ -39,7 +39,8 @@ namespace HealthcareSystemProjectCS3230.view
             patientComboBox.Items.Clear();
             foreach (var p in _patients)
             {
-                patientComboBox.Items.Add($"{p.FirstName} {p.LastName}");
+                var name = $"{p.FirstName} {p.LastName}";
+                patientComboBox.Items.Add(name);
             }
             if (patientComboBox.Items.Count > 0) patientComboBox.SelectedIndex = 0;
         }
@@ -56,12 +57,12 @@ namespace HealthcareSystemProjectCS3230.view
             lastNameTextBox.Text = loaded.LastName;
             birthdatePicker.Value = loaded.Birthdate;
             phoneTextBox.Text = loaded.PhoneNumber;
-            streetTextBox.Text = loaded.Street;
-            cityTextBox.Text = loaded.City;
-            zipcodeTextBox.Text = loaded.Zipcode;
+            streetTextBox.Text = loaded.Address.Street;
+            cityTextBox.Text = loaded.Address.City;
+            zipcodeTextBox.Text = loaded.Address.Zipcode;
             isActiveCheckBox.Checked = loaded.IsActive;
             // select state in combobox if present
-            var idx = stateComboBox.Items.IndexOf(loaded.State);
+            var idx = stateComboBox.Items.IndexOf(loaded.Address.State);
             if (idx >= 0) stateComboBox.SelectedIndex = idx;
             else if (stateComboBox.Items.Count > 0) stateComboBox.SelectedIndex = 0;
 
@@ -100,10 +101,10 @@ namespace HealthcareSystemProjectCS3230.view
             existing.LastName = lastNameTextBox.Text.Trim();
             existing.Birthdate = birthdatePicker.Value.Date;
             existing.PhoneNumber = phoneTextBox.Text.Trim();
-            existing.Street = streetTextBox.Text.Trim();
-            existing.City = cityTextBox.Text.Trim();
-            existing.State = stateComboBox.SelectedItem?.ToString() ?? string.Empty;
-            existing.Zipcode = zipcodeTextBox.Text.Trim();
+            existing.Address.Street = streetTextBox.Text.Trim();
+            existing.Address.City = cityTextBox.Text.Trim();
+            existing.Address.State = stateComboBox.SelectedItem?.ToString() ?? string.Empty;
+            existing.Address.Zipcode = zipcodeTextBox.Text.Trim();
             existing.IsActive = isActiveCheckBox.Checked;
 
             var ok = PatientsDAL.UpdatePatient(existing);

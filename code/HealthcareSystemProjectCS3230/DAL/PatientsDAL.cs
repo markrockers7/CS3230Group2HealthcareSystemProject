@@ -56,11 +56,14 @@ namespace HealthcareSystemProjectCS3230.DAL
                 LastName = reader.GetString("last_name"),
                 Birthdate = reader.GetDateTime("birthdate"),
                 PhoneNumber = reader.GetString("phone_number"),
-                AddressId = reader.GetInt32("address_id"),
-                Street = reader.GetString("street"),
-                City = reader.GetString("city"),
-                Zipcode = reader.GetString("zipcode"),
-                State = reader.GetString("state")
+                Address = new Address
+                {
+                    AddressId = reader.GetInt32("address_id"),
+                    Street = reader.GetString("street"),
+                    City = reader.GetString("city"),
+                    Zipcode = reader.GetString("zipcode"),
+                    State = reader.GetString("state")
+                }
             };
         }
 
@@ -75,10 +78,10 @@ namespace HealthcareSystemProjectCS3230.DAL
                 const string insertAddress =
                     "INSERT INTO Address (street, city, zipcode, state) VALUES (@street, @city, @zipcode, @state)";
                 using var cmdAddr = new MySqlCommand(insertAddress, connection, transaction);
-                cmdAddr.Parameters.Add("@street", MySqlDbType.VarChar).Value = p.Street;
-                cmdAddr.Parameters.Add("@city", MySqlDbType.VarChar).Value = p.City;
-                cmdAddr.Parameters.Add("@zipcode", MySqlDbType.String).Value = p.Zipcode;
-                cmdAddr.Parameters.Add("@state", MySqlDbType.String).Value = p.State;
+                cmdAddr.Parameters.Add("@street", MySqlDbType.VarChar).Value = p.Address.Street;
+                cmdAddr.Parameters.Add("@city", MySqlDbType.VarChar).Value = p.Address.City;
+                cmdAddr.Parameters.Add("@zipcode", MySqlDbType.String).Value = p.Address.Zipcode;
+                cmdAddr.Parameters.Add("@state", MySqlDbType.String).Value = p.Address.State;
                 cmdAddr.ExecuteNonQuery();
 
                 // get last address id
@@ -129,11 +132,11 @@ namespace HealthcareSystemProjectCS3230.DAL
                 const string updateAddress =
                     "UPDATE Address SET street = @street, city = @city, zipcode = @zipcode, state = @state WHERE address_id = @addressId";
                 using var cmdAddr = new MySqlCommand(updateAddress, connection, transaction);
-                cmdAddr.Parameters.Add("@street", MySqlDbType.VarChar).Value = p.Street;
-                cmdAddr.Parameters.Add("@city", MySqlDbType.VarChar).Value = p.City;
-                cmdAddr.Parameters.Add("@zipcode", MySqlDbType.String).Value = p.Zipcode;
-                cmdAddr.Parameters.Add("@state", MySqlDbType.String).Value = p.State;
-                cmdAddr.Parameters.Add("@addressId", MySqlDbType.Int32).Value = p.AddressId;
+                cmdAddr.Parameters.Add("@street", MySqlDbType.VarChar).Value = p.Address.Street;
+                cmdAddr.Parameters.Add("@city", MySqlDbType.VarChar).Value = p.Address.City;
+                cmdAddr.Parameters.Add("@zipcode", MySqlDbType.String).Value = p.Address.Zipcode;
+                cmdAddr.Parameters.Add("@state", MySqlDbType.String).Value = p.Address.State;
+                cmdAddr.Parameters.Add("@addressId", MySqlDbType.Int32).Value = p.Address.AddressId;
                 cmdAddr.ExecuteNonQuery();
 
                 // Update Person
