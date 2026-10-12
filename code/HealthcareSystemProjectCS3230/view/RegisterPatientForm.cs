@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using HealthcareSystemProjectCS3230.model;
-using HealthcareSystemProjectCS3230.DAL;
+using HealthcareSystemProjectCS3230.controler;
 
 namespace HealthcareSystemProjectCS3230.view
 {
@@ -21,6 +21,7 @@ namespace HealthcareSystemProjectCS3230.view
         private TextBox zipcodeTextBox = null!;
         private Button saveButton = null!;
         private Button cancelButton = null!;
+        private readonly PatientController _controller = new PatientController();
 
         public RegisterPatientForm()
         {
@@ -119,30 +120,6 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void saveButton_Click(object? sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(firstNameTextBox.Text) || string.IsNullOrWhiteSpace(lastNameTextBox.Text))
-            {
-                MessageBox.Show("First and last name are required.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!Regex.IsMatch(phoneTextBox.Text ?? string.Empty, "^[0-9]{10}$"))
-            {
-                MessageBox.Show("Phone number must be 10 digits (numbers only).", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!Regex.IsMatch(zipcodeTextBox.Text ?? string.Empty, "^[0-9]{5}$"))
-            {
-                MessageBox.Show("ZIP code must be 5 digits.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (birthdatePicker.Value.Date >= DateTime.Now.Date)
-            {
-                MessageBox.Show("Birthdate must be in the past.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             var patient = new Patient
             {
                 FirstName = firstNameTextBox.Text.Trim(),
@@ -159,15 +136,19 @@ namespace HealthcareSystemProjectCS3230.view
                 IsActive = true
             };
 
-            var success = PatientsDAL.AddPatient(patient);
-            if (success)
+            try
             {
+                _controller.AddPatient(patient);
                 MessageBox.Show("Patient successfully registered.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
             }
-            else
+            catch (ArgumentException ex)
             {
-                MessageBox.Show("An error occurred while saving the patient.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
