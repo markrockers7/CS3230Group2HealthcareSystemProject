@@ -25,5 +25,15 @@ namespace HealthcareSystemProjectCS3230.view
 
             Show();
         }
+
+        private void patientSearchButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            using var patientSearchForm = new PatientSearchForm();
+            patientSearchForm.ShowDialog();
+
+            Show();
+        }
     }
 }
