@@ -81,10 +81,11 @@ CREATE TABLE Nurse (
     person_id  INT         NOT NULL,
     username   VARCHAR(50) NOT NULL,
     CONSTRAINT nurse_fk_person  FOREIGN KEY (person_id) REFERENCES Person(person_id),
-    CONSTRAINT nurse_fk_account FOREIGN KEY (username)  REFERENCES Account(username),
+    CONSTRAINT nurse_fk_account FOREIGN KEY (username)  REFERENCES Account(username) ON UPDATE CASCADE,
     CONSTRAINT uq_nurse_person_id UNIQUE (person_id),
     CONSTRAINT uq_nurse_username  UNIQUE (username)
 );
+
 
 INSERT INTO Nurse (id, person_id, username) VALUES
 (1, 4,  'ejohnson'),
@@ -97,7 +98,7 @@ CREATE TABLE Administrator (
     person_id  INT         NOT NULL,
     username   VARCHAR(50) NOT NULL,
     CONSTRAINT administrator_fk_person  FOREIGN KEY (person_id) REFERENCES Person(person_id),
-    CONSTRAINT administrator_fk_account FOREIGN KEY (username)  REFERENCES Account(username),
+    CONSTRAINT administrator_fk_account FOREIGN KEY (username)  REFERENCES Account(username) ON UPDATE CASCADE,
     CONSTRAINT uq_administrator_person_id UNIQUE (person_id),
     CONSTRAINT uq_administrator_username  UNIQUE (username)
 );
@@ -137,7 +138,7 @@ CREATE TABLE DoctorSpecialties (
     doctor_id  INT         NOT NULL,
     specialty  VARCHAR(20) NOT NULL,
     PRIMARY KEY (doctor_id, specialty),
-    CONSTRAINT doctorspecialties_fk_doctor    FOREIGN KEY (doctor_id) REFERENCES Doctor(id),
+    CONSTRAINT doctorspecialties_fk_doctor    FOREIGN KEY (doctor_id) REFERENCES Doctor(id) ON DELETE CASCADE,
     CONSTRAINT doctorspecialties_fk_specialty FOREIGN KEY (specialty) REFERENCES Specialty(specialty)
 );
 
@@ -210,7 +211,7 @@ CREATE TABLE VisitTest (
     result          VARCHAR(100),
     isAbnormal      BOOLEAN,
     PRIMARY KEY (appointment_id, test_code),
-    CONSTRAINT visittest_fk_visit FOREIGN KEY (appointment_id) REFERENCES Visit(appointment_id),
+    CONSTRAINT visittest_fk_visit FOREIGN KEY (appointment_id) REFERENCES Visit(appointment_id) ON DELETE CASCADE,
     CONSTRAINT visittest_fk_test  FOREIGN KEY (test_code)      REFERENCES Test(test_code)
 );
 
