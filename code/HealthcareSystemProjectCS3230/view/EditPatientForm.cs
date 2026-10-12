@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using HealthcareSystemProjectCS3230.model;
-using HealthcareSystemProjectCS3230.DAL;
+using HealthcareSystemProjectCS3230.controler;
 
 namespace HealthcareSystemProjectCS3230.view
 {
     public partial class EditPatientForm : Form
     {
         private List<Patient> _patients = new List<Patient>();
+        private readonly PatientController _controller = new PatientController();
 
         public EditPatientForm()
         {
@@ -35,7 +36,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void LoadPatients()
         {
-            _patients = PatientsDAL.GetAllPatients();
+            _patients = _controller.GetAllPatients();
             patientComboBox.Items.Clear();
             foreach (var p in _patients)
             {
@@ -49,7 +50,7 @@ namespace HealthcareSystemProjectCS3230.view
         {
             if (patientComboBox.SelectedIndex < 0) return;
             var sel = _patients[patientComboBox.SelectedIndex];
-            var loaded = PatientsDAL.GetPatientByPatientId(sel.Id);
+            var loaded = _controller.GetPatientById(sel.Id);
             if (loaded == null) return;
 
             // populate fields
@@ -79,24 +80,6 @@ namespace HealthcareSystemProjectCS3230.view
         {
             if (this.Tag is not Patient existing) return;
 
-            if (string.IsNullOrWhiteSpace(firstNameTextBox.Text) || string.IsNullOrWhiteSpace(lastNameTextBox.Text))
-            {
-                MessageBox.Show("First and last name are required.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!Regex.IsMatch(phoneTextBox.Text ?? string.Empty, "^[0-9]{10}$"))
-            {
-                MessageBox.Show("Phone number must be 10 digits (numbers only).", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!Regex.IsMatch(zipcodeTextBox.Text ?? string.Empty, "^[0-9]{5}$"))
-            {
-                MessageBox.Show("ZIP code must be 5 digits.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             existing.FirstName = firstNameTextBox.Text.Trim();
             existing.LastName = lastNameTextBox.Text.Trim();
             existing.Birthdate = birthdatePicker.Value.Date;
@@ -107,15 +90,19 @@ namespace HealthcareSystemProjectCS3230.view
             existing.Address.Zipcode = zipcodeTextBox.Text.Trim();
             existing.IsActive = isActiveCheckBox.Checked;
 
-            var ok = PatientsDAL.UpdatePatient(existing);
-            if (ok)
+            try
             {
+                _controller.UpdatePatient(existing);
                 MessageBox.Show("Patient updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadPatients();
             }
-            else
+            catch (ArgumentException ex)
             {
-                MessageBox.Show("Failed to update patient.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
