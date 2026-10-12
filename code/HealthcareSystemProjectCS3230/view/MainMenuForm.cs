@@ -35,5 +35,21 @@ namespace HealthcareSystemProjectCS3230.view
 
             Show();
         }
+
+        private void registerPatientButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+            using var reg = new RegisterPatientForm();
+            reg.ShowDialog();
+            Show();
+        }
+
+        private void editPatientButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+            using var edit = new EditPatientForm();
+            edit.ShowDialog();
+            Show();
+        }
     }
 }
