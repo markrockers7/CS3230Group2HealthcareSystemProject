@@ -18,7 +18,7 @@ namespace HealthcareSystemProjectCS3230.view
         private void loginButton(object sender, EventArgs e)
         {
             MainMenuForm mainMenuForm = new MainMenuForm();
-            mainMenuForm.Show();
+            mainMenuForm.ShowDialog();
             this.Hide();
         }
     }
