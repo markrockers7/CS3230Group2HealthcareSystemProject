@@ -11,7 +11,7 @@ namespace HealthcareSystemProjectCS3230.controler
     {
         public void AddNurse(int personID, string username)
         {
-            if (!PersonDAL.DoesExist(personID) {
+            if (!PersonDAL.DoesExist(personID)) {
                 throw new ArgumentException("Person ID must be valid");
             }
             if (username.Length > 50)
