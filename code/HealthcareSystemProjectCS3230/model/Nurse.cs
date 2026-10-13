@@ -12,10 +12,10 @@ namespace HealthcareSystemProjectCS3230.model
 
         public int ID { get; set; }
 
-        public Nurse(int id, int personId, string username)
+        public Nurse(int id, int personID, string username)
         {
             this.ID = id;
-            this.PersonID = personId;
+            this.PersonID = personID;
             this.Username = username;
 
         }

@@ -178,7 +178,7 @@ namespace HealthcareSystemProjectCS3230.view
             // selectedNurseID
             // 
             selectedNurseID.AutoSize = true;
-            selectedNurseID.Location = new Point(366, 69);
+            selectedNurseID.Location = new Point(361, 66);
             selectedNurseID.Name = "selectedNurseID";
             selectedNurseID.Size = new Size(13, 15);
             selectedNurseID.TabIndex = 12;
