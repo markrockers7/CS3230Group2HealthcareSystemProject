@@ -21,6 +21,11 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void NurseForm_Load(object sender, EventArgs e)
         {
+            this.updateNurseView();
+        }
+
+        private void updateNurseView()
+        {
             NurseListView.Items.Clear();
             var nurses = nurseController.GetAllNurses();
             foreach (var nurse in nurses)
@@ -50,6 +55,7 @@ namespace HealthcareSystemProjectCS3230.view
                 var personID = Int32.Parse(personIDTextBox.Text);
                 var username = addUsernameTextBox.Text;
                 nurseController.AddNurse(personID, username);
+                this.updateNurseView();
             }
             catch (ArgumentException ex)
             {
@@ -81,6 +87,7 @@ namespace HealthcareSystemProjectCS3230.view
                 var currentUsername = nurse.Username;
                 var newUsername = updateUsernameTextBox.Text;
                 nurseController.UpdateNurse(currentUsername, newUsername);
+                this.updateNurseView();
             }
         }
     }

@@ -58,7 +58,7 @@ namespace HealthcareSystemProjectCS3230.DAL
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
-            const string query = "UPDATE Nurse SET username = @newUsername WHERE username = @oldUsername";
+            const string query = "UPDATE Account SET username = @newUsername WHERE username = @oldUsername";
             using var command = new MySqlCommand(query, connection);
             command.Parameters.Add("@newUsername", MySqlDbType.VarString).Value = newUsername;
             command.Parameters.Add("@oldUsername", MySqlDbType.VarString).Value = oldUsername;
