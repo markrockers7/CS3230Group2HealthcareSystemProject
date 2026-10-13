@@ -45,6 +45,10 @@ namespace HealthcareSystemProjectCS3230.view
                 if (string.Equals(_loginSession.AccountType, "nurse", StringComparison.CurrentCultureIgnoreCase))
                 {
                     EnableNurseButtons();
+                } else
+                {
+                    nurseManagerButton.Visible = true;
+                    nurseManagerButton.Enabled = true;
                 }
             }
         }
@@ -55,6 +59,8 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentButton.Enabled = false;
             patientSearchButton.Enabled = false;
             editPatientButton.Enabled = false;
+            nurseManagerButton.Enabled = false;
+            nurseManagerButton.Visible = false;
         }
 
         private void EnableNurseButtons()
@@ -99,6 +105,16 @@ namespace HealthcareSystemProjectCS3230.view
             Hide();
             using var edit = new EditPatientForm();
             edit.ShowDialog();
+            Show();
+        }
+
+        private void nurseManagerButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            var nurseForm = new NurseForm();
+            nurseForm.ShowDialog();
+
             Show();
         }
     }
