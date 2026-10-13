@@ -5,14 +5,64 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using HealthcareSystemProjectCS3230.model;
 
 namespace HealthcareSystemProjectCS3230.view
 {
     public partial class MainMenuForm : Form
     {
+        private LoginSession? _loginSession;
         public MainMenuForm()
         {
             InitializeComponent();
+        }
+
+        public void SetLoginSession(LoginSession ls)
+        {
+            _loginSession = ls;
+            SetupSession();
+        }
+
+        private void SetupSession()
+        {
+            if (_loginSession != null)
+            {
+                FormatUsernameLabel(_loginSession.Username);
+                SetButtonVisibility();
+            }
+        }
+
+        private void FormatUsernameLabel(string username)
+        {
+            usernameLabel.Text = @"Hello, " + username + @"!";
+        }
+
+        private void SetButtonVisibility()
+        {
+            DisableAllButtons();
+            if (_loginSession != null)
+            {
+                if (string.Equals(_loginSession.AccountType, "nurse", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    EnableNurseButtons();
+                }
+            }
+        }
+
+        private void DisableAllButtons()
+        {
+            registerPatientButton.Enabled = false;
+            appointmentButton.Enabled = false;
+            patientSearchButton.Enabled = false;
+            editPatientButton.Enabled = false;
+        }
+
+        private void EnableNurseButtons()
+        {
+            registerPatientButton.Enabled = true;
+            appointmentButton.Enabled = true;
+            patientSearchButton.Enabled = true;
+            editPatientButton.Enabled = true;
         }
 
         private void appointmentButton_Click(object sender, EventArgs e)

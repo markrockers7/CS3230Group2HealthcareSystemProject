@@ -32,6 +32,7 @@
             registerPatientButton = new Button();
             patientSearchButton = new Button();
             editPatientButton = new Button();
+            usernameLabel = new Label();
             SuspendLayout();
             // 
             // appointmentButton
@@ -74,11 +75,21 @@
             editPatientButton.UseVisualStyleBackColor = true;
             editPatientButton.Click += editPatientButton_Click;
             // 
+            // usernameLabel
+            // 
+            usernameLabel.AutoSize = true;
+            usernameLabel.Location = new Point(12, 9);
+            usernameLabel.Name = "usernameLabel";
+            usernameLabel.Size = new Size(79, 15);
+            usernameLabel.TabIndex = 4;
+            usernameLabel.Text = "Hello, [USER]!";
+            // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(usernameLabel);
             Controls.Add(editPatientButton);
             Controls.Add(patientSearchButton);
             Controls.Add(registerPatientButton);
@@ -86,6 +97,7 @@
             Name = "MainMenuForm";
             Text = "MainMenuForm";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -94,5 +106,6 @@
         private Button registerPatientButton;
         private Button patientSearchButton;
         private Button editPatientButton;
+        private Label usernameLabel;
     }
 }
