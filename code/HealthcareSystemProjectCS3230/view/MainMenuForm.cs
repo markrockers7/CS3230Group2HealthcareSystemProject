@@ -71,7 +71,7 @@ namespace HealthcareSystemProjectCS3230.view
         {
             Hide();
 
-            using var patientSearchForm = new PatientSearchForm();
+            using var patientSearchForm = new PatientSearchForm(_loginSession);
             patientSearchForm.ShowDialog();
 
             Show();
@@ -80,7 +80,7 @@ namespace HealthcareSystemProjectCS3230.view
         private void registerPatientButton_Click(object sender, EventArgs e)
         {
             Hide();
-            using var reg = new RegisterPatientForm();
+            using var reg = new RegisterPatientForm(_loginSession);
             reg.ShowDialog();
             Show();
         }
@@ -88,7 +88,7 @@ namespace HealthcareSystemProjectCS3230.view
         private void editPatientButton_Click(object sender, EventArgs e)
         {
             Hide();
-            using var edit = new EditPatientForm();
+            using var edit = new EditPatientForm(_loginSession);
             edit.ShowDialog();
             Show();
         }

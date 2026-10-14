@@ -17,6 +17,7 @@ namespace HealthcareSystemProjectCS3230.view
         private CheckBox isActiveCheckBox = null!;
         private Button updateButton = null!;
         private Button cancelButton = null!;
+        private Label loggedInLabel = null!;
 
         private void InitializeComponent()
         {
@@ -32,6 +33,7 @@ namespace HealthcareSystemProjectCS3230.view
             isActiveCheckBox = new CheckBox { Text = "Active", AutoSize = true };
             updateButton = new Button { Text = "Update", AutoSize = true };
             cancelButton = new Button { Text = "Cancel", AutoSize = true };
+            loggedInLabel = new Label { AutoSize = true, Anchor = AnchorStyles.Left };
 
             patientComboBox.SelectedIndexChanged += patientComboBox_SelectedIndexChanged;
             updateButton.Click += updateButton_Click;
@@ -40,7 +42,7 @@ namespace HealthcareSystemProjectCS3230.view
             var layout = new TableLayoutPanel
             {
                 ColumnCount = 2,
-                RowCount = 11,
+                RowCount = 12,
                 Dock = DockStyle.Fill,
                 Padding = new Padding(12),
                 AutoSize = true,
@@ -49,25 +51,28 @@ namespace HealthcareSystemProjectCS3230.view
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-            AddField(layout, "Patient", patientComboBox, 0);
-            AddField(layout, "First name", firstNameTextBox, 1);
-            AddField(layout, "Last name", lastNameTextBox, 2);
-            AddField(layout, "Birthdate", birthdatePicker, 3);
-            AddField(layout, "Phone", phoneTextBox, 4);
-            AddField(layout, "Street", streetTextBox, 5);
-            AddField(layout, "City", cityTextBox, 6);
-            AddField(layout, "State", stateComboBox, 7);
-            AddField(layout, "ZIP code", zipcodeTextBox, 8);
-            layout.Controls.Add(isActiveCheckBox, 1, 9);
+            layout.Controls.Add(loggedInLabel, 0, 0);
+            layout.SetColumnSpan(loggedInLabel, 2);
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            AddField(layout, "Patient", patientComboBox, 1);
+            AddField(layout, "First name", firstNameTextBox, 2);
+            AddField(layout, "Last name", lastNameTextBox, 3);
+            AddField(layout, "Birthdate", birthdatePicker, 4);
+            AddField(layout, "Phone", phoneTextBox, 5);
+            AddField(layout, "Street", streetTextBox, 6);
+            AddField(layout, "City", cityTextBox, 7);
+            AddField(layout, "State", stateComboBox, 8);
+            AddField(layout, "ZIP code", zipcodeTextBox, 9);
+            layout.Controls.Add(isActiveCheckBox, 1, 10);
 
             var buttons = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, Dock = DockStyle.Fill, AutoSize = true };
             buttons.Controls.Add(cancelButton);
             buttons.Controls.Add(updateButton);
-            layout.Controls.Add(buttons, 1, 10);
+            layout.Controls.Add(buttons, 1, 11);
 
             Controls.Add(layout);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(420, 440);
+            ClientSize = new Size(420, 470);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;

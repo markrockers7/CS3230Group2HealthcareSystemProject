@@ -13,9 +13,10 @@ namespace HealthcareSystemProjectCS3230.view
         private List<Patient> _patients = new List<Patient>();
         private readonly PatientController _controller = new PatientController();
 
-        public EditPatientForm()
+        public EditPatientForm(LoginSession loginSession)
         {
             InitializeComponent();
+            loggedInLabel.Text = $"Hello, {loginSession.FullName}!{Environment.NewLine}Username: {loginSession.Username}{Environment.NewLine}ID: {loginSession.id}";
             PopulateStates();
             LoadPatients();
         }
