@@ -26,5 +26,18 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return null;
         }
+
+        public static bool AddAccount(string username, string password, string accountType)
+        {
+            using var connection = new MySqlConnection(Connection.ConnectionString);
+            connection.Open();
+            const string query = "INSERT INTO account (username, password, type) VALUES (@username, @password, @type)";
+            using var command = new MySqlCommand(query, connection);
+            command.Parameters.Add("@username", MySqlDbType.VarString).Value = username;
+            command.Parameters.Add("@password", MySqlDbType.VarString).Value = password;
+            command.Parameters.Add("@type", MySqlDbType.VarString).Value = accountType;
+            int rowsAffected = command.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
     }
 }

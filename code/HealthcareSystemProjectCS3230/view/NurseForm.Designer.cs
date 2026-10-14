@@ -30,23 +30,36 @@ namespace HealthcareSystemProjectCS3230.view
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             NurseListView = new ListView();
             NurseID = new ColumnHeader();
             FirstName = new ColumnHeader();
             LastName = new ColumnHeader();
             Username = new ColumnHeader();
             addButton = new Button();
-            personIDTextBox = new TextBox();
+            addFnameTextBox = new TextBox();
             addUsernameTextBox = new TextBox();
             label1 = new Label();
             label2 = new Label();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
-            updateUsernameTextBox = new TextBox();
-            updateButton = new Button();
-            label6 = new Label();
-            selectedNurseID = new Label();
+            addLabel = new Label();
+            label7 = new Label();
+            addPasswordTextBox = new TextBox();
+            label8 = new Label();
+            addLnameTextBox = new TextBox();
+            addBirthDateTimePicker = new DateTimePicker();
+            label9 = new Label();
+            addZipCodeTextBox = new TextBox();
+            label10 = new Label();
+            addStreetTextBox = new TextBox();
+            label11 = new Label();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            addStateComboBox = new ComboBox();
+            label12 = new Label();
+            label13 = new Label();
+            addCityTextBox = new TextBox();
+            addPhoneNumberTextBox = new TextBox();
+            label14 = new Label();
+            updateCheckBox = new CheckBox();
             SuspendLayout();
             // 
             // NurseListView
@@ -82,7 +95,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             // addButton
             // 
-            addButton.Location = new Point(639, 95);
+            addButton.Location = new Point(516, 361);
             addButton.Name = "addButton";
             addButton.Size = new Size(75, 23);
             addButton.TabIndex = 1;
@@ -90,16 +103,16 @@ namespace HealthcareSystemProjectCS3230.view
             addButton.UseVisualStyleBackColor = true;
             addButton.Click += addButton_Click;
             // 
-            // personIDTextBox
+            // addFnameTextBox
             // 
-            personIDTextBox.Location = new Point(565, 66);
-            personIDTextBox.Name = "personIDTextBox";
-            personIDTextBox.Size = new Size(100, 23);
-            personIDTextBox.TabIndex = 2;
+            addFnameTextBox.Location = new Point(457, 75);
+            addFnameTextBox.Name = "addFnameTextBox";
+            addFnameTextBox.Size = new Size(100, 23);
+            addFnameTextBox.TabIndex = 2;
             // 
             // addUsernameTextBox
             // 
-            addUsernameTextBox.Location = new Point(686, 66);
+            addUsernameTextBox.Location = new Point(438, 332);
             addUsernameTextBox.Name = "addUsernameTextBox";
             addUsernameTextBox.Size = new Size(100, 23);
             addUsernameTextBox.TabIndex = 3;
@@ -107,99 +120,202 @@ namespace HealthcareSystemProjectCS3230.view
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(582, 48);
+            label1.Location = new Point(474, 57);
             label1.Name = "label1";
-            label1.Size = new Size(57, 15);
+            label1.Size = new Size(64, 15);
             label1.TabIndex = 4;
-            label1.Text = "Person ID";
+            label1.Text = "First Name";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(705, 48);
+            label2.Location = new Point(457, 314);
             label2.Name = "label2";
             label2.Size = new Size(60, 15);
             label2.TabIndex = 5;
             label2.Text = "Username";
             // 
-            // label3
+            // addLabel
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(639, 9);
-            label3.Name = "label3";
-            label3.Size = new Size(72, 15);
-            label3.TabIndex = 6;
-            label3.Text = "Add a Nurse";
+            addLabel.AutoSize = true;
+            addLabel.Location = new Point(516, 23);
+            addLabel.Name = "addLabel";
+            addLabel.Size = new Size(90, 15);
+            addLabel.TabIndex = 6;
+            addLabel.Text = "Add New Nurse";
             // 
-            // label4
+            // label7
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(388, 9);
-            label4.Name = "label4";
-            label4.Size = new Size(79, 15);
-            label4.TabIndex = 7;
-            label4.Text = "Update Nurse";
+            label7.AutoSize = true;
+            label7.Location = new Point(598, 314);
+            label7.Name = "label7";
+            label7.Size = new Size(57, 15);
+            label7.TabIndex = 14;
+            label7.Text = "Password";
             // 
-            // label5
+            // addPasswordTextBox
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(428, 48);
-            label5.Name = "label5";
-            label5.Size = new Size(60, 15);
-            label5.TabIndex = 9;
-            label5.Text = "Username";
+            addPasswordTextBox.Location = new Point(580, 332);
+            addPasswordTextBox.Name = "addPasswordTextBox";
+            addPasswordTextBox.Size = new Size(100, 23);
+            addPasswordTextBox.TabIndex = 13;
             // 
-            // updateUsernameTextBox
+            // label8
             // 
-            updateUsernameTextBox.Location = new Point(413, 66);
-            updateUsernameTextBox.Name = "updateUsernameTextBox";
-            updateUsernameTextBox.Size = new Size(100, 23);
-            updateUsernameTextBox.TabIndex = 8;
+            label8.AutoSize = true;
+            label8.Location = new Point(597, 57);
+            label8.Name = "label8";
+            label8.Size = new Size(63, 15);
+            label8.TabIndex = 16;
+            label8.Text = "Last Name";
             // 
-            // updateButton
+            // addLnameTextBox
             // 
-            updateButton.Location = new Point(388, 95);
-            updateButton.Name = "updateButton";
-            updateButton.Size = new Size(75, 23);
-            updateButton.TabIndex = 10;
-            updateButton.Text = "Update";
-            updateButton.UseVisualStyleBackColor = true;
-            updateButton.Click += updateButton_Click;
+            addLnameTextBox.Location = new Point(580, 75);
+            addLnameTextBox.Name = "addLnameTextBox";
+            addLnameTextBox.Size = new Size(100, 23);
+            addLnameTextBox.TabIndex = 15;
             // 
-            // label6
+            // addBirthDateTimePicker
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(345, 48);
-            label6.Name = "label6";
-            label6.Size = new Size(52, 15);
-            label6.TabIndex = 11;
-            label6.Text = "Nurse ID";
+            addBirthDateTimePicker.Location = new Point(457, 114);
+            addBirthDateTimePicker.Name = "addBirthDateTimePicker";
+            addBirthDateTimePicker.Size = new Size(200, 23);
+            addBirthDateTimePicker.TabIndex = 17;
             // 
-            // selectedNurseID
+            // label9
             // 
-            selectedNurseID.AutoSize = true;
-            selectedNurseID.Location = new Point(361, 66);
-            selectedNurseID.Name = "selectedNurseID";
-            selectedNurseID.Size = new Size(13, 15);
-            selectedNurseID.TabIndex = 12;
-            selectedNurseID.Text = "0";
+            label9.AutoSize = true;
+            label9.Location = new Point(383, 120);
+            label9.Name = "label9";
+            label9.Size = new Size(59, 15);
+            label9.TabIndex = 18;
+            label9.Text = "Birth Date";
+            // 
+            // addZipCodeTextBox
+            // 
+            addZipCodeTextBox.Location = new Point(457, 183);
+            addZipCodeTextBox.Name = "addZipCodeTextBox";
+            addZipCodeTextBox.Size = new Size(134, 23);
+            addZipCodeTextBox.TabIndex = 19;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(414, 224);
+            label10.Name = "label10";
+            label10.Size = new Size(28, 15);
+            label10.TabIndex = 20;
+            label10.Text = "City";
+            // 
+            // addStreetTextBox
+            // 
+            addStreetTextBox.Location = new Point(457, 148);
+            addStreetTextBox.Name = "addStreetTextBox";
+            addStreetTextBox.Size = new Size(221, 23);
+            addStreetTextBox.TabIndex = 21;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(405, 151);
+            label11.Name = "label11";
+            label11.Size = new Size(37, 15);
+            label11.TabIndex = 22;
+            label11.Text = "Street";
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(61, 4);
+            // 
+            // addStateComboBox
+            // 
+            addStateComboBox.FormattingEnabled = true;
+            addStateComboBox.Location = new Point(640, 183);
+            addStateComboBox.Name = "addStateComboBox";
+            addStateComboBox.Size = new Size(40, 23);
+            addStateComboBox.TabIndex = 24;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(597, 186);
+            label12.Name = "label12";
+            label12.Size = new Size(33, 15);
+            label12.TabIndex = 25;
+            label12.Text = "State";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(389, 183);
+            label13.Name = "label13";
+            label13.Size = new Size(53, 15);
+            label13.TabIndex = 26;
+            label13.Text = "ZIP code";
+            // 
+            // addCityTextBox
+            // 
+            addCityTextBox.Location = new Point(457, 221);
+            addCityTextBox.Name = "addCityTextBox";
+            addCityTextBox.Size = new Size(221, 23);
+            addCityTextBox.TabIndex = 27;
+            // 
+            // addPhoneNumberTextBox
+            // 
+            addPhoneNumberTextBox.Location = new Point(457, 264);
+            addPhoneNumberTextBox.Name = "addPhoneNumberTextBox";
+            addPhoneNumberTextBox.Size = new Size(221, 23);
+            addPhoneNumberTextBox.TabIndex = 28;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(354, 267);
+            label14.Name = "label14";
+            label14.Size = new Size(88, 15);
+            label14.TabIndex = 29;
+            label14.Text = "Phone Number";
+            // 
+            // updateCheckBox
+            // 
+            updateCheckBox.AutoSize = true;
+            updateCheckBox.Location = new Point(684, 392);
+            updateCheckBox.Name = "updateCheckBox";
+            updateCheckBox.Size = new Size(98, 19);
+            updateCheckBox.TabIndex = 30;
+            updateCheckBox.Text = "Update Mode";
+            updateCheckBox.UseVisualStyleBackColor = true;
+            updateCheckBox.CheckedChanged += updateCheckBox_CheckedChanged;
             // 
             // NurseForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(selectedNurseID);
-            Controls.Add(label6);
-            Controls.Add(updateButton);
-            Controls.Add(label5);
-            Controls.Add(updateUsernameTextBox);
-            Controls.Add(label4);
-            Controls.Add(label3);
+            Controls.Add(updateCheckBox);
+            Controls.Add(label14);
+            Controls.Add(addPhoneNumberTextBox);
+            Controls.Add(addCityTextBox);
+            Controls.Add(label13);
+            Controls.Add(label12);
+            Controls.Add(addStateComboBox);
+            Controls.Add(label11);
+            Controls.Add(addStreetTextBox);
+            Controls.Add(label10);
+            Controls.Add(addZipCodeTextBox);
+            Controls.Add(label9);
+            Controls.Add(addBirthDateTimePicker);
+            Controls.Add(label8);
+            Controls.Add(addLnameTextBox);
+            Controls.Add(label7);
+            Controls.Add(addPasswordTextBox);
+            Controls.Add(addLabel);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(addUsernameTextBox);
-            Controls.Add(personIDTextBox);
+            Controls.Add(addFnameTextBox);
             Controls.Add(addButton);
             Controls.Add(NurseListView);
             Name = "NurseForm";
@@ -216,17 +332,32 @@ namespace HealthcareSystemProjectCS3230.view
         private ColumnHeader LastName;
         private ColumnHeader Username;
         private Button addButton;
-        private TextBox personIDTextBox;
+        private TextBox addFnameTextBox;
         private TextBox addUsernameTextBox;
+        private TextBox addZipCodeTextBox;
+        private TextBox addCityTextBox;
+        private TextBox addLnameTextBox;
+        private TextBox addStreetTextBox;
+        private TextBox addPasswordTextBox;
+        private ComboBox addStateComboBox;
         private Label label1;
         private Label label2;
         private ColumnHeader NurseID;
-        private Label label3;
-        private Label label4;
-        private Label label5;
-        private TextBox updateUsernameTextBox;
-        private Button updateButton;
-        private Label label6;
-        private Label selectedNurseID;
+        private Label addLabel;
+        private Label label7;
+        private TextBox passwordTextBox;
+        private Label label8;
+        private DateTimePicker addBirthDateTimePicker;
+        private Label label9;
+        private Label label10;
+        private Label label11;
+        private ContextMenuStrip contextMenuStrip1;
+        private ComboBox comboBox1;
+        private Label label12;
+        private Label label13;
+        private TextBox textBox3;
+        private TextBox addPhoneNumberTextBox;
+        private Label label14;
+        private CheckBox updateCheckBox;
     }
 }

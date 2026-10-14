@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HealthcareSystemProjectCS3230.model
 {
-    public class Nurse
+    public class Nurse : Person
     {
         public int PersonID { get; set; }
 
