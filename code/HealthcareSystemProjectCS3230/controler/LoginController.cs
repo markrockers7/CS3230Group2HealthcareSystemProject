@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using HealthcareSystemProjectCS3230.DAL;
+﻿using HealthcareSystemProjectCS3230.DAL;
 using HealthcareSystemProjectCS3230.model;
 
 namespace HealthcareSystemProjectCS3230.controler
@@ -10,7 +7,7 @@ namespace HealthcareSystemProjectCS3230.controler
     {
         public LoginSession LoginSession { get; private set; }
 
-        public Boolean isValidLogin(string username, string password)
+        public Boolean IsValidLogin(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -21,9 +18,17 @@ namespace HealthcareSystemProjectCS3230.controler
                 throw new ArgumentException("Password cannot be Whitespace");
             }
             var loginSession = LoginDAL.verifyLogin(username, password);
-            if (loginSession != null)
+            if (loginSession == "nurse")
             {
-                LoginSession = loginSession;
+                var nurseLogin = LoginDAL.SetNurseLoginSession(username, password);
+                if (nurseLogin == null) return false;
+                LoginSession = nurseLogin;
+                return true;
+            } else if (loginSession == "administrator")
+            {
+                var adminLogin = LoginDAL.SetAdministratorLoginSession(username, password);
+                if (adminLogin == null) return false;
+                LoginSession = adminLogin;
                 return true;
             }
 

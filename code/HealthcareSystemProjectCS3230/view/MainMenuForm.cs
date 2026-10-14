@@ -1,55 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using HealthcareSystemProjectCS3230.model;
+﻿using HealthcareSystemProjectCS3230.model;
 
 namespace HealthcareSystemProjectCS3230.view
 {
     public partial class MainMenuForm : Form
     {
-        private LoginSession? _loginSession;
-        public MainMenuForm()
+        private LoginSession _loginSession;
+        public MainMenuForm(LoginSession loginSession)
         {
+            _loginSession = loginSession;
             InitializeComponent();
-        }
-
-        public void SetLoginSession(LoginSession ls)
-        {
-            _loginSession = ls;
             SetupSession();
         }
 
+
         private void SetupSession()
         {
-            if (_loginSession != null)
-            {
-                FormatUsernameLabel(_loginSession.Username);
-                SetButtonVisibility();
-            }
+            FormatUsernameLabel(_loginSession.FullName, _loginSession.Username, _loginSession.id);
+            SetButtonVisibility();
         }
 
-        private void FormatUsernameLabel(string username)
+        private void FormatUsernameLabel(string fullName, string username, int id)
         {
-            usernameLabel.Text = @"Hello, " + username + @"!";
+            usernameLabel.Text = @"Hello, " + fullName + @"!" + Environment.NewLine + @"Username: " + username + Environment.NewLine + @"ID: " + id;
         }
 
         private void SetButtonVisibility()
         {
             DisableAllButtons();
-            if (_loginSession != null)
+            if (string.Equals(_loginSession.AccountType, "nurse", StringComparison.CurrentCultureIgnoreCase))
             {
-                if (string.Equals(_loginSession.AccountType, "nurse", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    EnableNurseButtons();
-                } else
-                {
-                    nurseManagerButton.Visible = true;
-                    nurseManagerButton.Enabled = true;
-                }
+                EnableNurseButtons();
+            } else
+            {
+                nurseManagerButton.Visible = true;
+                nurseManagerButton.Enabled = true;
             }
         }
 
@@ -76,6 +60,7 @@ namespace HealthcareSystemProjectCS3230.view
             Hide();
 
             var appointmentForm = new AppointmentForm();
+            appointmentForm.setLoginSession(_loginSession);
             appointmentForm.ShowDialog();
 
 
@@ -86,7 +71,7 @@ namespace HealthcareSystemProjectCS3230.view
         {
             Hide();
 
-            using var patientSearchForm = new PatientSearchForm();
+            using var patientSearchForm = new PatientSearchForm(_loginSession);
             patientSearchForm.ShowDialog();
 
             Show();
@@ -95,7 +80,7 @@ namespace HealthcareSystemProjectCS3230.view
         private void registerPatientButton_Click(object sender, EventArgs e)
         {
             Hide();
-            using var reg = new RegisterPatientForm();
+            using var reg = new RegisterPatientForm(_loginSession);
             reg.ShowDialog();
             Show();
         }
@@ -103,7 +88,7 @@ namespace HealthcareSystemProjectCS3230.view
         private void editPatientButton_Click(object sender, EventArgs e)
         {
             Hide();
-            using var edit = new EditPatientForm();
+            using var edit = new EditPatientForm(_loginSession);
             edit.ShowDialog();
             Show();
         }

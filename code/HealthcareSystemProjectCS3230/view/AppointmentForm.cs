@@ -1,4 +1,5 @@
 ﻿using HealthcareSystemProjectCS3230.controler;
+using HealthcareSystemProjectCS3230.model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,11 +14,18 @@ namespace HealthcareSystemProjectCS3230.view
     {
         private readonly AppointmentController _appointmentController = new AppointmentController();
         private readonly int _patientId;
+        private LoginSession? _loginSession;
 
         public AppointmentForm()
         {
             InitializeComponent();
             LoadDoctors();
+        }
+
+        public void setLoginSession(LoginSession session)
+        {
+            _loginSession = session;
+            loggedInLabel.Text = @"Logged in as: " + session.FullName + @" | " + session.Username + @" | " + session.id;
         }
 
         private void LoadDoctors()

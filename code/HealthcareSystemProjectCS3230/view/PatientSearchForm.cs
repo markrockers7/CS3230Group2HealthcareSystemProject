@@ -22,7 +22,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         public event EventHandler? SearchRequested;
 
-        public PatientSearchForm()
+        public PatientSearchForm(LoginSession loginSession)
         {
             patientController = new PatientController();
             SearchRequested += PatientSearchForm_SearchRequested;
@@ -76,24 +76,33 @@ namespace HealthcareSystemProjectCS3230.view
                 Dock = DockStyle.Fill,
                 Padding = new Padding(12),
                 ColumnCount = 4,
-                RowCount = 3
+                RowCount = 4
             };
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 85));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 85));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 54));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
             layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
-            layout.Controls.Add(new Label { Text = "First name", AutoSize = true, Anchor = AnchorStyles.Left }, 0, 0);
-            layout.Controls.Add(firstNameTextBox, 1, 0);
-            layout.Controls.Add(new Label { Text = "Last name", AutoSize = true, Anchor = AnchorStyles.Left }, 2, 0);
-            layout.Controls.Add(lastNameTextBox, 3, 0);
-            layout.Controls.Add(new Label { Text = "Birthdate", AutoSize = true, Anchor = AnchorStyles.Left }, 0, 1);
-            layout.Controls.Add(birthdatePicker, 1, 1);
-            layout.Controls.Add(searchButton, 3, 1);
-            layout.Controls.Add(PatientResultsGrid, 0, 2);
+            var loggedInLabel = new Label
+            {
+                Text = $"Hello, {loginSession.FullName}!{Environment.NewLine}Username: {loginSession.Username}{Environment.NewLine}ID: {loginSession.id}",
+                AutoSize = true,
+                Anchor = AnchorStyles.Left
+            };
+            layout.Controls.Add(loggedInLabel, 0, 0);
+            layout.SetColumnSpan(loggedInLabel, 4);
+            layout.Controls.Add(new Label { Text = "First name", AutoSize = true, Anchor = AnchorStyles.Left }, 0, 1);
+            layout.Controls.Add(firstNameTextBox, 1, 1);
+            layout.Controls.Add(new Label { Text = "Last name", AutoSize = true, Anchor = AnchorStyles.Left }, 2, 1);
+            layout.Controls.Add(lastNameTextBox, 3, 1);
+            layout.Controls.Add(new Label { Text = "Birthdate", AutoSize = true, Anchor = AnchorStyles.Left }, 0, 2);
+            layout.Controls.Add(birthdatePicker, 1, 2);
+            layout.Controls.Add(searchButton, 3, 2);
+            layout.Controls.Add(PatientResultsGrid, 0, 3);
             layout.SetColumnSpan(PatientResultsGrid, 4);
 
             Controls.Add(layout);

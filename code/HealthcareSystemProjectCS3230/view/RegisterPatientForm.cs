@@ -21,11 +21,13 @@ namespace HealthcareSystemProjectCS3230.view
         private TextBox zipcodeTextBox = null!;
         private Button saveButton = null!;
         private Button cancelButton = null!;
+        private Label loggedInLabel = null!;
         private readonly PatientController _controller = new PatientController();
 
-        public RegisterPatientForm()
+        public RegisterPatientForm(LoginSession loginSession)
         {
             InitializeComponent();
+            loggedInLabel.Text = $"Hello, {loginSession.FullName}!{Environment.NewLine}Username: {loginSession.Username}{Environment.NewLine}ID: {loginSession.id}";
             PopulateGender();
             PopulateStates();
         }
@@ -70,6 +72,7 @@ namespace HealthcareSystemProjectCS3230.view
             zipcodeTextBox = new TextBox { Dock = DockStyle.Fill };
             saveButton = new Button { Text = "Save", AutoSize = true };
             cancelButton = new Button { Text = "Cancel", AutoSize = true };
+            loggedInLabel = new Label { AutoSize = true, Anchor = AnchorStyles.Left };
 
             saveButton.Click += saveButton_Click;
             cancelButton.Click += cancelButton_Click;
@@ -77,7 +80,7 @@ namespace HealthcareSystemProjectCS3230.view
             var layout = new TableLayoutPanel
             {
                 ColumnCount = 2,
-                RowCount = 10,
+                RowCount = 11,
                 Dock = DockStyle.Fill,
                 Padding = new Padding(12),
                 AutoSize = true,
@@ -86,24 +89,27 @@ namespace HealthcareSystemProjectCS3230.view
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
-            AddField(layout, "First name", firstNameTextBox, 0);
-            AddField(layout, "Last name", lastNameTextBox, 1);
-            AddField(layout, "Birthdate", birthdatePicker, 2);
-            AddField(layout, "Phone", phoneTextBox, 3);
-            AddField(layout, "Gender", genderComboBox, 4);
-            AddField(layout, "Street", streetTextBox, 5);
-            AddField(layout, "City", cityTextBox, 6);
-            AddField(layout, "State", stateComboBox, 7);
-            AddField(layout, "ZIP code", zipcodeTextBox, 8);
+            layout.Controls.Add(loggedInLabel, 0, 0);
+            layout.SetColumnSpan(loggedInLabel, 2);
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            AddField(layout, "First name", firstNameTextBox, 1);
+            AddField(layout, "Last name", lastNameTextBox, 2);
+            AddField(layout, "Birthdate", birthdatePicker, 3);
+            AddField(layout, "Phone", phoneTextBox, 4);
+            AddField(layout, "Gender", genderComboBox, 5);
+            AddField(layout, "Street", streetTextBox, 6);
+            AddField(layout, "City", cityTextBox, 7);
+            AddField(layout, "State", stateComboBox, 8);
+            AddField(layout, "ZIP code", zipcodeTextBox, 9);
 
             var buttons = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, Dock = DockStyle.Fill, AutoSize = true };
             buttons.Controls.Add(cancelButton);
             buttons.Controls.Add(saveButton);
-            layout.Controls.Add(buttons, 1, 9);
+            layout.Controls.Add(buttons, 1, 10);
 
             Controls.Add(layout);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(420, 440);
+            ClientSize = new Size(420, 470);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
