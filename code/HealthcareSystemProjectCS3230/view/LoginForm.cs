@@ -19,12 +19,11 @@ namespace HealthcareSystemProjectCS3230.view
         {
             try
             {
-                if (_loginController.isValidLogin(usernameTextBox.Text, passwordTextBox.Text))
+                if (_loginController.IsValidLogin(usernameTextBox.Text, passwordTextBox.Text))
                 {
                     Hide();
-                    MainMenuForm mainMenuForm = new MainMenuForm();
+                    MainMenuForm mainMenuForm = new MainMenuForm(_loginController.LoginSession);
                     ClearFields();
-                    mainMenuForm.SetLoginSession(_loginController.LoginSession);
                     mainMenuForm.ShowDialog();
                     Show();
                 }
