@@ -17,6 +17,21 @@ namespace HealthcareSystemProjectCS3230.view
         public NurseForm()
         {
             InitializeComponent();
+            PopulateStates();
+        }
+
+        private void PopulateStates()
+        {
+            var states = new[]
+            {
+                "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA",
+                "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+                "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+                "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+                "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
+            };
+            addStateComboBox.Items.Clear();
+            addStateComboBox.Items.AddRange(states);
         }
 
         private void NurseForm_Load(object sender, EventArgs e)
@@ -48,13 +63,45 @@ namespace HealthcareSystemProjectCS3230.view
             }
         }
 
+
         private void addButton_Click(object sender, EventArgs e)
         {
             try
             {
-                var personID = Int32.Parse(personIDTextBox.Text);
-                var username = addUsernameTextBox.Text;
-                nurseController.AddNurse(personID, username);
+                var firstName = addFnameTextBox.Text.Trim();
+                var lastName = addLnameTextBox.Text.Trim();
+                var birthdate = addBirthDateTimePicker.Value;
+                var phone = addPhoneNumberTextBox.Text.Trim();
+                var street = addStreetTextBox.Text.Trim();
+                var city = addCityTextBox.Text.Trim();
+                var state = addStateComboBox.SelectedItem?.ToString();
+                var zipcode = addZipCodeTextBox.Text.Trim();
+                var username = addUsernameTextBox.Text.Trim();
+                var password = addPasswordTextBox.Text.Trim();
+                var nurse = new Nurse(0, 0, username)
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Birthdate = birthdate,
+                    PhoneNumber = phone,
+                    Address = new Address
+                    {
+                        Street = street,
+                        City = city,
+                        State = state,
+                        Zipcode = zipcode
+                    }
+                };
+                if (updateCheckBox.Checked)
+                {
+                    nurse.PersonID = ((Nurse)NurseListView.SelectedItems[0].Tag).PersonID;
+                    nurse.Address.AddressId = ((Nurse)NurseListView.SelectedItems[0].Tag).Address.AddressId;
+                    nurseController.UpdateNurse(nurse);
+                }
+                else
+                {
+                    nurseController.AddNurse(nurse, password);
+                }
                 this.updateNurseView();
             }
             catch (ArgumentException ex)
@@ -72,9 +119,16 @@ namespace HealthcareSystemProjectCS3230.view
             if (NurseListView.SelectedItems.Count > 0)
             {
                 var selectedNurse = (Nurse)NurseListView.SelectedItems[0].Tag;
+                addFnameTextBox.Text = selectedNurse.FirstName;
+                addLnameTextBox.Text = selectedNurse.LastName;
+                addBirthDateTimePicker.Value = selectedNurse.Birthdate;
+                addPhoneNumberTextBox.Text = selectedNurse.PhoneNumber;
+                addStreetTextBox.Text = selectedNurse.Address.Street;
+                addCityTextBox.Text = selectedNurse.Address.City;
+                addStateComboBox.SelectedItem = selectedNurse.Address.State;
+                addZipCodeTextBox.Text = selectedNurse.Address.Zipcode;
+                addUsernameTextBox.Text = selectedNurse.Username;
 
-                selectedNurseID.Text = selectedNurse.ID.ToString();
-                updateUsernameTextBox.Text = selectedNurse.Username;
             }
         }
 
@@ -84,10 +138,24 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 var nurse = (Nurse)NurseListView.SelectedItems[0].Tag;
 
-                var currentUsername = nurse.Username;
-                var newUsername = updateUsernameTextBox.Text;
-                nurseController.UpdateNurse(currentUsername, newUsername);
+                nurseController.UpdateNurse(nurse);
                 this.updateNurseView();
+            }
+        }
+
+        private void updateCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (updateCheckBox.Checked)
+            {
+                addPasswordTextBox.Enabled = false;
+                addButton.Text = "Update";
+                addLabel.Text = "Update Existing Nurse";
+            }
+            else
+            {
+                addPasswordTextBox.Enabled = true;
+                addButton.Text = "Add";
+                addLabel.Text = "Add New Nurse";
             }
         }
     }
