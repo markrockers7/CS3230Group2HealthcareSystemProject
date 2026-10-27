@@ -30,8 +30,8 @@ namespace HealthcareSystemProjectCS3230.view
                 "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
                 "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
             };
-            addStateComboBox.Items.Clear();
-            addStateComboBox.Items.AddRange(states);
+            stateComboBox.Items.Clear();
+            stateComboBox.Items.AddRange(states);
         }
 
         private void NurseForm_Load(object sender, EventArgs e)
@@ -68,16 +68,16 @@ namespace HealthcareSystemProjectCS3230.view
         {
             try
             {
-                var firstName = addFnameTextBox.Text.Trim();
-                var lastName = addLnameTextBox.Text.Trim();
-                var birthdate = addBirthDateTimePicker.Value;
-                var phone = addPhoneNumberTextBox.Text.Trim();
-                var street = addStreetTextBox.Text.Trim();
-                var city = addCityTextBox.Text.Trim();
-                var state = addStateComboBox.SelectedItem?.ToString();
-                var zipcode = addZipCodeTextBox.Text.Trim();
-                var username = addUsernameTextBox.Text.Trim();
-                var password = addPasswordTextBox.Text.Trim();
+                var firstName = fnameTextBox.Text.Trim();
+                var lastName = lnameTextBox.Text.Trim();
+                var birthdate = birthDateTimePicker.Value;
+                var phone = phoneNumberTextBox.Text.Trim();
+                var street = streetTextBox.Text.Trim();
+                var city = cityTextBox.Text.Trim();
+                var state = stateComboBox.SelectedItem?.ToString();
+                var zipcode = zipCodeTextBox.Text.Trim();
+                var username = usernameTextBox.Text.Trim();
+                var password = passwordTextBox.Text.Trim();
                 var nurse = new Nurse(0, 0, username)
                 {
                     FirstName = firstName,
@@ -92,6 +92,12 @@ namespace HealthcareSystemProjectCS3230.view
                         Zipcode = zipcode
                     }
                 };
+
+                if (!this.validateInput(nurse, password))
+                {
+                    return;
+                }
+
                 if (updateCheckBox.Checked)
                 {
                     nurse.PersonID = ((Nurse)NurseListView.SelectedItems[0].Tag).PersonID;
@@ -116,18 +122,18 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void NurseListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (NurseListView.SelectedItems.Count > 0)
+            if (NurseListView.SelectedItems.Count > 0 && updateCheckBox.Checked)
             {
                 var selectedNurse = (Nurse)NurseListView.SelectedItems[0].Tag;
-                addFnameTextBox.Text = selectedNurse.FirstName;
-                addLnameTextBox.Text = selectedNurse.LastName;
-                addBirthDateTimePicker.Value = selectedNurse.Birthdate;
-                addPhoneNumberTextBox.Text = selectedNurse.PhoneNumber;
-                addStreetTextBox.Text = selectedNurse.Address.Street;
-                addCityTextBox.Text = selectedNurse.Address.City;
-                addStateComboBox.SelectedItem = selectedNurse.Address.State;
-                addZipCodeTextBox.Text = selectedNurse.Address.Zipcode;
-                addUsernameTextBox.Text = selectedNurse.Username;
+                fnameTextBox.Text = selectedNurse.FirstName;
+                lnameTextBox.Text = selectedNurse.LastName;
+                birthDateTimePicker.Value = selectedNurse.Birthdate;
+                phoneNumberTextBox.Text = selectedNurse.PhoneNumber;
+                streetTextBox.Text = selectedNurse.Address.Street;
+                cityTextBox.Text = selectedNurse.Address.City;
+                stateComboBox.SelectedItem = selectedNurse.Address.State;
+                zipCodeTextBox.Text = selectedNurse.Address.Zipcode;
+                usernameTextBox.Text = selectedNurse.Username;
 
             }
         }
@@ -140,6 +146,7 @@ namespace HealthcareSystemProjectCS3230.view
 
                 nurseController.UpdateNurse(nurse);
                 this.updateNurseView();
+                this.clearForm();
             }
         }
 
@@ -147,16 +154,110 @@ namespace HealthcareSystemProjectCS3230.view
         {
             if (updateCheckBox.Checked)
             {
-                addPasswordTextBox.Enabled = false;
+                passwordTextBox.Enabled = false;
                 addButton.Text = "Update";
                 addLabel.Text = "Update Existing Nurse";
+                this.clearForm();
             }
             else
             {
-                addPasswordTextBox.Enabled = true;
+                passwordTextBox.Enabled = true;
                 addButton.Text = "Add";
                 addLabel.Text = "Add New Nurse";
+                this.clearForm();
             }
+        }
+
+        private void clearForm()
+        {
+            fnameTextBox.Clear();
+            lnameTextBox.Clear();
+            birthDateTimePicker.Value = DateTime.Now;
+            phoneNumberTextBox.Clear();
+            streetTextBox.Clear();
+            cityTextBox.Clear();
+            stateComboBox.SelectedIndex = -1;
+            zipCodeTextBox.Clear();
+            usernameTextBox.Clear();
+            passwordTextBox.Clear();
+
+            this.clearErrorLabels();
+        }
+
+        private void clearErrorLabels()
+        {
+            fnameErrorLabel.Text = "";
+            lnameErrorLabel.Text = "";
+            birthdateErrorLabel.Text = "";
+            phoneNumberErrorLabel.Text = "";
+            streetErrorLabel.Text = "";
+            cityErrorLabel.Text = "";
+            zipCodeErrorLabel.Text = "";
+            usernameErrorLabel.Text = "";
+            stateErrorLabel.Text = "";
+            passwordErrorLabel.Text = "";
+        }
+
+        private bool validateInput(Nurse nurse, string password)
+        {
+            this.clearErrorLabels();
+            bool isValid = true;
+            if (string.IsNullOrWhiteSpace(nurse.Username) || nurse.Username.Length > 50)
+            {
+                usernameErrorLabel.Text = "Username must be 50 or less characters, and cannot be empty.";
+                isValid = false;
+            }
+            if(password.Length > 50 || string.IsNullOrWhiteSpace(password))
+            {
+                passwordErrorLabel.Text = "Password must be 50 or less characters and cannot be empty.";
+                isValid = false;
+            }
+            if (string.IsNullOrWhiteSpace(nurse.FirstName))
+            {
+                fnameErrorLabel.Text = "First name is required.";
+                isValid = false;
+            }
+            if (string.IsNullOrWhiteSpace(nurse.LastName))
+            {
+                lnameErrorLabel.Text = "Last name is required.";
+                isValid = false;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(nurse.PhoneNumber, @"^\d{10}$"))
+            {
+                phoneNumberErrorLabel.Text = "Phone number must be 10 digits (numbers only).";
+                isValid = false;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(nurse.Address.Zipcode, @"^\d{5}$"))
+            {
+                zipCodeErrorLabel.Text = "ZIP code must be 5 digits.";
+                isValid = false;
+            }
+            if (nurse.Birthdate >= DateTime.Now)
+            {
+                birthdateErrorLabel.Text = "Birthdate must be in the past.";
+                isValid = false;
+            }
+            if (nurse.Address.Street.Length > 100 || string.IsNullOrWhiteSpace(nurse.Address.Street))
+            {
+                streetErrorLabel.Text = "Street address must be 100 or less characters and cannot be empty.";
+                isValid = false;
+            }
+            if (nurse.Address.City.Length > 50 || string.IsNullOrWhiteSpace(nurse.Address.City))
+            {
+                cityErrorLabel.Text = "City must be 50 or less characters and cannot be empty.";
+                isValid = false;
+            }
+            if (nurse.Address.State == null || string.IsNullOrWhiteSpace(nurse.Address.State))
+            {
+                stateErrorLabel.Text = "State must be selected.";
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        private void clearFormButton_Click(object sender, EventArgs e)
+        {
+            this.clearForm();
         }
     }
 }
