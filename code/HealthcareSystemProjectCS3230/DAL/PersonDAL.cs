@@ -18,7 +18,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
             const string query =
-                "SELECT per.person_id, per.first_name, per.last_name, per.birthdate, per.phone_number, per.address_id, " +
+                "SELECT per.person_id, per.first_name, per.last_name, per.birthdate, per.phone_number, per.address_id, per.gender, " +
                 "a.street, a.city, a.zipcode, a.state " +
                 "FROM Person per " +
                 "JOIN Address a ON per.address_id = a.address_id " +
@@ -35,6 +35,7 @@ namespace HealthcareSystemProjectCS3230.DAL
                 LastName = reader.GetString("last_name"),
                 Birthdate = reader.GetDateTime("birthdate"),
                 PhoneNumber = reader.GetString("phone_number"),
+                Gender = reader.GetChar("gender"),
                 Address = new Address
                 {
                     AddressId = reader.GetInt32("address_id"),

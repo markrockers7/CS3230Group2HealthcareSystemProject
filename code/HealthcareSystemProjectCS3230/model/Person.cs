@@ -10,5 +10,7 @@ namespace HealthcareSystemProjectCS3230.model
         public DateTime Birthdate { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
         public Address Address { get; set; } = new Address();
+
+        public char Gender { get; set; } = 'U'; // U for unspecified, M for male, F for female
     }
 }
