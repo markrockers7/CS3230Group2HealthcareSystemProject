@@ -8,6 +8,10 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class NurseDAL
     {
+        /*
+         * Retrieves a list of all nurses from the database.
+         *
+         */
         public List<Nurse> GetAllNurses()
         {
             var nurses = new List<Nurse>();
@@ -44,6 +48,11 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return nurses;
         }
+
+        /*
+         * Retrieves a nurse from the database by their ID.
+         * @param id The ID of the nurse to retrieve.
+         */
         public Nurse GetNurseByID(int id)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -85,6 +94,11 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return null;
         }
+        /*
+         * Adds a new nurse to the database.
+         * @param nurse The nurse object to add.
+         * @param password The password for the nurse's account.
+         */
         public bool AddNurse(Nurse nurse, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -148,6 +162,10 @@ namespace HealthcareSystemProjectCS3230.DAL
             }
         }
 
+        /*
+         * Updates an existing nurse in the database.
+         * @param nurse The nurse object with updated information.
+         */
         public bool UpdateNurse(Nurse nurse)
         {
            using var connection = new MySqlConnection(Connection.ConnectionString);

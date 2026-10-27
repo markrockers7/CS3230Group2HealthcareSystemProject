@@ -9,6 +9,15 @@ namespace HealthcareSystemProjectCS3230.controler
     public class NurseController
     {
         private NurseDAL nurseDAL = new NurseDAL();
+
+        /*
+         * Adds a new nurse to the database after validating the input.
+         * Throws ArgumentException if validation fails.
+         * Throws Exception if the nurse could not be added to the database.
+         * 
+         * @param nurse The Nurse object to be added.
+         * @param password The password for the nurse's account.
+         */
         public void AddNurse(Nurse nurse, string password)
         {
             if (password.Length > 50 || string.IsNullOrWhiteSpace(password))
@@ -40,16 +49,28 @@ namespace HealthcareSystemProjectCS3230.controler
             return true;
         }
 
+        /*
+         * Retrieves a list of all nurses from the database.
+         *
+         */
         public List<Nurse> GetAllNurses()
         {
             return nurseDAL.GetAllNurses();
         }
 
+        /*
+         * Retrieves a nurse from the database by their ID.
+         * @param id The ID of the nurse to retrieve.
+         */
         public Nurse GetNurseByID(int id)
         {
             return nurseDAL.GetNurseByID(id);
         }
 
+        /*
+         * Updates an existing nurse in the database.
+         * @param nurse The Nurse object containing updated information.
+         */
         public void UpdateNurse(Nurse nurse)
         {
             validateNurse(nurse);
