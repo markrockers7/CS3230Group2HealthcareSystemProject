@@ -60,6 +60,8 @@ namespace HealthcareSystemProjectCS3230.view
             addPhoneNumberTextBox = new TextBox();
             label14 = new Label();
             updateCheckBox = new CheckBox();
+            stateLabel = new Label();
+            genderComboBox = new ComboBox();
             SuspendLayout();
             // 
             // NurseListView
@@ -266,7 +268,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             addPhoneNumberTextBox.Location = new Point(457, 264);
             addPhoneNumberTextBox.Name = "addPhoneNumberTextBox";
-            addPhoneNumberTextBox.Size = new Size(221, 23);
+            addPhoneNumberTextBox.Size = new Size(134, 23);
             addPhoneNumberTextBox.TabIndex = 28;
             // 
             // label14
@@ -289,11 +291,30 @@ namespace HealthcareSystemProjectCS3230.view
             updateCheckBox.UseVisualStyleBackColor = true;
             updateCheckBox.CheckedChanged += updateCheckBox_CheckedChanged;
             // 
+            // stateLabel
+            // 
+            stateLabel.AutoSize = true;
+            stateLabel.Location = new Point(589, 270);
+            stateLabel.Name = "stateLabel";
+            stateLabel.Size = new Size(45, 15);
+            stateLabel.TabIndex = 32;
+            stateLabel.Text = "Gender";
+            // 
+            // genderComboBox
+            // 
+            genderComboBox.FormattingEnabled = true;
+            genderComboBox.Location = new Point(640, 267);
+            genderComboBox.Name = "genderComboBox";
+            genderComboBox.Size = new Size(40, 23);
+            genderComboBox.TabIndex = 31;
+            // 
             // NurseForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(stateLabel);
+            Controls.Add(genderComboBox);
             Controls.Add(updateCheckBox);
             Controls.Add(label14);
             Controls.Add(addPhoneNumberTextBox);
@@ -359,5 +380,7 @@ namespace HealthcareSystemProjectCS3230.view
         private TextBox addPhoneNumberTextBox;
         private Label label14;
         private CheckBox updateCheckBox;
+        private Label stateLabel;
+        private ComboBox genderComboBox;
     }
 }

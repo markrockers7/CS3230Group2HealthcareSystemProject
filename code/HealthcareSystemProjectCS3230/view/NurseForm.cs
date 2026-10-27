@@ -18,8 +18,15 @@ namespace HealthcareSystemProjectCS3230.view
         {
             InitializeComponent();
             PopulateStates();
+            PopulateGender();
         }
 
+        private void PopulateGender()
+        {
+            var genders = new[] { 'U', 'M', 'F' };
+            genderComboBox.Items.Clear();
+            genderComboBox.Items.AddRange(genders);
+        }
         private void PopulateStates()
         {
             var states = new[]
@@ -78,12 +85,14 @@ namespace HealthcareSystemProjectCS3230.view
                 var zipcode = addZipCodeTextBox.Text.Trim();
                 var username = addUsernameTextBox.Text.Trim();
                 var password = addPasswordTextBox.Text.Trim();
+                var gender = genderComboBox.SelectedItem?.ToString().ToCharArray()[0] ?? 'U';
                 var nurse = new Nurse(0, 0, username)
                 {
                     FirstName = firstName,
                     LastName = lastName,
                     Birthdate = birthdate,
                     PhoneNumber = phone,
+                    Gender = gender,
                     Address = new Address
                     {
                         Street = street,
