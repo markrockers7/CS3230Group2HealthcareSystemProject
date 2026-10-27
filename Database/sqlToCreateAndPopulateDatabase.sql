@@ -31,24 +31,25 @@ CREATE TABLE Person (
     birthdate     DATE        NOT NULL,
     phone_number  CHAR(10)    NOT NULL,
     address_id    INT         NOT NULL,
+    gender	   CHAR(1),       NOT NULL,
     CONSTRAINT person_fk_address FOREIGN KEY (address_id) REFERENCES Address(address_id)
 );
 
-INSERT INTO Person (person_id, first_name, last_name, birthdate, phone_number, address_id) VALUES
-(1,  'Sarah',   'Mitchell',  '1975-04-12', '7705550101', 1),
-(2,  'James',   'Carter',    '1968-09-30', '7705550102', 2),
-(3,  'Priya',   'Patel',     '1982-01-22', '7705550103', 3),
-(4,  'Emily',   'Johnson',   '1990-06-15', '7705550104', 4),
-(5,  'Marcus',  'Brown',     '1987-11-03', '6785550105', 5),
-(6,  'Ashley',  'Davis',     '1994-02-28', '6785550106', 6),
-(7,  'Robert',  'Wilson',    '1979-08-19', '7705550107', 7),
-(8,  'Linda',   'Thompson',  '1958-03-07', '4045550108', 8),
-(9,  'Michael', 'Garcia',    '1985-12-25', '7705550109', 9),
-(10, 'Jessica', 'Martinez',  '1996-07-14', '6785550110', 10),
-(11, 'David',   'Lee',       '2015-05-09', '7705550111', 11),
-(12, 'Karen',   'White',     '1949-10-31', '7705550112', 12),
-(13, 'Jane',    'Doe',       '1992-03-18', '7705550113', 13),
-(14, 'John',    'Doe',       '1984-07-04', '7705550114', 14);
+INSERT INTO Person (person_id, first_name, last_name, birthdate, phone_number, address_id, gender) VALUES
+(1,  'Sarah',   'Mitchell',  '1975-04-12', '7705550101', 1, 'F'),
+(2,  'James',   'Carter',    '1968-09-30', '7705550102', 2, 'M'),
+(3,  'Priya',   'Patel',     '1982-01-22', '7705550103', 3, 'F'),
+(4,  'Emily',   'Johnson',   '1990-06-15', '7705550104', 4, 'F'),
+(5,  'Marcus',  'Brown',     '1987-11-03', '6785550105', 5, 'M'),
+(6,  'Ashley',  'Davis',     '1994-02-28', '6785550106', 6, 'F'),
+(7,  'Robert',  'Wilson',    '1979-08-19', '7705550107', 7, 'M'),
+(8,  'Linda',   'Thompson',  '1958-03-07', '4045550108', 8, 'F'),
+(9,  'Michael', 'Garcia',    '1985-12-25', '7705550109', 9, 'M'),
+(10, 'Jessica', 'Martinez',  '1996-07-14', '6785550110', 10, 'F'),
+(11, 'David',   'Lee',       '2015-05-09', '7705550111', 11, 'M'),
+(12, 'Karen',   'White',     '1949-10-31', '7705550112', 12, 'F'),
+(13, 'Jane',    'Doe',       '1992-03-18', '7705550113', 13, 'F'),
+(14, 'John',    'Doe',       '1984-07-04', '7705550114', 14, 'M');
 
 CREATE TABLE Account (
     username  VARCHAR(50)  PRIMARY KEY,
