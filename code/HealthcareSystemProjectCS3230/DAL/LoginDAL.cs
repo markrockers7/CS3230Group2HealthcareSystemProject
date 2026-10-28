@@ -14,7 +14,7 @@ namespace HealthcareSystemProjectCS3230.DAL
         /// <param name="username">The account username.</param>
         /// <param name="password">The account password.</param>
         /// <returns>The account type if the credentials are valid; otherwise, <see langword="null"/>.</returns>
-        public static string? VerifyLogin(string username, string password)
+        public string? VerifyLogin(string username, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -38,7 +38,7 @@ namespace HealthcareSystemProjectCS3230.DAL
         /// <param name="username">The nurse account username.</param>
         /// <param name="password">The account password.</param>
         /// <returns>The nurse's login session if the credentials and nurse record are valid; otherwise, <see langword="null"/>.</returns>
-        public static LoginSession? SetNurseLoginSession(string username, string password)
+        public LoginSession? SetNurseLoginSession(string username, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -67,7 +67,7 @@ namespace HealthcareSystemProjectCS3230.DAL
         /// <param name="username">The administrator account username.</param>
         /// <param name="password">The account password.</param>
         /// <returns>The administrator's login session if the credentials and administrator record are valid; otherwise, <see langword="null"/>.</returns>
-        public static LoginSession? SetAdministratorLoginSession(string username, string password)
+        public LoginSession? SetAdministratorLoginSession(string username, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
