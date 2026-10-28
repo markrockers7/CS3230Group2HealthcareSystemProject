@@ -26,8 +26,11 @@
             patientIdTextBox = new TextBox();
             doctorLabel = new Label();
             doctorComboBox = new ComboBox();
-            dateTimeLabel = new Label();
-            appointmentDateTimePicker = new DateTimePicker();
+            dateLabel = new Label();
+            appointmentDatePicker = new DateTimePicker();
+            timeSlotLabel = new Label();
+            appointmentTimeComboBox = new ComboBox();
+            availabilityStatusLabel = new Label();
             reasonLabel = new Label();
             reasonTextBox = new TextBox();
             bookButton = new Button();
@@ -79,56 +82,82 @@
             doctorComboBox.Name = "doctorComboBox";
             doctorComboBox.Size = new Size(300, 23);
             doctorComboBox.TabIndex = 1;
+            doctorComboBox.SelectedIndexChanged += doctorComboBox_SelectedIndexChanged;
             //
-            // dateTimeLabel
+            // dateLabel
             //
-            dateTimeLabel.AutoSize = true;
-            dateTimeLabel.Location = new Point(20, 175);
-            dateTimeLabel.Name = "dateTimeLabel";
-            dateTimeLabel.Text = "Date and time:";
+            dateLabel.AutoSize = true;
+            dateLabel.Location = new Point(20, 175);
+            dateLabel.Name = "dateLabel";
+            dateLabel.Text = "Date:";
             //
-            // appointmentDateTimePicker
+            // appointmentDatePicker
             //
-            appointmentDateTimePicker.CustomFormat = "MM/dd/yyyy   hh:mm tt";
-            appointmentDateTimePicker.Format = DateTimePickerFormat.Custom;
-            appointmentDateTimePicker.Location = new Point(130, 172);
-            appointmentDateTimePicker.Name = "appointmentDateTimePicker";
-            appointmentDateTimePicker.Size = new Size(300, 23);
-            appointmentDateTimePicker.TabIndex = 2;
+            appointmentDatePicker.Format = DateTimePickerFormat.Short;
+            appointmentDatePicker.Location = new Point(130, 172);
+            appointmentDatePicker.Name = "appointmentDatePicker";
+            appointmentDatePicker.Size = new Size(300, 23);
+            appointmentDatePicker.TabIndex = 2;
+            appointmentDatePicker.ValueChanged += appointmentDatePicker_ValueChanged;
+            //
+            // timeSlotLabel
+            //
+            timeSlotLabel.AutoSize = true;
+            timeSlotLabel.Location = new Point(20, 215);
+            timeSlotLabel.Name = "timeSlotLabel";
+            timeSlotLabel.Text = "Time slot:";
+            //
+            // appointmentTimeComboBox
+            //
+            appointmentTimeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            appointmentTimeComboBox.FormattingEnabled = true;
+            appointmentTimeComboBox.Location = new Point(130, 212);
+            appointmentTimeComboBox.Name = "appointmentTimeComboBox";
+            appointmentTimeComboBox.Size = new Size(300, 23);
+            appointmentTimeComboBox.TabIndex = 3;
+            //
+            // availabilityStatusLabel
+            //
+            availabilityStatusLabel.AutoSize = true;
+            availabilityStatusLabel.ForeColor = Color.Firebrick;
+            availabilityStatusLabel.Location = new Point(130, 238);
+            availabilityStatusLabel.Name = "availabilityStatusLabel";
+            availabilityStatusLabel.Size = new Size(0, 15);
+            availabilityStatusLabel.TabIndex = 11;
             //
             // reasonLabel
             //
             reasonLabel.AutoSize = true;
-            reasonLabel.Location = new Point(20, 215);
+            reasonLabel.Location = new Point(20, 270);
             reasonLabel.Name = "reasonLabel";
             reasonLabel.Text = "Reason:";
             //
             // reasonTextBox
             //
-            reasonTextBox.Location = new Point(130, 212);
+            reasonTextBox.Location = new Point(130, 267);
             reasonTextBox.MaxLength = 255;
             reasonTextBox.Multiline = true;
             reasonTextBox.Name = "reasonTextBox";
             reasonTextBox.ScrollBars = ScrollBars.Vertical;
             reasonTextBox.Size = new Size(300, 80);
-            reasonTextBox.TabIndex = 3;
+            reasonTextBox.TabIndex = 4;
             //
             // bookButton
             //
-            bookButton.Location = new Point(250, 315);
+            bookButton.Location = new Point(250, 370);
             bookButton.Name = "bookButton";
             bookButton.Size = new Size(85, 30);
-            bookButton.TabIndex = 4;
+            bookButton.TabIndex = 5;
             bookButton.Text = "Book";
             bookButton.UseVisualStyleBackColor = true;
             bookButton.Click += bookButton_Click;
             //
             // cancelButton
             //
-            cancelButton.Location = new Point(345, 315);
+            cancelButton.Location = new Point(345, 370);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(85, 30);
-            cancelButton.TabIndex = 5;
+            cancelButton.TabIndex = 6;
             cancelButton.Text = "Cancel";
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += cancelButton_Click;
@@ -139,15 +168,18 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = cancelButton;
-            ClientSize = new Size(460, 365);
+            ClientSize = new Size(460, 420);
             Controls.Add(loggedInLabel);
             Controls.Add(titleLabel);
             Controls.Add(patientIdLabel);
             Controls.Add(patientIdTextBox);
             Controls.Add(doctorLabel);
             Controls.Add(doctorComboBox);
-            Controls.Add(dateTimeLabel);
-            Controls.Add(appointmentDateTimePicker);
+            Controls.Add(dateLabel);
+            Controls.Add(appointmentDatePicker);
+            Controls.Add(timeSlotLabel);
+            Controls.Add(appointmentTimeComboBox);
+            Controls.Add(availabilityStatusLabel);
             Controls.Add(reasonLabel);
             Controls.Add(reasonTextBox);
             Controls.Add(bookButton);
@@ -170,8 +202,11 @@
         private TextBox patientIdTextBox;
         private Label doctorLabel;
         private ComboBox doctorComboBox;
-        private Label dateTimeLabel;
-        private DateTimePicker appointmentDateTimePicker;
+        private Label dateLabel;
+        private DateTimePicker appointmentDatePicker;
+        private Label timeSlotLabel;
+        private ComboBox appointmentTimeComboBox;
+        private Label availabilityStatusLabel;
         private Label reasonLabel;
         private TextBox reasonTextBox;
         private Button bookButton;
