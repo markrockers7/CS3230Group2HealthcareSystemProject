@@ -33,62 +33,81 @@
             passwordTextBox = new TextBox();
             label1 = new Label();
             label2 = new Label();
+            LoginWarningLabel = new Label();
             SuspendLayout();
             // 
             // LoginButton
             // 
-            LoginButton.Location = new Point(362, 299);
+            LoginButton.Location = new Point(517, 498);
+            LoginButton.Margin = new Padding(4, 5, 4, 5);
             LoginButton.Name = "LoginButton";
-            LoginButton.Size = new Size(75, 23);
-            LoginButton.TabIndex = 0;
+            LoginButton.Size = new Size(107, 38);
+            LoginButton.TabIndex = 2;
             LoginButton.Text = "Login";
             LoginButton.UseVisualStyleBackColor = true;
-            LoginButton.Click += loginButton;
+            LoginButton.Click += LoginButtonClick;
             // 
             // usernameTextBox
             // 
-            usernameTextBox.Location = new Point(350, 149);
+            usernameTextBox.Location = new Point(500, 248);
+            usernameTextBox.Margin = new Padding(4, 5, 4, 5);
             usernameTextBox.Name = "usernameTextBox";
-            usernameTextBox.Size = new Size(100, 23);
+            usernameTextBox.Size = new Size(141, 31);
             usernameTextBox.TabIndex = 0;
             usernameTextBox.TextChanged += TextBoxes_TextChanged;
             // 
             // passwordTextBox
             // 
-            passwordTextBox.Location = new Point(350, 214);
+            passwordTextBox.Location = new Point(500, 357);
+            passwordTextBox.Margin = new Padding(4, 5, 4, 5);
             passwordTextBox.Name = "passwordTextBox";
-            passwordTextBox.Size = new Size(100, 23);
+            passwordTextBox.Size = new Size(141, 31);
             passwordTextBox.TabIndex = 1;
             passwordTextBox.TextChanged += TextBoxes_TextChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(284, 217);
+            label1.Location = new Point(406, 362);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(60, 15);
+            label1.Size = new Size(91, 25);
             label1.TabIndex = 2;
             label1.Text = "Password:";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(284, 152);
+            label2.Location = new Point(406, 253);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(63, 15);
+            label2.Size = new Size(95, 25);
             label2.TabIndex = 3;
             label2.Text = "Username:";
             // 
+            // LoginWarningLabel
+            // 
+            LoginWarningLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            LoginWarningLabel.ForeColor = Color.Red;
+            LoginWarningLabel.Location = new Point(268, 175);
+            LoginWarningLabel.Name = "LoginWarningLabel";
+            LoginWarningLabel.Size = new Size(600, 32);
+            LoginWarningLabel.TabIndex = 4;
+            LoginWarningLabel.Text = "WARNING";
+            LoginWarningLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // LoginForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1143, 750);
+            Controls.Add(LoginWarningLabel);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(passwordTextBox);
             Controls.Add(usernameTextBox);
             Controls.Add(LoginButton);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "LoginForm";
             Text = "LoginForm";
             ResumeLayout(false);
@@ -102,5 +121,6 @@
         private TextBox passwordTextBox;
         private Label label1;
         private Label label2;
+        private Label LoginWarningLabel;
     }
 }

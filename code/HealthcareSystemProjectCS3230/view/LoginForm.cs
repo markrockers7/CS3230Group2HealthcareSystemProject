@@ -6,30 +6,33 @@ namespace HealthcareSystemProjectCS3230.view
     {
         private const string LoginUnsuccessfulError = "Username and/or password do not match.";
 
-        private LoginController _loginController = new LoginController();
+        private readonly LoginController _loginController = new LoginController();
 
         public LoginForm()
         {
             InitializeComponent();
+            LoginWarningLabel.Visible = false;
 
             UpdateLoginButton();
         }
 
-        private void loginButton(object sender, EventArgs e)
+        private void LoginButtonClick(object sender, EventArgs e)
         {
             try
             {
                 if (_loginController.IsValidLogin(usernameTextBox.Text, passwordTextBox.Text))
                 {
                     Hide();
-                    MainMenuForm mainMenuForm = new MainMenuForm(_loginController.LoginSession);
+                    LoginWarningLabel.Visible = false;
+                    var mainMenuForm = new MainMenuForm(_loginController.LoginSession);
                     ClearFields();
                     mainMenuForm.ShowDialog();
                     Show();
                 }
                 else
                 {
-                    MessageBox.Show(LoginUnsuccessfulError);
+                    LoginWarningLabel.Text = LoginUnsuccessfulError;
+                    LoginWarningLabel.Visible = true;
                 }
             }
             catch (Exception ex)
