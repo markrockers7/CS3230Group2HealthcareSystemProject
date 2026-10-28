@@ -59,6 +59,7 @@ namespace HealthcareSystemProjectCS3230.view
             PatientResultsGrid.Columns.Add(CreateTextColumn(nameof(Patient.FirstName), "First Name"));
             PatientResultsGrid.Columns.Add(CreateTextColumn(nameof(Patient.LastName), "Last Name"));
             PatientResultsGrid.Columns.Add(CreateTextColumn(nameof(Patient.Birthdate), "Birthdate", "d"));
+            PatientResultsGrid.Columns.Add(CreateTextColumn(nameof(Patient.Gender), "Gender"));
             PatientResultsGrid.Columns.Add(CreateTextColumn(nameof(Patient.PhoneNumber), "Phone Number"));
             PatientResultsGrid.Columns.Add(CreateTextColumn(nameof(Patient.Address), "Address"));
             PatientResultsGrid.Columns.Add(new DataGridViewCheckBoxColumn
