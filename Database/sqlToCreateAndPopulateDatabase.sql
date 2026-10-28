@@ -31,7 +31,7 @@ CREATE TABLE Person (
     birthdate     DATE        NOT NULL,
     phone_number  CHAR(10)    NOT NULL,
     address_id    INT         NOT NULL,
-    gender	   CHAR(1),       NOT NULL,
+    gender	   CHAR(1) NOT NULL,
     CONSTRAINT person_fk_address FOREIGN KEY (address_id) REFERENCES Address(address_id)
 );
 
