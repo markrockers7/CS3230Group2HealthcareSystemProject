@@ -139,7 +139,8 @@ namespace HealthcareSystemProjectCS3230.view
                     State = stateComboBox.SelectedItem?.ToString() ?? string.Empty,
                     Zipcode = zipcodeTextBox.Text.Trim()
                 },
-                IsActive = true
+                IsActive = true,
+                Gender = genderComboBox.SelectedItem?.ToString()?.ToCharArray()[0] ?? 'U'
             };
 
             try
