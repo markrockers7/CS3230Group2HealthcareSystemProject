@@ -6,7 +6,7 @@ namespace HealthcareSystemProjectCS3230.view
     {
         private const string LoginUnsuccessfulError = "Username and/or password do not match.";
 
-        private readonly LoginController _loginController = new LoginController();
+        private readonly LoginController _loginController = new LoginController(null);
 
         public LoginForm()
         {
@@ -20,7 +20,7 @@ namespace HealthcareSystemProjectCS3230.view
         {
             try
             {
-                if (_loginController.IsValidLogin(usernameTextBox.Text, passwordTextBox.Text))
+                if (_loginController.IsValidLogin(usernameTextBox.Text, passwordTextBox.Text) && _loginController.LoginSession != null)
                 {
                     Hide();
                     LoginWarningLabel.Visible = false;

@@ -6,10 +6,9 @@ namespace HealthcareSystemProjectCS3230.controler
     /// <summary>
     /// Controller to handle login operations, including validating user credentials and creating login sessions.
     /// </summary>
-    public class LoginController
+    public class LoginController(LoginSession? loginSession)
     {
-
-        public LoginSession LoginSession { get; private set; }
+        public LoginSession? LoginSession { get; private set; } = loginSession;
 
         /// <summary>
         /// Validates the user's login credentials.
@@ -27,17 +26,19 @@ namespace HealthcareSystemProjectCS3230.controler
             {
                 throw new ArgumentException("Password cannot be Whitespace");
             }
-            var loginSession = LoginDAL.VerifyLogin(username, password);
+
+            var loginDal = new LoginDAL();
+            var loginSession = loginDal.VerifyLogin(username, password);
             if (loginSession == "nurse")
             {
-                var nurseLogin = LoginDAL.SetNurseLoginSession(username, password);
+                var nurseLogin = loginDal.SetNurseLoginSession(username, password);
                 if (nurseLogin == null) return false;
                 LoginSession = nurseLogin;
                 return true;
             }
             if (loginSession == "administrator")
             {
-                var adminLogin = LoginDAL.SetAdministratorLoginSession(username, password);
+                var adminLogin = loginDal.SetAdministratorLoginSession(username, password);
                 if (adminLogin == null) return false;
                 LoginSession = adminLogin;
                 return true;
