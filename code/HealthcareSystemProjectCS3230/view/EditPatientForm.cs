@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using HealthcareSystemProjectCS3230.model;
 using HealthcareSystemProjectCS3230.controler;
@@ -10,15 +7,30 @@ namespace HealthcareSystemProjectCS3230.view
 {
     public partial class EditPatientForm : Form
     {
-        private List<Patient> _patients = new List<Patient>();
         private readonly PatientController _controller = new PatientController();
+        private readonly PatientSearchControl patientSearchControl;
 
         public EditPatientForm(LoginSession loginSession)
         {
             InitializeComponent();
             loggedInLabel.Text = $"Hello, {loginSession.FullName}!{Environment.NewLine}Username: {loginSession.Username}{Environment.NewLine}ID: {loginSession.id}";
             PopulateStates();
-            LoadPatients();
+
+            patientSearchControl = new PatientSearchControl
+            {
+                Dock = DockStyle.Fill,
+                Height = 320
+            };
+            patientSearchControl.PatientSelected += PatientSearchControl_PatientSelected;
+
+            if (Controls[0] is TableLayoutPanel mainLayout)
+            {
+                mainLayout.Controls.Add(patientSearchControl, 0, 1);
+                mainLayout.SetColumnSpan(patientSearchControl, 2);
+            }
+
+            // Nothing is editable until a patient is selected
+            ClearEditFields();
         }
 
         private void PopulateStates()
@@ -35,41 +47,63 @@ namespace HealthcareSystemProjectCS3230.view
             stateComboBox.Items.AddRange(states);
         }
 
-        private void LoadPatients()
+        private void PatientSearchControl_PatientSelected(object? sender, EventArgs e)
         {
-            _patients = _controller.GetAllPatients();
-            patientComboBox.Items.Clear();
-            foreach (var p in _patients)
+            var selectedPatient = patientSearchControl.SelectedPatient;
+            if (selectedPatient == null)
             {
-                var name = $"{p.FirstName} {p.LastName}";
-                patientComboBox.Items.Add(name);
+                ClearEditFields();
+                return;
             }
-            if (patientComboBox.Items.Count > 0) patientComboBox.SelectedIndex = 0;
+
+            LoadPatientData(selectedPatient);
+            EnableEditFields(true);
+            Tag = selectedPatient;
         }
 
-        private void patientComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        private void LoadPatientData(Patient patient)
         {
-            if (patientComboBox.SelectedIndex < 0) return;
-            var sel = _patients[patientComboBox.SelectedIndex];
-            var loaded = _controller.GetPatientById(sel.Id);
-            if (loaded == null) return;
+            firstNameTextBox.Text = patient.FirstName;
+            lastNameTextBox.Text = patient.LastName;
+            birthdatePicker.Value = patient.Birthdate;
+            phoneTextBox.Text = patient.PhoneNumber;
+            streetTextBox.Text = patient.Address.Street;
+            cityTextBox.Text = patient.Address.City;
+            zipcodeTextBox.Text = patient.Address.Zipcode;
+            isActiveCheckBox.Checked = patient.IsActive;
 
-            // populate fields
-            firstNameTextBox.Text = loaded.FirstName;
-            lastNameTextBox.Text = loaded.LastName;
-            birthdatePicker.Value = loaded.Birthdate;
-            phoneTextBox.Text = loaded.PhoneNumber;
-            streetTextBox.Text = loaded.Address.Street;
-            cityTextBox.Text = loaded.Address.City;
-            zipcodeTextBox.Text = loaded.Address.Zipcode;
-            isActiveCheckBox.Checked = loaded.IsActive;
-            // select state in combobox if present
-            var idx = stateComboBox.Items.IndexOf(loaded.Address.State);
+            var idx = stateComboBox.Items.IndexOf(patient.Address.State);
             if (idx >= 0) stateComboBox.SelectedIndex = idx;
             else if (stateComboBox.Items.Count > 0) stateComboBox.SelectedIndex = 0;
+        }
 
-            // store ids in Tag for update
-            this.Tag = loaded;
+        private void ClearEditFields()
+        {
+            firstNameTextBox.Clear();
+            lastNameTextBox.Clear();
+            birthdatePicker.Value = DateTime.Today;
+            phoneTextBox.Clear();
+            streetTextBox.Clear();
+            cityTextBox.Clear();
+            zipcodeTextBox.Clear();
+            isActiveCheckBox.Checked = true;
+            stateComboBox.SelectedIndex = -1;
+            EnableEditFields(false);
+            Tag = null;
+        }
+
+        private void EnableEditFields(bool enabled)
+        {
+            firstNameTextBox.Enabled = enabled;
+            lastNameTextBox.Enabled = enabled;
+            birthdatePicker.Enabled = enabled;
+            phoneTextBox.Enabled = enabled;
+            streetTextBox.Enabled = enabled;
+            cityTextBox.Enabled = enabled;
+            stateComboBox.Enabled = enabled;
+            zipcodeTextBox.Enabled = enabled;
+            isActiveCheckBox.Enabled = enabled;
+            updateButton.Enabled = enabled;
         }
 
         private void cancelButton_Click(object? sender, EventArgs e)
@@ -79,7 +113,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void updateButton_Click(object? sender, EventArgs e)
         {
-            if (this.Tag is not Patient existing) return;
+            if (Tag is not Patient existing) return;
 
             existing.FirstName = firstNameTextBox.Text.Trim();
             existing.LastName = lastNameTextBox.Text.Trim();
@@ -95,7 +129,8 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 _controller.UpdatePatient(existing);
                 MessageBox.Show("Patient updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadPatients();
+                patientSearchControl.Clear();
+                ClearEditFields();
             }
             catch (ArgumentException ex)
             {

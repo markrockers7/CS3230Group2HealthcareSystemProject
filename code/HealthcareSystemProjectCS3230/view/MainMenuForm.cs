@@ -61,7 +61,7 @@ namespace HealthcareSystemProjectCS3230.view
 
             var appointmentForm = new AppointmentForm();
             appointmentForm.setLoginSession(_loginSession);
-            appointmentForm.ShowDialog();
+                appointmentForm.ShowDialog();
 
 
             Show();

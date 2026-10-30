@@ -12,6 +12,7 @@ namespace HealthcareSystemProjectCS3230.view
         private readonly TextBox lastNameTextBox;
         private readonly DateTimePicker birthdatePicker;
         private readonly Button searchButton;
+        private readonly Button clearButton;
         private readonly PatientController patientController;
 
         public DataGridView PatientResultsGrid { get; }
@@ -42,7 +43,9 @@ namespace HealthcareSystemProjectCS3230.view
                 Checked = false
             };
             searchButton = new Button { Text = "Search", AutoSize = true };
+            clearButton = new Button { Text = "Clear", AutoSize = true };
             searchButton.Click += (_, _) => SearchRequested?.Invoke(this, EventArgs.Empty);
+            clearButton.Click += ClearButton_Click;
 
             PatientResultsGrid = new DataGridView
             {
@@ -75,13 +78,15 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(12),
-                ColumnCount = 4,
+                ColumnCount = 6,
                 RowCount = 4
             };
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 85));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 85));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 54));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
@@ -99,11 +104,12 @@ namespace HealthcareSystemProjectCS3230.view
             layout.Controls.Add(firstNameTextBox, 1, 1);
             layout.Controls.Add(new Label { Text = "Last name", AutoSize = true, Anchor = AnchorStyles.Left }, 2, 1);
             layout.Controls.Add(lastNameTextBox, 3, 1);
+            layout.Controls.Add(searchButton, 4, 1);
+            layout.Controls.Add(clearButton, 5, 1);
             layout.Controls.Add(new Label { Text = "Birthdate", AutoSize = true, Anchor = AnchorStyles.Left }, 0, 2);
             layout.Controls.Add(birthdatePicker, 1, 2);
-            layout.Controls.Add(searchButton, 3, 2);
             layout.Controls.Add(PatientResultsGrid, 0, 3);
-            layout.SetColumnSpan(PatientResultsGrid, 4);
+            layout.SetColumnSpan(PatientResultsGrid, 6);
 
             Controls.Add(layout);
         }
@@ -138,6 +144,15 @@ namespace HealthcareSystemProjectCS3230.view
             PatientResultsGrid.DataSource = new BindingList<Patient>(patients.ToList());
         }
 
+        private void ClearButton_Click(object? sender, EventArgs e)
+        {
+            firstNameTextBox.Clear();
+            lastNameTextBox.Clear();
+            birthdatePicker.Checked = false;
+            PatientResultsGrid.DataSource = null;
+            PatientResultsGrid.ClearSelection();
+        }
+
         private static DataGridViewTextBoxColumn CreateTextColumn(string propertyName, string headerText, string? format = null)
         {
             return new DataGridViewTextBoxColumn
@@ -155,7 +170,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             // PatientSearchForm
             // 
-            ClientSize = new Size(284, 261);
+            ClientSize = new Size(620, 479);
             Name = "PatientSearchForm";
             ResumeLayout(false);
 

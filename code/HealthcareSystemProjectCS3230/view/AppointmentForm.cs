@@ -15,14 +15,18 @@ namespace HealthcareSystemProjectCS3230.view
         private bool _isEditMode;
         private bool _isReadOnlyEdit;
         private TimeSpan? _currentSlot;
+        private int? _selectedPatientId;
 
+        // Create mode
         public AppointmentForm()
         {
             InitializeComponent();
             ConfigureForm();
             LoadDoctors();
+            EnableAppointmentFields(false);
         }
 
+        // Edit mode
         public AppointmentForm(int appointmentId)
         {
             InitializeComponent();
@@ -41,16 +45,31 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ConfigureForm()
         {
+            // Past dates are only blocked when creating; an old appointment may be opened to view
+            if (!_isEditMode)
+            {
+                appointmentDatePicker.MinDate = DateTime.Today;
+            }
+
             appointmentDatePicker.Value = DateTime.Today;
             appointmentTimeComboBox.Format += appointmentTimeComboBox_Format;
             availabilityStatusLabel.Text = string.Empty;
+            inactivePatientLabel.Text = string.Empty;
         }
 
         private void LoadDoctors()
         {
-            doctorComboBox.DataSource = _appointmentController.GetDoctors();
-            doctorComboBox.DisplayMember = "id";
-            doctorComboBox.ValueMember = "id";
+            try
+            {
+                // Set Display/Value members first so SelectedValue is the doctor id right away
+                doctorComboBox.DisplayMember = nameof(DoctorView.FullName);
+                doctorComboBox.ValueMember = nameof(DoctorView.DoctorId);
+                doctorComboBox.DataSource = _appointmentController.GetDoctorsWithNames();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not load doctors: " + ex.Message, "Error");
+            }
 
             RefreshAvailableSlots();
         }
@@ -72,7 +91,10 @@ namespace HealthcareSystemProjectCS3230.view
             Text = "Edit Appointment";
             bookButton.Text = "Save";
 
-            patientIdTextBox.Text = appointment.PatientId.ToString();
+            // Keep the appointment's current patient unless the nurse searches and picks a different one
+            _selectedPatientId = appointment.PatientId;
+            patientNameTextBox.Text = "Patient ID " + appointment.PatientId;
+
             doctorComboBox.SelectedValue = appointment.DoctorId;
             appointmentDatePicker.Value = appointment.DateTime.Date;
             reasonTextBox.Text = appointment.Reason;
@@ -84,15 +106,64 @@ namespace HealthcareSystemProjectCS3230.view
             if (!_appointmentController.CanEditAppointment(appointment.DateTime))
             {
                 _isReadOnlyEdit = true;
-                patientIdTextBox.Enabled = false;
-                doctorComboBox.Enabled = false;
-                appointmentDatePicker.Enabled = false;
-                appointmentTimeComboBox.Enabled = false;
-                reasonTextBox.Enabled = false;
-                bookButton.Enabled = false;
+                patientSearchControl.Enabled = false;
+                EnableAppointmentFields(false);
                 availabilityStatusLabel.Text = "This appointment cannot be edited on or after its date.";
+                return;
             }
+
+            EnableAppointmentFields(true);
         }
+
+        private void patientSearchControl_PatientSelected(object? sender, EventArgs e)
+        {
+            Patient? patient = patientSearchControl.SelectedPatient;
+
+            if (patient == null)
+            {
+                // In edit mode, keep the appointment's current patient
+                if (!_isEditMode)
+                {
+                    ClearSelectedPatient();
+                }
+                return;
+            }
+
+            patientNameTextBox.Text = patient.FirstName + " " + patient.LastName;
+            patientDobTextBox.Text = patient.Birthdate.ToString("d");
+
+            if (!patient.IsActive)
+            {
+                _selectedPatientId = null;
+                inactivePatientLabel.Text = "This patient is inactive and cannot be booked.";
+                EnableAppointmentFields(false);
+                return;
+            }
+
+            _selectedPatientId = patient.Id;
+            inactivePatientLabel.Text = string.Empty;
+            EnableAppointmentFields(!_isReadOnlyEdit);
+        }
+
+        private void ClearSelectedPatient()
+        {
+            _selectedPatientId = null;
+            patientNameTextBox.Clear();
+            patientDobTextBox.Clear();
+            inactivePatientLabel.Text = string.Empty;
+            EnableAppointmentFields(false);
+        }
+
+        private void EnableAppointmentFields(bool enabled)
+        {
+            doctorComboBox.Enabled = enabled;
+            appointmentDatePicker.Enabled = enabled;
+            reasonTextBox.Enabled = enabled;
+            bookButton.Enabled = enabled;
+            appointmentTimeComboBox.Enabled = enabled && appointmentTimeComboBox.Items.Count > 0;
+        }
+
+        private bool CanEditFields => _selectedPatientId.HasValue && !_isReadOnlyEdit;
 
         private void RefreshAvailableSlots()
         {
@@ -118,10 +189,10 @@ namespace HealthcareSystemProjectCS3230.view
                 return;
             }
 
-            appointmentTimeComboBox.Enabled = !_isReadOnlyEdit;
+            appointmentTimeComboBox.Enabled = CanEditFields;
             availabilityStatusLabel.Text = string.Empty;
 
-            if (_isEditMode && _currentSlot.HasValue && selectedDate == appointmentDatePicker.Value.Date)
+            if (_isEditMode && _currentSlot.HasValue)
             {
                 SelectSlot(_currentSlot.Value);
             }
@@ -164,7 +235,13 @@ namespace HealthcareSystemProjectCS3230.view
         {
             try
             {
-                int patientId = int.Parse(patientIdTextBox.Text.Trim());
+                if (!_selectedPatientId.HasValue)
+                {
+                    throw new ArgumentException("Please search for and select an active patient.");
+                }
+
+                int patientId = _selectedPatientId.Value;
+
                 if (!TryGetSelectedDoctorId(out int doctorId))
                 {
                     throw new ArgumentException("Please select a doctor.");
@@ -188,6 +265,7 @@ namespace HealthcareSystemProjectCS3230.view
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message, "Please check your input");
+                RefreshAvailableSlots();
             }
             catch (MySqlException ex)
             {
@@ -196,6 +274,7 @@ namespace HealthcareSystemProjectCS3230.view
             catch (Exception ex)
             {
                 MessageBox.Show("Something went wrong: " + ex.Message, "Error");
+                RefreshAvailableSlots();
             }
         }
 

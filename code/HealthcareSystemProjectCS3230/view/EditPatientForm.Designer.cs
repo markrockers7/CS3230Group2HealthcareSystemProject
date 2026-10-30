@@ -5,7 +5,6 @@ namespace HealthcareSystemProjectCS3230.view
 {
     partial class EditPatientForm
     {
-        private ComboBox patientComboBox = null!;
         private TextBox firstNameTextBox = null!;
         private TextBox lastNameTextBox = null!;
         private DateTimePicker birthdatePicker = null!;
@@ -21,7 +20,6 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void InitializeComponent()
         {
-            patientComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
             firstNameTextBox = new TextBox { Dock = DockStyle.Fill };
             lastNameTextBox = new TextBox { Dock = DockStyle.Fill };
             birthdatePicker = new DateTimePicker { Format = DateTimePickerFormat.Short, Dock = DockStyle.Fill };
@@ -35,15 +33,14 @@ namespace HealthcareSystemProjectCS3230.view
             cancelButton = new Button { Text = "Cancel", AutoSize = true };
             loggedInLabel = new Label { AutoSize = true, Anchor = AnchorStyles.Left };
 
-            patientComboBox.SelectedIndexChanged += patientComboBox_SelectedIndexChanged;
             updateButton.Click += updateButton_Click;
             cancelButton.Click += cancelButton_Click;
 
             var layout = new TableLayoutPanel
             {
                 ColumnCount = 2,
-                RowCount = 12,
-                Dock = DockStyle.Fill,
+                RowCount = 14,
+                Dock = DockStyle.Top,
                 Padding = new Padding(12),
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink
@@ -51,30 +48,41 @@ namespace HealthcareSystemProjectCS3230.view
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
 
+            // Row 0: logged-in user
             layout.Controls.Add(loggedInLabel, 0, 0);
             layout.SetColumnSpan(loggedInLabel, 2);
             layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            AddField(layout, "Patient", patientComboBox, 1);
-            AddField(layout, "First name", firstNameTextBox, 2);
-            AddField(layout, "Last name", lastNameTextBox, 3);
-            AddField(layout, "Birthdate", birthdatePicker, 4);
-            AddField(layout, "Phone", phoneTextBox, 5);
-            AddField(layout, "Street", streetTextBox, 6);
-            AddField(layout, "City", cityTextBox, 7);
-            AddField(layout, "State", stateComboBox, 8);
-            AddField(layout, "ZIP code", zipcodeTextBox, 9);
-            layout.Controls.Add(isActiveCheckBox, 1, 10);
+
+            // Row 1: PatientSearchControl (added in EditPatientForm.cs)
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 330));
+            // Rows 2-3: spacing
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+            AddField(layout, "First name", firstNameTextBox, 4);
+            AddField(layout, "Last name", lastNameTextBox, 5);
+            AddField(layout, "Birthdate", birthdatePicker, 6);
+            AddField(layout, "Phone", phoneTextBox, 7);
+            AddField(layout, "Street", streetTextBox, 8);
+            AddField(layout, "City", cityTextBox, 9);
+            AddField(layout, "State", stateComboBox, 10);
+            AddField(layout, "ZIP code", zipcodeTextBox, 11);
+
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.Controls.Add(isActiveCheckBox, 1, 12);
 
             var buttons = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, Dock = DockStyle.Fill, AutoSize = true };
             buttons.Controls.Add(cancelButton);
             buttons.Controls.Add(updateButton);
-            layout.Controls.Add(buttons, 1, 11);
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.Controls.Add(buttons, 1, 13);
 
             Controls.Add(layout);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(420, 470);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
+            AutoScroll = true;
+            ClientSize = new Size(850, 850);
+            FormBorderStyle = FormBorderStyle.Sizable;
+            MaximizeBox = true;
             MinimizeBox = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Edit Patient";
