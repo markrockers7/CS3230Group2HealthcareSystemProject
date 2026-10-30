@@ -1,14 +1,20 @@
 ﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using HealthcareSystemProjectCS3230.model;
 
 namespace HealthcareSystemProjectCS3230.DAL
 {
+    /// <summary>
+    /// Provides database operations for verifying login credentials and creating login sessions.
+    /// </summary>
     public class LoginDAL
     {
-        public static string? verifyLogin(string username, string password)
+        /// <summary>
+        /// Verifies an account's username and password.
+        /// </summary>
+        /// <param name="username">The account username.</param>
+        /// <param name="password">The account password.</param>
+        /// <returns>The account type if the credentials are valid; otherwise, <see langword="null"/>.</returns>
+        public string? VerifyLogin(string username, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -19,14 +25,20 @@ namespace HealthcareSystemProjectCS3230.DAL
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
-               string accountType = reader.GetString("type");
-               return accountType;
+                string accountType = reader.GetString("type");
+                return accountType;
             }
 
             return null;
         }
 
-        public static LoginSession? SetNurseLoginSession(string username, string password)
+        /// <summary>
+        /// Creates a login session for a nurse with valid credentials.
+        /// </summary>
+        /// <param name="username">The nurse account username.</param>
+        /// <param name="password">The account password.</param>
+        /// <returns>The nurse's login session if the credentials and nurse record are valid; otherwise, <see langword="null"/>.</returns>
+        public LoginSession? SetNurseLoginSession(string username, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -49,7 +61,13 @@ namespace HealthcareSystemProjectCS3230.DAL
             return null;
         }
 
-        public static LoginSession? SetAdministratorLoginSession(string username, string password)
+        /// <summary>
+        /// Creates a login session for an administrator with valid credentials.
+        /// </summary>
+        /// <param name="username">The administrator account username.</param>
+        /// <param name="password">The account password.</param>
+        /// <returns>The administrator's login session if the credentials and administrator record are valid; otherwise, <see langword="null"/>.</returns>
+        public LoginSession? SetAdministratorLoginSession(string username, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
