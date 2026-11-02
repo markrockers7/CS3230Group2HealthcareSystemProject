@@ -7,6 +7,10 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class PatientsDAL
     {
+        /*
+         * Retrieves a list of all patients in the system.
+         * @returns A list of Patient objects representing all patients in the system.
+         */
         public List<Patient> GetAllPatients()
         {
             var results = new List<Patient>();
@@ -30,7 +34,12 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return results;
         }
-
+        /*
+         * Retrieves a list of patients based on the provided first or last name (at least one of them must be provided).
+         * @param firstName The first name of the patient to search for (optional).
+         * @param lastName The last name of the patient to search for (optional).
+         * @returns A list of Patient objects matching the search criteria.
+         */
         public List<Patient> GetPatientsByName(string? firstName, string? lastName)
         {
             if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
@@ -42,11 +51,23 @@ namespace HealthcareSystemProjectCS3230.DAL
             return FindPatients(firstName, lastName, null);
         }
 
+        /*
+         * Retrieves a list of patients based on the provided date of birth.
+         * @param dateOfBirth The date of birth of the patient to search for.
+         * @returns A list of Patient objects matching the search criteria.
+         */
         public List<Patient> GetPatientsByDateOfBirth(DateTime dateOfBirth)
         {
             return FindPatients(null, null, dateOfBirth);
         }
 
+        /*
+         * Retrieves a list of patients based on the provided first name, last name, and date of birth.
+         * @param firstName The first name of the patient to search for (optional).
+         * @param lastName The last name of the patient to search for (optional).
+         * @param dateOfBirth The date of birth of the patient to search for (optional).
+         * @returns A list of Patient objects matching the search criteria.
+         */
         public List<Patient> GetPatientsByNameAndDateOfBirth(
             string? firstName,
             string? lastName,
@@ -61,6 +82,13 @@ namespace HealthcareSystemProjectCS3230.DAL
             return FindPatients(firstName, lastName, dateOfBirth);
         }
 
+        /*
+         * Finds patients based on the provided first name, last name, and date of birth (at least one must be provided).
+         * @param firstName The first name of the patient to search for (optional).
+         * @param lastName The last name of the patient to search for (optional).
+         * @param dateOfBirth The date of birth of the patient to search for (optional).
+         * @returns A list of Patient objects matching the search criteria.
+         */
         private List<Patient> FindPatients(string? firstName, string? lastName, DateTime? dateOfBirth)
         {
             var results = new List<Patient>();
@@ -124,6 +152,11 @@ namespace HealthcareSystemProjectCS3230.DAL
             return results;
         }
 
+        /*
+         * Retrieves a patient by their unique patient ID.
+         * @param patientId The unique ID of the patient to retrieve.
+         * @returns The patient object if found; otherwise, null.
+         */
         public Patient? GetPatientByPatientId(int patientId)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -161,6 +194,11 @@ namespace HealthcareSystemProjectCS3230.DAL
             };
         }
 
+        /*
+         * Adds a new patient to the system, including their address and personal information.
+         * @param p The patient object containing the details to be added.
+         * @returns True if the patient was successfully added; otherwise, false.
+         */
         public bool AddPatient(Patient p)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -216,6 +254,11 @@ namespace HealthcareSystemProjectCS3230.DAL
             }
         }
 
+        /*
+         * Updates an existing patient's information in the system.
+         * @param p The patient object containing the updated details.
+         * @returns True if the patient was successfully updated; otherwise, false.
+         */
         public bool UpdatePatient(Patient p)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);

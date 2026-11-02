@@ -11,6 +11,6 @@ namespace HealthcareSystemProjectCS3230.model
         public string PhoneNumber { get; set; } = string.Empty;
         public Address Address { get; set; } = new Address();
 
-        public char Gender { get; set; } = 'U'; // U for unspecified, M for male, F for female
+        public char Gender { get; set; } = 'U'; // U for unspecified or N/A, M for male, F for female
     }
 }
