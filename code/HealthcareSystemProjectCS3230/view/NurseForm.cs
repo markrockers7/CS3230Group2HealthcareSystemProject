@@ -245,7 +245,7 @@ namespace HealthcareSystemProjectCS3230.view
                 zipCodeErrorLabel.Text = "ZIP code must be 5 digits.";
                 isValid = false;
             }
-            if (nurse.Birthdate >= DateTime.Now)
+            if (nurse.Birthdate >= DateTime.Now.Date)
             {
                 birthdateErrorLabel.Text = "Birthdate must be in the past.";
                 isValid = false;
