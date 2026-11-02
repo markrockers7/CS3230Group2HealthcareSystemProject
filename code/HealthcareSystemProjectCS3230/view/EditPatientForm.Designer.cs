@@ -8,6 +8,7 @@ namespace HealthcareSystemProjectCS3230.view
         private TextBox firstNameTextBox = null!;
         private TextBox lastNameTextBox = null!;
         private DateTimePicker birthdatePicker = null!;
+        private ComboBox genderComboBox = null!;
         private TextBox phoneTextBox = null!;
         private TextBox streetTextBox = null!;
         private TextBox cityTextBox = null!;
@@ -23,6 +24,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameTextBox = new TextBox { Dock = DockStyle.Fill };
             lastNameTextBox = new TextBox { Dock = DockStyle.Fill };
             birthdatePicker = new DateTimePicker { Format = DateTimePickerFormat.Short, Dock = DockStyle.Fill };
+            genderComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
             phoneTextBox = new TextBox { Dock = DockStyle.Fill };
             streetTextBox = new TextBox { Dock = DockStyle.Fill };
             cityTextBox = new TextBox { Dock = DockStyle.Fill };
@@ -39,7 +41,7 @@ namespace HealthcareSystemProjectCS3230.view
             var layout = new TableLayoutPanel
             {
                 ColumnCount = 2,
-                RowCount = 14,
+                RowCount = 15,
                 Dock = DockStyle.Top,
                 Padding = new Padding(12),
                 AutoSize = true,
@@ -62,20 +64,21 @@ namespace HealthcareSystemProjectCS3230.view
             AddField(layout, "First name", firstNameTextBox, 4);
             AddField(layout, "Last name", lastNameTextBox, 5);
             AddField(layout, "Birthdate", birthdatePicker, 6);
-            AddField(layout, "Phone", phoneTextBox, 7);
-            AddField(layout, "Street", streetTextBox, 8);
-            AddField(layout, "City", cityTextBox, 9);
-            AddField(layout, "State", stateComboBox, 10);
-            AddField(layout, "ZIP code", zipcodeTextBox, 11);
+            AddField(layout, "Gender", genderComboBox, 7);
+            AddField(layout, "Phone", phoneTextBox, 8);
+            AddField(layout, "Street", streetTextBox, 9);
+            AddField(layout, "City", cityTextBox, 10);
+            AddField(layout, "State", stateComboBox, 11);
+            AddField(layout, "ZIP code", zipcodeTextBox, 12);
 
             layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            layout.Controls.Add(isActiveCheckBox, 1, 12);
+            layout.Controls.Add(isActiveCheckBox, 1, 13);
 
             var buttons = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, Dock = DockStyle.Fill, AutoSize = true };
             buttons.Controls.Add(cancelButton);
             buttons.Controls.Add(updateButton);
             layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            layout.Controls.Add(buttons, 1, 13);
+            layout.Controls.Add(buttons, 1, 14);
 
             Controls.Add(layout);
             AutoScaleMode = AutoScaleMode.Font;

@@ -68,7 +68,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             connection.Open();
 
             var query =
-                "SELECT p.id AS patient_id, p.isActive, p.person_id, per.first_name, per.last_name, " +
+                "SELECT p.id AS patient_id, p.isActive, p.person_id, per.first_name, per.last_name, per.gender, " +
                 "per.birthdate, per.phone_number, per.address_id, a.street, a.city, a.zipcode, a.state " +
                 "FROM Patient p " +
                 "JOIN Person per ON p.person_id = per.person_id " +
@@ -109,6 +109,7 @@ namespace HealthcareSystemProjectCS3230.DAL
                     LastName = reader.GetString("last_name"),
                     Birthdate = reader.GetDateTime("birthdate"),
                     PhoneNumber = reader.GetString("phone_number"),
+                    Gender = reader.GetChar("gender"),
                     Address = new Address
                     {
                         AddressId = reader.GetInt32("address_id"),
@@ -128,7 +129,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
             const string query =
-                "SELECT p.id AS patient_id, p.isActive, p.person_id, per.first_name, per.last_name, per.birthdate, per.phone_number, per.address_id, " +
+                "SELECT p.id AS patient_id, p.isActive, p.person_id, per.first_name, per.last_name, per.birthdate, per.phone_number, per.address_id, per.gender, " +
                 "a.street, a.city, a.zipcode, a.state " +
                 "FROM Patient p " +
                 "JOIN Person per ON p.person_id = per.person_id " +
@@ -148,6 +149,7 @@ namespace HealthcareSystemProjectCS3230.DAL
                 LastName = reader.GetString("last_name"),
                 Birthdate = reader.GetDateTime("birthdate"),
                 PhoneNumber = reader.GetString("phone_number"),
+                Gender = reader.GetChar("gender"),
                 Address = new Address
                 {
                     AddressId = reader.GetInt32("address_id"),
@@ -182,14 +184,15 @@ namespace HealthcareSystemProjectCS3230.DAL
 
                 // Insert Person
                 const string insertPerson =
-                    "INSERT INTO Person (first_name, last_name, birthdate, phone_number, address_id) " +
-                    "VALUES (@first, @last, @birthdate, @phone, @addressId)";
+                    "INSERT INTO Person (first_name, last_name, birthdate, phone_number, address_id, gender) " +
+                    "VALUES (@first, @last, @birthdate, @phone, @addressId, @gender)";
                 using var cmdPer = new MySqlCommand(insertPerson, connection, transaction);
                 cmdPer.Parameters.Add("@first", MySqlDbType.VarChar).Value = p.FirstName;
                 cmdPer.Parameters.Add("@last", MySqlDbType.VarChar).Value = p.LastName;
                 cmdPer.Parameters.Add("@birthdate", MySqlDbType.Date).Value = p.Birthdate;
                 cmdPer.Parameters.Add("@phone", MySqlDbType.String).Value = p.PhoneNumber;
                 cmdPer.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
+                cmdPer.Parameters.Add("@gender", MySqlDbType.String).Value = p.Gender;
                 cmdPer.ExecuteNonQuery();
 
                 using var cmdLastPer = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction);
@@ -233,12 +236,13 @@ namespace HealthcareSystemProjectCS3230.DAL
 
                 // Update Person
                 const string updatePerson =
-                    "UPDATE Person SET first_name = @first, last_name = @last, birthdate = @birthdate, phone_number = @phone WHERE person_id = @personId";
+                    "UPDATE Person SET first_name = @first, last_name = @last, birthdate = @birthdate, phone_number = @phone, gender = @gender WHERE person_id = @personId";
                 using var cmdPer = new MySqlCommand(updatePerson, connection, transaction);
                 cmdPer.Parameters.Add("@first", MySqlDbType.VarChar).Value = p.FirstName;
                 cmdPer.Parameters.Add("@last", MySqlDbType.VarChar).Value = p.LastName;
                 cmdPer.Parameters.Add("@birthdate", MySqlDbType.Date).Value = p.Birthdate;
                 cmdPer.Parameters.Add("@phone", MySqlDbType.String).Value = p.PhoneNumber;
+                cmdPer.Parameters.Add("@gender", MySqlDbType.String).Value = p.Gender;
                 cmdPer.Parameters.Add("@personId", MySqlDbType.Int32).Value = p.PersonId;
                 cmdPer.ExecuteNonQuery();
 

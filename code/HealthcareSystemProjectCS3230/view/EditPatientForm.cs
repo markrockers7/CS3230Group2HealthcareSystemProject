@@ -15,6 +15,7 @@ namespace HealthcareSystemProjectCS3230.view
             InitializeComponent();
             loggedInLabel.Text = $"Hello, {loginSession.FullName}!{Environment.NewLine}Username: {loginSession.Username}{Environment.NewLine}ID: {loginSession.id}";
             PopulateStates();
+            PopulateGender();
 
             patientSearchControl = new PatientSearchControl
             {
@@ -47,6 +48,13 @@ namespace HealthcareSystemProjectCS3230.view
             stateComboBox.Items.AddRange(states);
         }
 
+        private void PopulateGender()
+        {
+            genderComboBox.Items.Clear();
+            genderComboBox.Items.AddRange(new object[] { 'U', 'M', 'F' });
+            genderComboBox.SelectedItem = 'U';
+        }
+
         private void PatientSearchControl_PatientSelected(object? sender, EventArgs e)
         {
             var selectedPatient = patientSearchControl.SelectedPatient;
@@ -66,6 +74,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameTextBox.Text = patient.FirstName;
             lastNameTextBox.Text = patient.LastName;
             birthdatePicker.Value = patient.Birthdate;
+            genderComboBox.SelectedItem = genderComboBox.Items.Contains(patient.Gender) ? patient.Gender : 'U';
             phoneTextBox.Text = patient.PhoneNumber;
             streetTextBox.Text = patient.Address.Street;
             cityTextBox.Text = patient.Address.City;
@@ -82,6 +91,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameTextBox.Clear();
             lastNameTextBox.Clear();
             birthdatePicker.Value = DateTime.Today;
+            genderComboBox.SelectedItem = 'U';
             phoneTextBox.Clear();
             streetTextBox.Clear();
             cityTextBox.Clear();
@@ -97,6 +107,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameTextBox.Enabled = enabled;
             lastNameTextBox.Enabled = enabled;
             birthdatePicker.Enabled = enabled;
+            genderComboBox.Enabled = enabled;
             phoneTextBox.Enabled = enabled;
             streetTextBox.Enabled = enabled;
             cityTextBox.Enabled = enabled;
@@ -118,6 +129,7 @@ namespace HealthcareSystemProjectCS3230.view
             existing.FirstName = firstNameTextBox.Text.Trim();
             existing.LastName = lastNameTextBox.Text.Trim();
             existing.Birthdate = birthdatePicker.Value.Date;
+            existing.Gender = genderComboBox.SelectedItem is char gender ? gender : 'U';
             existing.PhoneNumber = phoneTextBox.Text.Trim();
             existing.Address.Street = streetTextBox.Text.Trim();
             existing.Address.City = cityTextBox.Text.Trim();

@@ -33,6 +33,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameColumn = new DataGridViewTextBoxColumn();
             lastNameColumn = new DataGridViewTextBoxColumn();
             birthdateColumn = new DataGridViewTextBoxColumn();
+            genderColumn = new DataGridViewTextBoxColumn();
             phoneNumberColumn = new DataGridViewTextBoxColumn();
             addressColumn = new DataGridViewTextBoxColumn();
             isActiveColumn = new DataGridViewCheckBoxColumn();
@@ -111,7 +112,7 @@ namespace HealthcareSystemProjectCS3230.view
             patientResultsGrid.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             patientResultsGrid.AutoGenerateColumns = false;
             patientResultsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            patientResultsGrid.Columns.AddRange(new DataGridViewColumn[] { firstNameColumn, lastNameColumn, birthdateColumn, phoneNumberColumn, addressColumn, isActiveColumn });
+            patientResultsGrid.Columns.AddRange(new DataGridViewColumn[] { firstNameColumn, lastNameColumn, birthdateColumn, genderColumn, phoneNumberColumn, addressColumn, isActiveColumn });
             patientResultsGrid.Location = new Point(10, 80);
             patientResultsGrid.MultiSelect = false;
             patientResultsGrid.Name = "patientResultsGrid";
@@ -146,6 +147,14 @@ namespace HealthcareSystemProjectCS3230.view
             birthdateColumn.HeaderText = "Birthdate";
             birthdateColumn.Name = "birthdateColumn";
             birthdateColumn.ReadOnly = true;
+            //
+            // genderColumn
+            //
+            genderColumn.DataPropertyName = "Gender";
+            genderColumn.FillWeight = 60F;
+            genderColumn.HeaderText = "Gender";
+            genderColumn.Name = "genderColumn";
+            genderColumn.ReadOnly = true;
             //
             // phoneNumberColumn
             //
@@ -203,6 +212,7 @@ namespace HealthcareSystemProjectCS3230.view
         private DataGridViewTextBoxColumn firstNameColumn;
         private DataGridViewTextBoxColumn lastNameColumn;
         private DataGridViewTextBoxColumn birthdateColumn;
+        private DataGridViewTextBoxColumn genderColumn;
         private DataGridViewTextBoxColumn phoneNumberColumn;
         private DataGridViewTextBoxColumn addressColumn;
         private DataGridViewCheckBoxColumn isActiveColumn;

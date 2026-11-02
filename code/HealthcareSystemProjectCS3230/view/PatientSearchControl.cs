@@ -104,9 +104,21 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void patientResultsGrid_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (patientResultsGrid.Columns[e.ColumnIndex].DataPropertyName == nameof(Patient.Address) && e.Value is Address address)
+            string propertyName = patientResultsGrid.Columns[e.ColumnIndex].DataPropertyName;
+
+            if (propertyName == nameof(Patient.Address) && e.Value is Address address)
             {
                 e.Value = $"{address.Street}, {address.City}, {address.State} {address.Zipcode}";
+                e.FormattingApplied = true;
+            }
+            else if (propertyName == nameof(Patient.Gender) && e.Value is char gender)
+            {
+                e.Value = gender switch
+                {
+                    'M' => "Male",
+                    'F' => "Female",
+                    _ => "Unknown"
+                };
                 e.FormattingApplied = true;
             }
         }

@@ -34,6 +34,7 @@
             editPatientButton = new Button();
             usernameLabel = new Label();
             nurseManagerButton = new Button();
+            LogoutButton = new Button();
             SuspendLayout();
             // 
             // appointmentButton
@@ -95,11 +96,23 @@
             nurseManagerButton.UseVisualStyleBackColor = true;
             nurseManagerButton.Click += nurseManagerButton_Click;
             // 
+            // LogoutButton
+            // 
+            LogoutButton.Location = new Point(713, 7);
+            LogoutButton.Margin = new Padding(2, 2, 2, 2);
+            LogoutButton.Name = "LogoutButton";
+            LogoutButton.Size = new Size(78, 30);
+            LogoutButton.TabIndex = 6;
+            LogoutButton.Text = "Logout";
+            LogoutButton.UseVisualStyleBackColor = true;
+            LogoutButton.Click += LogoutButton_Click;
+            // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(LogoutButton);
             Controls.Add(nurseManagerButton);
             Controls.Add(usernameLabel);
             Controls.Add(editPatientButton);
@@ -120,5 +133,6 @@
         private Button editPatientButton;
         private Label usernameLabel;
         private Button nurseManagerButton;
+        private Button LogoutButton;
     }
 }
