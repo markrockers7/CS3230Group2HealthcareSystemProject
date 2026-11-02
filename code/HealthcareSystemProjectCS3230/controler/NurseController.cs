@@ -25,9 +25,8 @@ namespace HealthcareSystemProjectCS3230.controler
 
         private bool validateNurse(Nurse nurse)
         {
-
             if (nurse.Username.Length > 50) throw new ArgumentException("Username must be 50 or less characters");
-            
+            if (nurse.Gender == '\0') throw new ArgumentException("Gender is required.");
             if (string.IsNullOrWhiteSpace(nurse.FirstName) || string.IsNullOrWhiteSpace(nurse.LastName))
                 throw new ArgumentException("First and last name are required.");
             if (!System.Text.RegularExpressions.Regex.IsMatch(nurse.PhoneNumber ?? string.Empty, "^[0-9]{10}$"))

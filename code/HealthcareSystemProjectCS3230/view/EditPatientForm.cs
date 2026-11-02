@@ -18,6 +18,7 @@ namespace HealthcareSystemProjectCS3230.view
             InitializeComponent();
             loggedInLabel.Text = $"Hello, {loginSession.FullName}!{Environment.NewLine}Username: {loginSession.Username}{Environment.NewLine}ID: {loginSession.id}";
             PopulateStates();
+            PopulateGender();
             LoadPatients();
         }
 
@@ -33,6 +34,14 @@ namespace HealthcareSystemProjectCS3230.view
             };
             stateComboBox.Items.Clear();
             stateComboBox.Items.AddRange(states);
+        }
+
+        private void PopulateGender()
+        {
+            var genders = new[] { 'U', 'M', 'F' };
+            genderComboBox.Items.Clear();
+            genderComboBox.Items.AddRange(genders);
+            genderComboBox.SelectedItem = 'U';
         }
 
         private void LoadPatients()
@@ -58,6 +67,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameTextBox.Text = loaded.FirstName;
             lastNameTextBox.Text = loaded.LastName;
             birthdatePicker.Value = loaded.Birthdate;
+            genderComboBox.SelectedItem = genderComboBox.Items.Contains(loaded.Gender) ? loaded.Gender : 'U';
             phoneTextBox.Text = loaded.PhoneNumber;
             streetTextBox.Text = loaded.Address.Street;
             cityTextBox.Text = loaded.Address.City;
@@ -84,6 +94,7 @@ namespace HealthcareSystemProjectCS3230.view
             existing.FirstName = firstNameTextBox.Text.Trim();
             existing.LastName = lastNameTextBox.Text.Trim();
             existing.Birthdate = birthdatePicker.Value.Date;
+            existing.Gender = genderComboBox.SelectedItem?.ToString().ToCharArray()[0] ?? 'U';
             existing.PhoneNumber = phoneTextBox.Text.Trim();
             existing.Address.Street = streetTextBox.Text.Trim();
             existing.Address.City = cityTextBox.Text.Trim();
