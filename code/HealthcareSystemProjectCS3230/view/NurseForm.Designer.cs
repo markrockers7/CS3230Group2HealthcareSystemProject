@@ -71,6 +71,9 @@ namespace HealthcareSystemProjectCS3230.view
             fnameErrorLabel = new Label();
             lnameErrorLabel = new Label();
             clearFormButton = new Button();
+            genderLabel = new Label();
+            genderComboBox = new ComboBox();
+            genderErrorLabel = new Label();
             SuspendLayout();
             // 
             // NurseListView
@@ -275,9 +278,9 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             // phoneNumberTextBox
             // 
-            phoneNumberTextBox.Location = new Point(457, 290);
+            phoneNumberTextBox.Location = new Point(457, 285);
             phoneNumberTextBox.Name = "phoneNumberTextBox";
-            phoneNumberTextBox.Size = new Size(221, 23);
+            phoneNumberTextBox.Size = new Size(134, 23);
             phoneNumberTextBox.TabIndex = 28;
             // 
             // label14
@@ -322,7 +325,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             phoneNumberErrorLabel.AutoSize = true;
             phoneNumberErrorLabel.ForeColor = Color.Red;
-            phoneNumberErrorLabel.Location = new Point(457, 316);
+            phoneNumberErrorLabel.Location = new Point(354, 311);
             phoneNumberErrorLabel.Name = "phoneNumberErrorLabel";
             phoneNumberErrorLabel.Size = new Size(0, 15);
             phoneNumberErrorLabel.TabIndex = 33;
@@ -400,11 +403,38 @@ namespace HealthcareSystemProjectCS3230.view
             clearFormButton.UseVisualStyleBackColor = true;
             clearFormButton.Click += clearFormButton_Click;
             // 
+            // genderLabel
+            // 
+            genderLabel.AutoSize = true;
+            genderLabel.Location = new Point(587, 288);
+            genderLabel.Name = "genderLabel";
+            genderLabel.Size = new Size(45, 15);
+            genderLabel.TabIndex = 32;
+            genderLabel.Text = "Gender";
+            // 
+            // genderComboBox
+            // 
+            genderComboBox.FormattingEnabled = true;
+            genderComboBox.Location = new Point(638, 285);
+            genderComboBox.Name = "genderComboBox";
+            genderComboBox.Size = new Size(40, 23);
+            genderComboBox.TabIndex = 31;
+            // 
+            // genderErrorLabel
+            // 
+            genderErrorLabel.AutoSize = true;
+            genderErrorLabel.ForeColor = Color.Red;
+            genderErrorLabel.Location = new Point(638, 311);
+            genderErrorLabel.Name = "genderErrorLabel";
+            genderErrorLabel.Size = new Size(0, 15);
+            genderErrorLabel.TabIndex = 42;
+            // 
             // NurseForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(genderErrorLabel);
             Controls.Add(clearFormButton);
             Controls.Add(lnameErrorLabel);
             Controls.Add(fnameErrorLabel);
@@ -416,6 +446,8 @@ namespace HealthcareSystemProjectCS3230.view
             Controls.Add(phoneNumberErrorLabel);
             Controls.Add(passwordErrorLabel);
             Controls.Add(usernameErrorLabel);
+            Controls.Add(genderLabel);
+            Controls.Add(genderComboBox);
             Controls.Add(updateCheckBox);
             Controls.Add(label14);
             Controls.Add(phoneNumberTextBox);
@@ -491,5 +523,8 @@ namespace HealthcareSystemProjectCS3230.view
         private Label fnameErrorLabel;
         private Label lnameErrorLabel;
         private Button clearFormButton;
+        private Label genderLabel;
+        private ComboBox genderComboBox;
+        private Label genderErrorLabel;
     }
 }

@@ -9,6 +9,7 @@ namespace HealthcareSystemProjectCS3230.view
         private TextBox firstNameTextBox = null!;
         private TextBox lastNameTextBox = null!;
         private DateTimePicker birthdatePicker = null!;
+        private ComboBox genderComboBox = null!;
         private TextBox phoneTextBox = null!;
         private TextBox streetTextBox = null!;
         private TextBox cityTextBox = null!;
@@ -25,6 +26,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameTextBox = new TextBox { Dock = DockStyle.Fill };
             lastNameTextBox = new TextBox { Dock = DockStyle.Fill };
             birthdatePicker = new DateTimePicker { Format = DateTimePickerFormat.Short, Dock = DockStyle.Fill };
+            genderComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
             phoneTextBox = new TextBox { Dock = DockStyle.Fill };
             streetTextBox = new TextBox { Dock = DockStyle.Fill };
             cityTextBox = new TextBox { Dock = DockStyle.Fill };
@@ -42,7 +44,7 @@ namespace HealthcareSystemProjectCS3230.view
             var layout = new TableLayoutPanel
             {
                 ColumnCount = 2,
-                RowCount = 12,
+                RowCount = 13,
                 Dock = DockStyle.Fill,
                 Padding = new Padding(12),
                 AutoSize = true,
@@ -58,21 +60,22 @@ namespace HealthcareSystemProjectCS3230.view
             AddField(layout, "First name", firstNameTextBox, 2);
             AddField(layout, "Last name", lastNameTextBox, 3);
             AddField(layout, "Birthdate", birthdatePicker, 4);
-            AddField(layout, "Phone", phoneTextBox, 5);
-            AddField(layout, "Street", streetTextBox, 6);
-            AddField(layout, "City", cityTextBox, 7);
-            AddField(layout, "State", stateComboBox, 8);
-            AddField(layout, "ZIP code", zipcodeTextBox, 9);
-            layout.Controls.Add(isActiveCheckBox, 1, 10);
+            AddField(layout, "Gender", genderComboBox, 5);
+            AddField(layout, "Phone", phoneTextBox, 6);
+            AddField(layout, "Street", streetTextBox, 7);
+            AddField(layout, "City", cityTextBox, 8);
+            AddField(layout, "State", stateComboBox, 9);
+            AddField(layout, "ZIP code", zipcodeTextBox, 10);
+            layout.Controls.Add(isActiveCheckBox, 1, 11);
 
             var buttons = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, Dock = DockStyle.Fill, AutoSize = true };
             buttons.Controls.Add(cancelButton);
             buttons.Controls.Add(updateButton);
-            layout.Controls.Add(buttons, 1, 11);
+            layout.Controls.Add(buttons, 1, 12);
 
             Controls.Add(layout);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(420, 470);
+            ClientSize = new Size(420, 500);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;

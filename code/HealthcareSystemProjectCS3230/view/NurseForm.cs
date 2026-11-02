@@ -18,8 +18,15 @@ namespace HealthcareSystemProjectCS3230.view
         {
             InitializeComponent();
             PopulateStates();
+            PopulateGender();
         }
 
+        private void PopulateGender()
+        {
+            var genders = new[] { "U", "M", "F" };
+            genderComboBox.Items.Clear();
+            genderComboBox.Items.AddRange(genders);
+        }
         private void PopulateStates()
         {
             var states = new[]
@@ -78,12 +85,15 @@ namespace HealthcareSystemProjectCS3230.view
                 var zipcode = zipCodeTextBox.Text.Trim();
                 var username = usernameTextBox.Text.Trim();
                 var password = passwordTextBox.Text.Trim();
+                var gender = genderComboBox.SelectedItem?.ToString().ToCharArray()[0] ?? '\0';
+
                 var nurse = new Nurse(0, 0, username)
                 {
                     FirstName = firstName,
                     LastName = lastName,
                     Birthdate = birthdate,
                     PhoneNumber = phone,
+                    Gender = gender,
                     Address = new Address
                     {
                         Street = street,
@@ -106,6 +116,11 @@ namespace HealthcareSystemProjectCS3230.view
                 }
                 else
                 {
+                    if (password.Length > 50 || string.IsNullOrWhiteSpace(password))
+                    {
+                        passwordErrorLabel.Text = "Password must be 50 or less characters and cannot be empty.";
+                        return;
+                    }
                     nurseController.AddNurse(nurse, password);
                 }
                 this.updateNurseView();
@@ -134,6 +149,7 @@ namespace HealthcareSystemProjectCS3230.view
                 stateComboBox.SelectedItem = selectedNurse.Address.State;
                 zipCodeTextBox.Text = selectedNurse.Address.Zipcode;
                 usernameTextBox.Text = selectedNurse.Username;
+                genderComboBox.SelectedItem = selectedNurse.Gender.ToString();
 
             }
         }
@@ -180,6 +196,7 @@ namespace HealthcareSystemProjectCS3230.view
             zipCodeTextBox.Clear();
             usernameTextBox.Clear();
             passwordTextBox.Clear();
+            genderComboBox.SelectedIndex = -1;
 
             this.clearErrorLabels();
         }
@@ -196,6 +213,7 @@ namespace HealthcareSystemProjectCS3230.view
             usernameErrorLabel.Text = "";
             stateErrorLabel.Text = "";
             passwordErrorLabel.Text = "";
+            genderErrorLabel.Text = "";
         }
 
         private bool validateInput(Nurse nurse, string password)
@@ -205,11 +223,6 @@ namespace HealthcareSystemProjectCS3230.view
             if (string.IsNullOrWhiteSpace(nurse.Username) || nurse.Username.Length > 50)
             {
                 usernameErrorLabel.Text = "Username must be 50 or less characters, and cannot be empty.";
-                isValid = false;
-            }
-            if(password.Length > 50 || string.IsNullOrWhiteSpace(password))
-            {
-                passwordErrorLabel.Text = "Password must be 50 or less characters and cannot be empty.";
                 isValid = false;
             }
             if (string.IsNullOrWhiteSpace(nurse.FirstName))
@@ -250,6 +263,11 @@ namespace HealthcareSystemProjectCS3230.view
             if (nurse.Address.State == null || string.IsNullOrWhiteSpace(nurse.Address.State))
             {
                 stateErrorLabel.Text = "State must be selected.";
+                isValid = false;
+            }
+            if (nurse.Gender == '\0')
+            {
+                genderErrorLabel.Text = "Gender must be selected.";
                 isValid = false;
             }
             return isValid;
