@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using HealthcareSystemProjectCS3230.DAL;
 using HealthcareSystemProjectCS3230.model;
 
@@ -7,6 +8,7 @@ namespace HealthcareSystemProjectCS3230.controler
 {
     public class PatientController
     {
+        private PatientsDAL patientsDAL = new PatientsDAL();
         public List<Patient> FindPatients(string? firstName, string? lastName, DateTime? dateOfBirth)
         {
             var hasFirstName = !string.IsNullOrWhiteSpace(firstName);
@@ -26,40 +28,40 @@ namespace HealthcareSystemProjectCS3230.controler
             {
                 if (hasFirstName || hasLastName)
                 {
-                    return PatientsDAL.GetPatientsByNameAndDateOfBirth(firstName, lastName, dateOfBirth.Value);
+                    return patientsDAL.GetPatientsByNameAndDateOfBirth(firstName, lastName, dateOfBirth.Value);
                 }
 
-                return PatientsDAL.GetPatientsByDateOfBirth(dateOfBirth.Value);
+                return patientsDAL.GetPatientsByDateOfBirth(dateOfBirth.Value);
             }
 
-            return PatientsDAL.GetPatientsByName(firstName, lastName);
+            return patientsDAL.GetPatientsByName(firstName, lastName);
         }
 
         public List<Patient> GetAllPatients()
         {
-            return PatientsDAL.GetAllPatients();
+            return patientsDAL.GetAllPatients();
         }
 
         public Patient? GetPatientById(int id)
         {
-            return PatientsDAL.GetPatientByPatientId(id);
+            return patientsDAL.GetPatientByPatientId(id);
         }
 
         public void AddPatient(Patient p)
         {
             ValidatePatient(p);
-            var ok = PatientsDAL.AddPatient(p);
+            var ok = patientsDAL.AddPatient(p);
             if (!ok) throw new InvalidOperationException("An error occurred while saving the patient.");
         }
 
         public void UpdatePatient(Patient p)
         {
             ValidatePatient(p);
-            var ok = PatientsDAL.UpdatePatient(p);
+            var ok = patientsDAL.UpdatePatient(p);
             if (!ok) throw new InvalidOperationException("An error occurred while updating the patient.");
         }
 
-        private static void ValidatePatient(Patient p)
+        private void ValidatePatient(Patient p)
         {
             if (p == null) throw new ArgumentNullException(nameof(p));
             if (string.IsNullOrWhiteSpace(p.FirstName) || string.IsNullOrWhiteSpace(p.LastName))

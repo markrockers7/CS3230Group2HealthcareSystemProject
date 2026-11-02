@@ -8,9 +8,12 @@ namespace HealthcareSystemProjectCS3230.controler
 {
     public class AppointmentController
     {
+        private AppointmentsDAL appointmentsDAL = new AppointmentsDAL();
+        private DoctorDAL doctorDAL = new DoctorDAL();
+        private PersonDAL personDAL = new PersonDAL();
         public List<Doctor> GetDoctors()
         {
-            return DoctorDAL.GetAllDoctors();
+            return doctorDAL.GetAllDoctors();
         }
 
         public List<DoctorView> GetDoctorsWithNames()
@@ -19,7 +22,7 @@ namespace HealthcareSystemProjectCS3230.controler
 
             foreach (var doctor in GetDoctors())
             {
-                var person = PersonDAL.GetPersonByID(doctor.personId);
+                var person = personDAL.GetPersonByID(doctor.personId);
                 if (person != null)
                 {
                     doctorViews.Add(new DoctorView
@@ -37,7 +40,7 @@ namespace HealthcareSystemProjectCS3230.controler
 
         public Appointment? GetAppointmentById(int appointmentId)
         {
-            return AppointmentsDAL.GetAppointmentById(appointmentId);
+            return appointmentsDAL.GetAppointmentById(appointmentId);
         }
 
         public bool CanEditAppointment(DateTime appointmentDateTime)
@@ -48,7 +51,7 @@ namespace HealthcareSystemProjectCS3230.controler
         public List<TimeSpan> GetAvailableSlots(int doctorId, DateTime date, int? excludeAppointmentId = null)
         {
             List<TimeSpan> allSlots = AppointmentSlotRules.GetDailySlots();
-            HashSet<TimeSpan> bookedSlots = AppointmentsDAL
+            HashSet<TimeSpan> bookedSlots = appointmentsDAL
                 .GetBookedSlotsForDoctorDate(doctorId, date, excludeAppointmentId)
                 .ToHashSet();
 
@@ -60,7 +63,7 @@ namespace HealthcareSystemProjectCS3230.controler
             ValidateAppointment(patientId, appointmentDateTime, reason);
             EnsureSlotIsFree(doctorId, appointmentDateTime);
 
-            bool saved = AppointmentsDAL.AddAppointment(patientId, appointmentDateTime, doctorId, reason.Trim());
+            bool saved = appointmentsDAL.AddAppointment(patientId, appointmentDateTime, doctorId, reason.Trim());
             if (!saved)
             {
                 throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");
@@ -69,7 +72,7 @@ namespace HealthcareSystemProjectCS3230.controler
 
         public void UpdateAppointment(int appointmentId, int patientId, int doctorId, DateTime appointmentDateTime, string reason)
         {
-            Appointment? currentAppointment = AppointmentsDAL.GetAppointmentById(appointmentId);
+            Appointment? currentAppointment = appointmentsDAL.GetAppointmentById(appointmentId);
             if (currentAppointment == null)
             {
                 throw new ArgumentException("The appointment could not be found.");
@@ -83,7 +86,7 @@ namespace HealthcareSystemProjectCS3230.controler
             ValidateAppointment(patientId, appointmentDateTime, reason);
             EnsureSlotIsFree(doctorId, appointmentDateTime, appointmentId);
 
-            bool saved = AppointmentsDAL.UpdateAppointment(appointmentId, patientId, appointmentDateTime, doctorId, reason.Trim());
+            bool saved = appointmentsDAL.UpdateAppointment(appointmentId, patientId, appointmentDateTime, doctorId, reason.Trim());
             if (!saved)
             {
                 throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");

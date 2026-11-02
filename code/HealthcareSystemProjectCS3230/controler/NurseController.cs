@@ -9,6 +9,7 @@ namespace HealthcareSystemProjectCS3230.controler
     public class NurseController
     {
         private NurseDAL nurseDAL = new NurseDAL();
+        private PersonDAL personDAL = new PersonDAL();
 
         /*
          * Adds a new nurse to the database after validating the input.
@@ -29,6 +30,11 @@ namespace HealthcareSystemProjectCS3230.controler
             {
                 throw new Exception("Nurse could not be added");
             }
+        }
+
+        public Person GetPersonByID(int personId)
+        {
+            return personDAL.GetPersonByID(personId);
         }
 
         private bool validateNurse(Nurse nurse)

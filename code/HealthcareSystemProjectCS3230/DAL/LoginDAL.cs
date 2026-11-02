@@ -91,7 +91,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return null;
         }
 
-        public static bool AddAccount(string username, string password, string accountType)
+        public bool AddAccount(string username, string password, string accountType)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();

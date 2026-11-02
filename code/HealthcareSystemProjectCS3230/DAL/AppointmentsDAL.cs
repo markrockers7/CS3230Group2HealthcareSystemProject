@@ -7,7 +7,7 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class AppointmentsDAL
     {
-        public static bool AddAppointment(int patientId, DateTime appointmentDateTime, int doctorId, string reason)
+        public bool AddAppointment(int patientId, DateTime appointmentDateTime, int doctorId, string reason)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -22,7 +22,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return command.ExecuteNonQuery() > 0;
         }
 
-        public static bool UpdateAppointment(int appointmentId, int patientId, DateTime appointmentDateTime, int doctorId, string reason)
+        public bool UpdateAppointment(int appointmentId, int patientId, DateTime appointmentDateTime, int doctorId, string reason)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -39,7 +39,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return command.ExecuteNonQuery() > 0;
         }
 
-        public static Appointment? GetAppointmentById(int appointmentId)
+        public Appointment? GetAppointmentById(int appointmentId)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -62,7 +62,7 @@ namespace HealthcareSystemProjectCS3230.DAL
                 reader.GetString("reason"));
         }
 
-        public static List<TimeSpan> GetBookedSlotsForDoctorDate(int doctorId, DateTime appointmentDate, int? excludeAppointmentId = null)
+        public List<TimeSpan> GetBookedSlotsForDoctorDate(int doctorId, DateTime appointmentDate, int? excludeAppointmentId = null)
         {
             var bookedSlots = new List<TimeSpan>();
             using var connection = new MySqlConnection(Connection.ConnectionString);

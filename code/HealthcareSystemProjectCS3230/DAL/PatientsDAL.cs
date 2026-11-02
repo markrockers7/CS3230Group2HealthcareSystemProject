@@ -5,9 +5,9 @@ using HealthcareSystemProjectCS3230.model;
 
 namespace HealthcareSystemProjectCS3230.DAL
 {
-    public static class PatientsDAL
+    public class PatientsDAL
     {
-        public static List<Patient> GetAllPatients()
+        public List<Patient> GetAllPatients()
         {
             var results = new List<Patient>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -31,7 +31,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return results;
         }
 
-        public static List<Patient> GetPatientsByName(string? firstName, string? lastName)
+        public List<Patient> GetPatientsByName(string? firstName, string? lastName)
         {
             if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
             {
@@ -42,12 +42,12 @@ namespace HealthcareSystemProjectCS3230.DAL
             return FindPatients(firstName, lastName, null);
         }
 
-        public static List<Patient> GetPatientsByDateOfBirth(DateTime dateOfBirth)
+        public List<Patient> GetPatientsByDateOfBirth(DateTime dateOfBirth)
         {
             return FindPatients(null, null, dateOfBirth);
         }
 
-        public static List<Patient> GetPatientsByNameAndDateOfBirth(
+        public List<Patient> GetPatientsByNameAndDateOfBirth(
             string? firstName,
             string? lastName,
             DateTime dateOfBirth)
@@ -61,7 +61,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return FindPatients(firstName, lastName, dateOfBirth);
         }
 
-        private static List<Patient> FindPatients(string? firstName, string? lastName, DateTime? dateOfBirth)
+        private List<Patient> FindPatients(string? firstName, string? lastName, DateTime? dateOfBirth)
         {
             var results = new List<Patient>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -124,7 +124,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return results;
         }
 
-        public static Patient? GetPatientByPatientId(int patientId)
+        public Patient? GetPatientByPatientId(int patientId)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -161,7 +161,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             };
         }
 
-        public static bool AddPatient(Patient p)
+        public bool AddPatient(Patient p)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -216,7 +216,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             }
         }
 
-        public static bool UpdatePatient(Patient p)
+        public bool UpdatePatient(Patient p)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();

@@ -8,7 +8,7 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class DoctorDAL
     {
-        public static List<Doctor> GetAllDoctors()
+        public List<Doctor> GetAllDoctors()
         {
             var doctors = new List<Doctor>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -26,7 +26,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return doctors;
         }
 
-        public static bool IsDoctorBooked(int doctorId, DateTime dateTime)
+        public bool IsDoctorBooked(int doctorId, DateTime dateTime)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
