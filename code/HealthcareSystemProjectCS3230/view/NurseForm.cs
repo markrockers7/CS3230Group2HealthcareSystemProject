@@ -52,7 +52,7 @@ namespace HealthcareSystemProjectCS3230.view
             var nurses = nurseController.GetAllNurses();
             foreach (var nurse in nurses)
             {
-                var person = PersonDAL.GetPersonByID(nurse.PersonID);
+                var person = nurseController.GetPersonByID(nurse.PersonID);
                 var fname = person.FirstName;
                 var lname = person.LastName;
                 var item = new ListViewItem(nurse.ID.ToString());

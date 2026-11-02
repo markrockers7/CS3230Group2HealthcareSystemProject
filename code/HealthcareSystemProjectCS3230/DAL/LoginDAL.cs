@@ -90,8 +90,14 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return null;
         }
-
-        public static bool AddAccount(string username, string password, string accountType)
+        /*
+         * Adds a new account to the database with the specified username, password, and account type.
+         * @param username The username for the new account.
+         * @param password The password for the new account.
+         * @param accountType The type of the account (e.g., "nurse", "administrator").
+         * @returns True if the account was successfully added; otherwise, false.
+         */
+        public bool AddAccount(string username, string password, string accountType)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
