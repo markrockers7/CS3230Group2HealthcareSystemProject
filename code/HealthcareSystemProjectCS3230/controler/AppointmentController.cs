@@ -8,6 +8,7 @@ namespace HealthcareSystemProjectCS3230.controler
         private AppointmentsDAL appointmentsDAL = new AppointmentsDAL();
         private DoctorDAL doctorDAL = new DoctorDAL();
         private PersonDAL personDAL = new PersonDAL();
+        private TestDAL testDAL = new TestDAL();
 
         /*
          * Retreives a list of all doctors in the system
@@ -43,6 +44,16 @@ namespace HealthcareSystemProjectCS3230.controler
 
             return doctorViews;
         }
+
+        /*
+         * Retrieves a list of all tests in the system.
+         * @return List of Test objects
+         */
+        public List<Test> GetTests()
+        {
+            return testDAL.GetTests();
+        }
+
         /*
          * Retreives a specific appointment by its ID
          *
@@ -150,6 +161,11 @@ namespace HealthcareSystemProjectCS3230.controler
             var doctorNames = GetDoctorsWithNames();
             foreach (var appt in appointments)
             {
+                if (appt.DateTime.Date < DateTime.Now.Date)
+                {
+                    continue; // Skip past appointments
+                }
+
                 var appointmentView = new AppointmentView
                 {
                     AppointmentId = appt.AppointmentId,

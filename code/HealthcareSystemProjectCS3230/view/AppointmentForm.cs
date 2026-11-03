@@ -35,6 +35,7 @@ namespace HealthcareSystemProjectCS3230.view
             _isEditMode = true;
             ConfigureForm();
             LoadDoctors();
+            ConfigureOrderTestForm();
             LoadExistingAppointment();
         }
 
@@ -325,6 +326,21 @@ namespace HealthcareSystemProjectCS3230.view
         private void ConfigureOrderTestForm()
         {
             selectAppointmentErrorLabel.Visible = false;
+
+            testCheckedListBox.DataSource = null;
+            testCheckedListBox.Items.Clear();
+
+            try
+            {
+                foreach (Test test in _appointmentController.GetTests())
+                {
+                    testCheckedListBox.Items.Add(test.Name);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not load tests: " + ex.Message, "Error");
+            }
         }
 
         private void orderTestPatientSearch_PatientSelected(object sender, EventArgs e)

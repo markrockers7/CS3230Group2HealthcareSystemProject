@@ -50,6 +50,8 @@
             reasonColumn = new DataGridViewTextBoxColumn();
             label1 = new Label();
             orderTestPatientSearchControl = new PatientSearchControl();
+            availableTestsLabel = new Label();
+            testCheckedListBox = new CheckedListBox();
             appointmentTabControl.SuspendLayout();
             createAppointmentTabPage.SuspendLayout();
             orderTestTabPage.SuspendLayout();
@@ -276,6 +278,8 @@
             orderTestTabPage.Controls.Add(appointmentDataGridView);
             orderTestTabPage.Controls.Add(label1);
             orderTestTabPage.Controls.Add(orderTestPatientSearchControl);
+            orderTestTabPage.Controls.Add(availableTestsLabel);
+            orderTestTabPage.Controls.Add(testCheckedListBox);
             orderTestTabPage.Location = new Point(4, 24);
             orderTestTabPage.Name = "orderTestTabPage";
             orderTestTabPage.Padding = new Padding(3);
@@ -288,9 +292,9 @@
             // 
             selectAppointmentErrorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             selectAppointmentErrorLabel.ForeColor = Color.Red;
-            selectAppointmentErrorLabel.Location = new Point(184, 336);
+            selectAppointmentErrorLabel.Location = new Point(16, 341);
             selectAppointmentErrorLabel.Name = "selectAppointmentErrorLabel";
-            selectAppointmentErrorLabel.Size = new Size(502, 23);
+            selectAppointmentErrorLabel.Size = new Size(330, 23);
             selectAppointmentErrorLabel.TabIndex = 4;
             selectAppointmentErrorLabel.Text = "ERROR";
             selectAppointmentErrorLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -299,11 +303,21 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(16, 336);
+            label2.Location = new Point(16, 366);
             label2.Name = "label2";
             label2.Size = new Size(162, 21);
             label2.TabIndex = 3;
             label2.Text = "Select Appointment";
+            // 
+            // availableTestsLabel
+            // 
+            availableTestsLabel.AutoSize = true;
+            availableTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            availableTestsLabel.Location = new Point(365, 366);
+            availableTestsLabel.Name = "availableTestsLabel";
+            availableTestsLabel.Size = new Size(111, 21);
+            availableTestsLabel.TabIndex = 5;
+            availableTestsLabel.Text = "Available Tests";
             // 
             // appointmentDataGridView
             // 
@@ -312,11 +326,19 @@
             appointmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             appointmentDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             appointmentDataGridView.Columns.AddRange(new DataGridViewColumn[] { doctorNameColumn, timeColumn, reasonColumn });
-            appointmentDataGridView.Location = new Point(16, 360);
+            appointmentDataGridView.Location = new Point(16, 390);
             appointmentDataGridView.Name = "appointmentDataGridView";
             appointmentDataGridView.ReadOnly = true;
-            appointmentDataGridView.Size = new Size(740, 180);
+            appointmentDataGridView.Size = new Size(330, 134);
             appointmentDataGridView.TabIndex = 2;
+            // 
+            // testCheckedListBox
+            // 
+            testCheckedListBox.FormattingEnabled = true;
+            testCheckedListBox.Location = new Point(365, 390);
+            testCheckedListBox.Name = "testCheckedListBox";
+            testCheckedListBox.Size = new Size(400, 134);
+            testCheckedListBox.TabIndex = 6;
             // 
             // doctorNameColumn
             // 
@@ -416,5 +438,7 @@
         private DataGridViewTextBoxColumn reasonColumn;
         private Label selectAppointmentErrorLabel;
         private Label label2;
+        private Label availableTestsLabel;
+        private CheckedListBox testCheckedListBox;
     }
 }
