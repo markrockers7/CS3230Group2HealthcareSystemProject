@@ -8,7 +8,11 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class DoctorDAL
     {
-        public static List<Doctor> GetAllDoctors()
+        /*
+         * Retrieves a list of all doctors in the system.
+         * @return A list of Doctor objects representing all doctors in the system.
+         */
+        public List<Doctor> GetAllDoctors()
         {
             var doctors = new List<Doctor>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -26,7 +30,12 @@ namespace HealthcareSystemProjectCS3230.DAL
             return doctors;
         }
 
-        public static bool IsDoctorBooked(int doctorId, DateTime dateTime)
+        /*
+         * Checks if a doctor is booked for a specific date and time.
+         * @param doctorId The ID of the doctor
+         * @returns True if the doctor is booked, false otherwise.
+         */
+        public bool IsDoctorBooked(int doctorId, DateTime dateTime)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();

@@ -8,12 +8,12 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class PersonDAL
     {
-        public static bool DoesExist(int personID)
-        {
-            return GetPersonByID(personID) != null;
-        }
-
-        public static Person GetPersonByID(int personID)
+        /*
+         * Retrieves a Person object from the database based on the provided personID.
+         * @param personID The ID of the person to retrieve.
+         * @returns null if no matching record is found.
+         */
+        public Person GetPersonByID(int personID)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();

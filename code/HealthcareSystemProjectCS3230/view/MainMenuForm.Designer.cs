@@ -44,7 +44,7 @@
             appointmentButton.Name = "appointmentButton";
             appointmentButton.Size = new Size(126, 40);
             appointmentButton.TabIndex = 0;
-            appointmentButton.Text = "Add Appointment";
+            appointmentButton.Text = "Appointments";
             appointmentButton.UseVisualStyleBackColor = true;
             appointmentButton.Click += appointmentButton_Click;
             // 
@@ -110,7 +110,7 @@
             // LogoutButton
             // 
             LogoutButton.Location = new Point(713, 7);
-            LogoutButton.Margin = new Padding(2, 2, 2, 2);
+            LogoutButton.Margin = new Padding(2);
             LogoutButton.Name = "LogoutButton";
             LogoutButton.Size = new Size(78, 30);
             LogoutButton.TabIndex = 6;

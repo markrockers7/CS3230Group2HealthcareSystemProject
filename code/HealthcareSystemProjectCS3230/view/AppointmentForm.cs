@@ -1,9 +1,7 @@
 ﻿using HealthcareSystemProjectCS3230.controler;
 using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Globalization;
 
 namespace HealthcareSystemProjectCS3230.view
 {
@@ -24,6 +22,8 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureForm();
             LoadDoctors();
             EnableAppointmentFields(false);
+            ConfigureVisitAndOrderTestForm();
+            ConfigureFinalDiagnosisForm();
         }
 
         // Edit mode
@@ -34,6 +34,8 @@ namespace HealthcareSystemProjectCS3230.view
             _isEditMode = true;
             ConfigureForm();
             LoadDoctors();
+            ConfigureVisitAndOrderTestForm();
+            ConfigureFinalDiagnosisForm();
             LoadExistingAppointment();
         }
 
@@ -339,6 +341,11 @@ namespace HealthcareSystemProjectCS3230.view
             errorLabel.Text = "Something went wrong: " + ex.Message;
         }
 
+        private void SetVisitAndOrderTextWarning(string message)
+        {
+            visitAndOrderTestErrorLabel.Text = message;
+        }
+
         private void doctorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshAvailableSlots();
@@ -360,6 +367,228 @@ namespace HealthcareSystemProjectCS3230.view
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void ConfigureVisitAndOrderTestForm()
+        {
+            ClearVisitAndOrderTestError();
+            testCheckedListBox.DataSource = null;
+            testCheckedListBox.Items.Clear();
+
+            try
+            {
+                List<Test> tests = _appointmentController.GetTests();
+
+                testCheckedListBox.DisplayMember = nameof(Test.Name);
+                testCheckedListBox.ValueMember = nameof(Test.TestCode);
+                testCheckedListBox.DataSource = tests;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not load tests: " + ex.Message, "Error");
+            }
+        }
+
+        private void ClearVisitAndOrderTestError()
+        {
+            visitAndOrderTestErrorLabel.Text = "";
+        }
+
+        private void orderTestPatientSearch_PatientSelected(object sender, EventArgs e)
+        {
+            appointmentDataGridView.Rows.Clear();
+            ClearVisitAndOrderTestError();
+            Patient? patient = orderTestPatientSearchControl.SelectedPatient;
+            if (patient != null)
+            {
+                try
+                {
+                    var appointments = _appointmentController.GetAppointmentsByPatientId(patient.Id);
+                    if (appointments.Count == 0)
+                    {
+                        SetVisitAndOrderTextWarning("No appointments found for this patient.");
+                        return;
+                    }
+                    foreach (var appt in appointments)
+                    {
+                        appointmentDataGridView.Rows.Add(appt.AppointmentId, appt.DoctorName, appt.DateTime, appt.Reason);
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    SetVisitAndOrderTextWarning(ex.Message);
+                }
+            }
+        }
+
+        private static int ParseRequiredInteger(TextBox input, string fieldName)
+        {
+            if (!int.TryParse(input.Text, NumberStyles.Integer, CultureInfo.CurrentCulture, out int value) || value <= 0)
+            {
+                throw new ArgumentException($"Enter a valid {fieldName} greater than zero.");
+            }
+
+            return value;
+        }
+
+        private static decimal ParseRequiredDecimal(TextBox input, string fieldName)
+        {
+            if (!decimal.TryParse(input.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal value) || value <= 0)
+            {
+                throw new ArgumentException($"Enter a valid {fieldName} greater than zero.");
+            }
+
+            return value;
+        }
+
+        private void submitVisitButton_Click(object sender, EventArgs e)
+        {
+            ClearVisitAndOrderTestError();
+            try
+            {
+                if (appointmentDataGridView.SelectedRows.Count == 0 ||
+                    appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
+                {
+                    throw new ArgumentException("Please select an appointment.");
+                }
+
+                var selectedAppointmentId = Convert.ToInt32(
+                    appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value,
+                    CultureInfo.InvariantCulture);
+
+                var systolic = ParseRequiredInteger(systolicTextBox, "systolic pressure");
+                var diastolic = ParseRequiredInteger(diastolicTextBox, "diastolic pressure");
+                var pulse = ParseRequiredInteger(pulseTextBox, "pulse");
+                var bodyTemperature = ParseRequiredDecimal(bodyTemperatureTextBox, "body temperature");
+                var height = ParseRequiredDecimal(heightTextBox, "height");
+                var weight = ParseRequiredDecimal(weightTextBox, "weight");
+
+                var selectedTests = testCheckedListBox.CheckedItems
+                    .Cast<Test>()
+                    .ToList();
+
+                _appointmentController.SaveVisitAndTests(
+                    selectedAppointmentId,
+                    systolic,
+                    diastolic,
+                    pulse,
+                    bodyTemperature,
+                    height,
+                    weight,
+                    symptomsTextBox.Text,
+                    initialDiagnosisTextBox.Text,
+                    selectedTests);
+
+                MessageBox.Show("Visit and selected tests submitted.");
+                systolicTextBox.Clear();
+                diastolicTextBox.Clear();
+                pulseTextBox.Clear();
+                bodyTemperatureTextBox.Clear();
+                heightTextBox.Clear();
+                weightTextBox.Clear();
+                symptomsTextBox.Clear();
+                initialDiagnosisTextBox.Clear();
+
+                for (int i = 0; i < testCheckedListBox.Items.Count; i++)
+                {
+                    testCheckedListBox.SetItemChecked(i, false);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                SetVisitAndOrderTextWarning(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                SetVisitAndOrderTextWarning("The visit could not be submitted: " + ex.Message);
+            }
+        }
+
+        private void ConfigureFinalDiagnosisForm()
+        {
+            ClearFinalDiagnosisForm();
+        }
+
+        private void ClearFinalDiagnosisForm()
+        {
+            ClearFinalDiagnosisWarning();
+            visitDataGridView.Rows.Clear();
+            finalDiagnosisPatientSearchControl.Clear();
+        }
+
+        private void SetFinalDiagnosisWarning(string message)
+        {
+            finalDiagnosisWarningLabel.Text = message;
+        }
+
+        private void ClearFinalDiagnosisWarning()
+        {
+            finalDiagnosisWarningLabel.Text = "";
+        }
+
+        private void finalDiagnosisPatientSearchControl_PatientSelected(object sender, EventArgs e)
+        {
+            visitDataGridView.Rows.Clear();
+            ClearFinalDiagnosisWarning();
+            Patient? patient = finalDiagnosisPatientSearchControl.SelectedPatient;
+            if (patient == null) return;
+            try
+            {
+                var visits = _appointmentController.GetVisitsWithCompleteOrNoTestsForPatient(patient.Id);
+                if (visits.Count == 0)
+                {
+                    SetFinalDiagnosisWarning("No appointments found for this patient.");
+                    return;
+                }
+
+                var doctorNames = _appointmentController.GetDoctorsWithNames();
+                foreach (var visit in visits)
+                {
+                    if (visit.FinalDiagnosis == null && visit.InitialDiagnosis != null)
+                    {
+                        visitDataGridView.Rows.Add(visit.AppointmentId, _appointmentController.GetDoctorNameFromVisit(visit.AppointmentId), visit.InitialDiagnosis);
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                SetFinalDiagnosisWarning(ex.Message);
+            }
+        }
+
+        private void finalDiagnosisSubmitButton_Click(object sender, EventArgs e)
+        {
+            ClearFinalDiagnosisWarning();
+            var finalDiagnosis = finalDiagnosisTextBox.Text;
+            if (string.IsNullOrWhiteSpace(finalDiagnosis))
+            {
+                SetFinalDiagnosisWarning("Please enter a final diagnosis.");
+                return;
+            }
+
+            if (visitDataGridView.SelectedRows.Count == 0 || visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value == null)
+            {
+                SetFinalDiagnosisWarning("Please select a visit.");
+                return;
+            }
+
+            var visitId = Convert.ToInt32(visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value);
+            try
+            {
+                if (_appointmentController.UpdateFinalDiagnosis(finalDiagnosis, visitId))
+                {
+                    MessageBox.Show("Final diagnosis updated successfully.");
+                    ClearFinalDiagnosisForm();
+                }
+                else
+                {
+                    SetFinalDiagnosisWarning("Failed to update final diagnosis.");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetFinalDiagnosisWarning("An error occurred while updating the final diagnosis: " + ex.Message);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace HealthcareSystemProjectCS3230.DAL
     {
         /*
          * Retrieves a list of all nurses from the database.
-         *
+         * @returns A list of Nurse objects.
          */
         public List<Nurse> GetAllNurses()
         {
@@ -53,6 +53,7 @@ namespace HealthcareSystemProjectCS3230.DAL
         /*
          * Retrieves a nurse from the database by their ID.
          * @param id The ID of the nurse to retrieve.
+         * @returns A Nurse object if found, otherwise null.
          */
         public Nurse GetNurseByID(int id)
         {
@@ -100,6 +101,7 @@ namespace HealthcareSystemProjectCS3230.DAL
          * Adds a new nurse to the database.
          * @param nurse The nurse object to add.
          * @param password The password for the nurse's account.
+         * @returns true if the nurse was added successfully, otherwise false.
          */
         public bool AddNurse(Nurse nurse, string password)
         {
@@ -168,6 +170,7 @@ namespace HealthcareSystemProjectCS3230.DAL
         /*
          * Updates an existing nurse in the database.
          * @param nurse The nurse object with updated information.
+         * @returns true if the nurse was updated successfully, otherwise false.
          */
         public bool UpdateNurse(Nurse nurse)
         {

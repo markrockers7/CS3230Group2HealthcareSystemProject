@@ -9,6 +9,9 @@ namespace HealthcareSystemProjectCS3230.model
         public static readonly TimeSpan EndTime = new TimeSpan(16, 45, 0);
         public const int SlotIntervalMinutes = 15;
 
+        /*
+         * Returns a list of all available appointment slots for a given doctor in 15 minute intervals between 8:00 AM and 4:45 PM.
+         */
         public static List<TimeSpan> GetDailySlots()
         {
             var slots = new List<TimeSpan>();
@@ -19,7 +22,10 @@ namespace HealthcareSystemProjectCS3230.model
 
             return slots;
         }
-
+        /*
+         * Validates if a given DateTime is a valid appointment slot.
+         * @param appointmentDateTime The DateTime to validate.
+         */
         public static bool IsValidSlotDateTime(DateTime appointmentDateTime)
         {
             TimeSpan time = appointmentDateTime.TimeOfDay;
