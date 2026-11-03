@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using HealthcareSystemProjectCS3230.DAL;
 using HealthcareSystemProjectCS3230.model;
 
@@ -7,6 +8,16 @@ namespace HealthcareSystemProjectCS3230.controler
 {
     public class PatientController
     {
+        private PatientsDAL patientsDAL = new PatientsDAL();
+        /*
+         * Finds patients based on the provided search criteria (first and last name, the date, or both must be provided).
+         * Throws ArgumentException if the search criteria are invalid.
+         *
+         * @param firstName The first name of the patient (optional).
+         * @param lastName The last name of the patient (optional).
+         * @param dateOfBirth The date of birth of the patient (optional).
+         * @return A list of patients matching the search criteria.
+         */
         public List<Patient> FindPatients(string? firstName, string? lastName, DateTime? dateOfBirth)
         {
             var hasFirstName = !string.IsNullOrWhiteSpace(firstName);
@@ -26,40 +37,62 @@ namespace HealthcareSystemProjectCS3230.controler
             {
                 if (hasFirstName || hasLastName)
                 {
-                    return PatientsDAL.GetPatientsByNameAndDateOfBirth(firstName, lastName, dateOfBirth.Value);
+                    return patientsDAL.GetPatientsByNameAndDateOfBirth(firstName, lastName, dateOfBirth.Value);
                 }
 
-                return PatientsDAL.GetPatientsByDateOfBirth(dateOfBirth.Value);
+                return patientsDAL.GetPatientsByDateOfBirth(dateOfBirth.Value);
             }
 
-            return PatientsDAL.GetPatientsByName(firstName, lastName);
+            return patientsDAL.GetPatientsByName(firstName, lastName);
         }
 
+        /*
+         * Retrieves a list of all patients from the database.
+         *
+         * @return A list of all patients.
+         */
         public List<Patient> GetAllPatients()
         {
-            return PatientsDAL.GetAllPatients();
+            return patientsDAL.GetAllPatients();
         }
-
+        /*
+         * Retrieves a patient by their id.
+         *
+         * @param id The unique identifier of the patient.
+         * @return The patient with the specified ID, or null if not found.
+         */
         public Patient? GetPatientById(int id)
         {
-            return PatientsDAL.GetPatientByPatientId(id);
+            return patientsDAL.GetPatientByPatientId(id);
         }
 
+        /*
+         * Adds a new patient to the database
+         * Throws ArgumentException if validation fails.
+         * 
+         * @param p The Patient object to be added.
+         */
         public void AddPatient(Patient p)
         {
             ValidatePatient(p);
-            var ok = PatientsDAL.AddPatient(p);
+            var ok = patientsDAL.AddPatient(p);
             if (!ok) throw new InvalidOperationException("An error occurred while saving the patient.");
         }
 
+        /*
+         * Updates an existing patient in the database
+         * Throws ArgumentException if validation fails.
+         * 
+         * @param p The Patient object to be updated.
+         */
         public void UpdatePatient(Patient p)
         {
             ValidatePatient(p);
-            var ok = PatientsDAL.UpdatePatient(p);
+            var ok = patientsDAL.UpdatePatient(p);
             if (!ok) throw new InvalidOperationException("An error occurred while updating the patient.");
         }
 
-        private static void ValidatePatient(Patient p)
+        private void ValidatePatient(Patient p)
         {
             if (p == null) throw new ArgumentNullException(nameof(p));
             if (string.IsNullOrWhiteSpace(p.FirstName) || string.IsNullOrWhiteSpace(p.LastName))

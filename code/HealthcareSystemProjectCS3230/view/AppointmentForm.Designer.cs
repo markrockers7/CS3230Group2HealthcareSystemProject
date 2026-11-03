@@ -22,12 +22,19 @@
         {
             loggedInLabel = new Label();
             titleLabel = new Label();
-            patientIdLabel = new Label();
-            patientIdTextBox = new TextBox();
+            patientSearchControl = new PatientSearchControl();
+            patientNameLabel = new Label();
+            patientNameTextBox = new TextBox();
+            patientDobLabel = new Label();
+            patientDobTextBox = new TextBox();
+            inactivePatientLabel = new Label();
             doctorLabel = new Label();
             doctorComboBox = new ComboBox();
-            dateTimeLabel = new Label();
-            appointmentDateTimePicker = new DateTimePicker();
+            dateLabel = new Label();
+            appointmentDatePicker = new DateTimePicker();
+            timeSlotLabel = new Label();
+            appointmentTimeComboBox = new ComboBox();
+            availabilityStatusLabel = new Label();
             reasonLabel = new Label();
             reasonTextBox = new TextBox();
             bookButton = new Button();
@@ -61,33 +68,62 @@
             // 
             titleLabel.AutoSize = true;
             titleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            titleLabel.Location = new Point(6, 37);
+            titleLabel.Location = new Point(20, 40);
             titleLabel.Name = "titleLabel";
             titleLabel.Size = new Size(165, 21);
             titleLabel.TabIndex = 1;
             titleLabel.Text = "Create Appointment";
-            // 
-            // patientIdLabel
-            // 
-            patientIdLabel.AutoSize = true;
-            patientIdLabel.Location = new Point(6, 87);
-            patientIdLabel.Name = "patientIdLabel";
-            patientIdLabel.Size = new Size(61, 15);
-            patientIdLabel.TabIndex = 2;
-            patientIdLabel.Text = "Patient ID:";
-            // 
-            // patientIdTextBox
-            // 
-            patientIdTextBox.Location = new Point(116, 84);
-            patientIdTextBox.Name = "patientIdTextBox";
-            patientIdTextBox.PlaceholderText = "Temporary: enter a patient ID";
-            patientIdTextBox.Size = new Size(300, 23);
-            patientIdTextBox.TabIndex = 0;
-            // 
+            //
+            // patientSearchControl
+            //
+            patientSearchControl.Location = new Point(20, 75);
+            patientSearchControl.Name = "patientSearchControl";
+            patientSearchControl.Size = new Size(760, 300);
+            patientSearchControl.TabIndex = 0;
+            patientSearchControl.PatientSelected += patientSearchControl_PatientSelected;
+            //
+            // patientNameLabel
+            //
+            patientNameLabel.AutoSize = true;
+            patientNameLabel.Location = new Point(20, 393);
+            patientNameLabel.Name = "patientNameLabel";
+            patientNameLabel.Text = "Patient:";
+            //
+            // patientNameTextBox
+            //
+            patientNameTextBox.Location = new Point(130, 390);
+            patientNameTextBox.Name = "patientNameTextBox";
+            patientNameTextBox.ReadOnly = true;
+            patientNameTextBox.Size = new Size(300, 23);
+            patientNameTextBox.TabStop = false;
+            //
+            // patientDobLabel
+            //
+            patientDobLabel.AutoSize = true;
+            patientDobLabel.Location = new Point(20, 428);
+            patientDobLabel.Name = "patientDobLabel";
+            patientDobLabel.Text = "Date of birth:";
+            //
+            // patientDobTextBox
+            //
+            patientDobTextBox.Location = new Point(130, 425);
+            patientDobTextBox.Name = "patientDobTextBox";
+            patientDobTextBox.ReadOnly = true;
+            patientDobTextBox.Size = new Size(300, 23);
+            patientDobTextBox.TabStop = false;
+            //
+            // inactivePatientLabel
+            //
+            inactivePatientLabel.AutoSize = true;
+            inactivePatientLabel.ForeColor = Color.Firebrick;
+            inactivePatientLabel.Location = new Point(130, 453);
+            inactivePatientLabel.Name = "inactivePatientLabel";
+            inactivePatientLabel.Size = new Size(0, 15);
+            //
             // doctorLabel
             // 
             doctorLabel.AutoSize = true;
-            doctorLabel.Location = new Point(6, 127);
+            doctorLabel.Location = new Point(20, 483);
             doctorLabel.Name = "doctorLabel";
             doctorLabel.Size = new Size(46, 15);
             doctorLabel.TabIndex = 3;
@@ -96,177 +132,115 @@
             // doctorComboBox
             // 
             doctorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            doctorComboBox.Location = new Point(116, 124);
+            doctorComboBox.Location = new Point(130, 480);
             doctorComboBox.Name = "doctorComboBox";
             doctorComboBox.Size = new Size(300, 23);
             doctorComboBox.TabIndex = 1;
-            // 
-            // dateTimeLabel
-            // 
-            dateTimeLabel.AutoSize = true;
-            dateTimeLabel.Location = new Point(6, 167);
-            dateTimeLabel.Name = "dateTimeLabel";
-            dateTimeLabel.Size = new Size(84, 15);
-            dateTimeLabel.TabIndex = 4;
-            dateTimeLabel.Text = "Date and time:";
-            // 
-            // appointmentDateTimePicker
-            // 
-            appointmentDateTimePicker.CustomFormat = "MM/dd/yyyy   hh:mm tt";
-            appointmentDateTimePicker.Format = DateTimePickerFormat.Custom;
-            appointmentDateTimePicker.Location = new Point(116, 164);
-            appointmentDateTimePicker.Name = "appointmentDateTimePicker";
-            appointmentDateTimePicker.Size = new Size(300, 23);
-            appointmentDateTimePicker.TabIndex = 2;
-            // 
+            doctorComboBox.SelectedIndexChanged += doctorComboBox_SelectedIndexChanged;
+            //
+            // dateLabel
+            //
+            dateLabel.AutoSize = true;
+            dateLabel.Location = new Point(20, 523);
+            dateLabel.Name = "dateLabel";
+            dateLabel.Text = "Date:";
+            //
+            // appointmentDatePicker
+            //
+            appointmentDatePicker.Format = DateTimePickerFormat.Short;
+            appointmentDatePicker.Location = new Point(130, 520);
+            appointmentDatePicker.Name = "appointmentDatePicker";
+            appointmentDatePicker.Size = new Size(300, 23);
+            appointmentDatePicker.TabIndex = 2;
+            appointmentDatePicker.ValueChanged += appointmentDatePicker_ValueChanged;
+            //
+            // timeSlotLabel
+            //
+            timeSlotLabel.AutoSize = true;
+            timeSlotLabel.Location = new Point(20, 563);
+            timeSlotLabel.Name = "timeSlotLabel";
+            timeSlotLabel.Text = "Time slot:";
+            //
+            // appointmentTimeComboBox
+            //
+            appointmentTimeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            appointmentTimeComboBox.FormattingEnabled = true;
+            appointmentTimeComboBox.Location = new Point(130, 560);
+            appointmentTimeComboBox.Name = "appointmentTimeComboBox";
+            appointmentTimeComboBox.Size = new Size(300, 23);
+            appointmentTimeComboBox.TabIndex = 3;
+            //
+            // availabilityStatusLabel
+            //
+            availabilityStatusLabel.AutoSize = true;
+            availabilityStatusLabel.ForeColor = Color.Firebrick;
+            availabilityStatusLabel.Location = new Point(130, 586);
+            availabilityStatusLabel.Name = "availabilityStatusLabel";
+            availabilityStatusLabel.Size = new Size(0, 15);
+            //
             // reasonLabel
             // 
             reasonLabel.AutoSize = true;
-            reasonLabel.Location = new Point(6, 207);
+            reasonLabel.Location = new Point(20, 618);
             reasonLabel.Name = "reasonLabel";
             reasonLabel.Size = new Size(48, 15);
             reasonLabel.TabIndex = 5;
             reasonLabel.Text = "Reason:";
             // 
             // reasonTextBox
-            // 
-            reasonTextBox.Location = new Point(116, 204);
+            //
+            reasonTextBox.Location = new Point(130, 615);
             reasonTextBox.MaxLength = 255;
             reasonTextBox.Multiline = true;
             reasonTextBox.Name = "reasonTextBox";
             reasonTextBox.ScrollBars = ScrollBars.Vertical;
             reasonTextBox.Size = new Size(300, 80);
-            reasonTextBox.TabIndex = 3;
-            // 
+            reasonTextBox.TabIndex = 4;
+            //
             // bookButton
-            // 
-            bookButton.Location = new Point(236, 307);
+            //
+            bookButton.Location = new Point(250, 710);
             bookButton.Name = "bookButton";
             bookButton.Size = new Size(85, 30);
-            bookButton.TabIndex = 4;
+            bookButton.TabIndex = 5;
             bookButton.Text = "Book";
             bookButton.UseVisualStyleBackColor = true;
             bookButton.Click += bookButton_Click;
             // 
             // cancelButton
-            // 
-            cancelButton.Location = new Point(345, 315);
+            //
+            cancelButton.Location = new Point(345, 710);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(85, 30);
-            cancelButton.TabIndex = 5;
+            cancelButton.TabIndex = 6;
             cancelButton.Text = "Cancel";
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += cancelButton_Click;
-            // 
-            // appointmentTabControl
-            // 
-            appointmentTabControl.Controls.Add(createAppointmentTabPage);
-            appointmentTabControl.Controls.Add(initialDiagnosisTabPage);
-            appointmentTabControl.Location = new Point(0, 0);
-            appointmentTabControl.Name = "appointmentTabControl";
-            appointmentTabControl.SelectedIndex = 0;
-            appointmentTabControl.Size = new Size(484, 409);
-            appointmentTabControl.TabIndex = 6;
-            // 
-            // createAppointmentTabPage
-            // 
-            createAppointmentTabPage.Controls.Add(loggedInLabel);
-            createAppointmentTabPage.Controls.Add(titleLabel);
-            createAppointmentTabPage.Controls.Add(patientIdLabel);
-            createAppointmentTabPage.Controls.Add(bookButton);
-            createAppointmentTabPage.Controls.Add(patientIdTextBox);
-            createAppointmentTabPage.Controls.Add(reasonTextBox);
-            createAppointmentTabPage.Controls.Add(doctorLabel);
-            createAppointmentTabPage.Controls.Add(reasonLabel);
-            createAppointmentTabPage.Controls.Add(doctorComboBox);
-            createAppointmentTabPage.Controls.Add(appointmentDateTimePicker);
-            createAppointmentTabPage.Controls.Add(dateTimeLabel);
-            createAppointmentTabPage.Location = new Point(4, 24);
-            createAppointmentTabPage.Name = "createAppointmentTabPage";
-            createAppointmentTabPage.Padding = new Padding(3);
-            createAppointmentTabPage.Size = new Size(476, 381);
-            createAppointmentTabPage.TabIndex = 0;
-            createAppointmentTabPage.Text = "Create Appointment";
-            createAppointmentTabPage.UseVisualStyleBackColor = true;
-            // 
-            // initialDiagnosisTabPage
-            // 
-            initialDiagnosisTabPage.Controls.Add(dataGridView1);
-            initialDiagnosisTabPage.Controls.Add(label3);
-            initialDiagnosisTabPage.Controls.Add(initialDiagnosisTextBox);
-            initialDiagnosisTabPage.Controls.Add(label2);
-            initialDiagnosisTabPage.Controls.Add(label1);
-            initialDiagnosisTabPage.Controls.Add(appointmentComboBox);
-            initialDiagnosisTabPage.Location = new Point(4, 24);
-            initialDiagnosisTabPage.Name = "initialDiagnosisTabPage";
-            initialDiagnosisTabPage.Padding = new Padding(3);
-            initialDiagnosisTabPage.Size = new Size(476, 381);
-            initialDiagnosisTabPage.TabIndex = 1;
-            initialDiagnosisTabPage.Text = "Enter Initial Diagnosis";
-            initialDiagnosisTabPage.UseVisualStyleBackColor = true;
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(15, 171);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(453, 150);
-            dataGridView1.TabIndex = 5;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(15, 150);
-            label3.Name = "label3";
-            label3.Size = new Size(106, 15);
-            label3.TabIndex = 4;
-            label3.Text = "Available Lab Tests";
-            // 
-            // initialDiagnosisTextBox
-            // 
-            initialDiagnosisTextBox.Location = new Point(15, 78);
-            initialDiagnosisTextBox.Multiline = true;
-            initialDiagnosisTextBox.Name = "initialDiagnosisTextBox";
-            initialDiagnosisTextBox.Size = new Size(453, 46);
-            initialDiagnosisTextBox.TabIndex = 3;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(15, 60);
-            label2.Name = "label2";
-            label2.Size = new Size(90, 15);
-            label2.TabIndex = 2;
-            label2.Text = "Initial Diagnosis";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(15, 22);
-            label1.Name = "label1";
-            label1.Size = new Size(115, 15);
-            label1.TabIndex = 1;
-            label1.Text = "Select Appointment:";
-            // 
-            // appointmentComboBox
-            // 
-            appointmentComboBox.FormattingEnabled = true;
-            appointmentComboBox.Location = new Point(133, 19);
-            appointmentComboBox.Name = "appointmentComboBox";
-            appointmentComboBox.Size = new Size(121, 23);
-            appointmentComboBox.TabIndex = 0;
-            // 
+            //
             // AppointmentForm
-            // 
-            AcceptButton = bookButton;
+            //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = cancelButton;
-            ClientSize = new Size(484, 411);
-            Controls.Add(appointmentTabControl);
+            ClientSize = new Size(800, 760);
+            Controls.Add(loggedInLabel);
+            Controls.Add(titleLabel);
+            Controls.Add(patientSearchControl);
+            Controls.Add(patientNameLabel);
+            Controls.Add(patientNameTextBox);
+            Controls.Add(patientDobLabel);
+            Controls.Add(patientDobTextBox);
+            Controls.Add(inactivePatientLabel);
+            Controls.Add(doctorLabel);
+            Controls.Add(doctorComboBox);
+            Controls.Add(dateLabel);
+            Controls.Add(appointmentDatePicker);
+            Controls.Add(timeSlotLabel);
+            Controls.Add(appointmentTimeComboBox);
+            Controls.Add(availabilityStatusLabel);
+            Controls.Add(reasonLabel);
+            Controls.Add(reasonTextBox);
+            Controls.Add(bookButton);
             Controls.Add(cancelButton);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -287,12 +261,19 @@
 
         private Label loggedInLabel;
         private Label titleLabel;
-        private Label patientIdLabel;
-        private TextBox patientIdTextBox;
+        private PatientSearchControl patientSearchControl;
+        private Label patientNameLabel;
+        private TextBox patientNameTextBox;
+        private Label patientDobLabel;
+        private TextBox patientDobTextBox;
+        private Label inactivePatientLabel;
         private Label doctorLabel;
         private ComboBox doctorComboBox;
-        private Label dateTimeLabel;
-        private DateTimePicker appointmentDateTimePicker;
+        private Label dateLabel;
+        private DateTimePicker appointmentDatePicker;
+        private Label timeSlotLabel;
+        private ComboBox appointmentTimeComboBox;
+        private Label availabilityStatusLabel;
         private Label reasonLabel;
         private TextBox reasonTextBox;
         private Button bookButton;
@@ -307,6 +288,4 @@
         private DataGridView dataGridView1;
         private Label label3;
     }
-
-
 }
