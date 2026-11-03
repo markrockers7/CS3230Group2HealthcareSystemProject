@@ -154,5 +154,25 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return appointments;
         }
+
+        /*
+         * Updates the final diagnosis for a visit.
+         *
+         * @param finalDiagnosis The final diagnosis to update.
+         * @return True if the update was successful, false otherwise.
+         */
+        public bool UpdateVisitFinalDiagnosis(string finalDiagnosis, int visitId)
+        {
+            using var connection = new MySqlConnection(Connection.ConnectionString);
+            connection.Open();
+            const string query =
+                "UPDATE Visit " +
+                "SET final_diagnosis = @finalDiagnosis " +
+                "WHERE appointment_id = @visitId";
+            using var command = new MySqlCommand(query, connection);
+            command.Parameters.Add("@finalDiagnosis", MySqlDbType.VarChar).Value = finalDiagnosis;
+            command.Parameters.Add("@visitId", MySqlDbType.Int32).Value = visitId;
+            return command.ExecuteNonQuery() > 0;
+        }
     }
 }

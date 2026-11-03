@@ -259,6 +259,8 @@ public class AppointmentController
 
     /*
      * Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+     * @param patientId The ID of the patient
+     * @return List of Visit objects that meet the criteria
      */
     public List<Visit> GetVisitsWithCompleteOrNoTestsForPatient(int patientId)
     {
@@ -267,6 +269,8 @@ public class AppointmentController
 
     /*
      * Gets the name of the doctor associated with a visit.
+     * @param visitId the ID of the visit
+     * @return the name of the doctor associated with the visit
      */
     public string GetDoctorNameFromVisit(int visitId)
     {
@@ -278,6 +282,17 @@ public class AppointmentController
         }
         var scheduledDoctor = doctors.FirstOrDefault(doctor => doctor.DoctorId == appointment.DoctorId);
         return scheduledDoctor == null ? throw new ArgumentException("Doctor not found.") : scheduledDoctor.FullName;
+    }
+
+    /*
+     * Updates the Final Diagnosis for a visit.
+     * @param visitId The ID of the visit to update
+     * @param finalDiagnosis The new final diagnosis
+     * @returns true if the update was successful, false otherwise
+     */
+    public bool UpdateFinalDiagnosis(string finalDiagnosis, int visitId)
+    {
+        return appointmentsDAL.UpdateVisitFinalDiagnosis(finalDiagnosis, visitId);
     }
 }
 

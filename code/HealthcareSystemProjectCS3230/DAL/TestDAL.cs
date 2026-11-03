@@ -8,6 +8,7 @@ public class TestDAL
 {
     /*
      * Gets all of the available tests from the database.
+     * @return List of Test objects representing the available tests
      */
     public List<Test> GetTests()
     {
@@ -40,6 +41,16 @@ public class TestDAL
 
     /*
      * Saves a visit and its associated tests to the database.
+     * @param appointmentId The ID of the appointment associated with the visit.
+     * @param systolic The systolic blood pressure.
+     * @param diastolic The diastolic blood pressure.
+     * @param pulse The pulse rate.
+     * @param bodyTemperature The body temperature.
+     * @param height The height.
+     * @param weight The weight.
+     * @param symptoms The symptoms.
+     * @param initialDiagnosis The initial diagnosis.
+     * @param selectedTests The selected tests.
      */
     public void SaveVisitAndTests(int appointmentId, int systolic, int diastolic, int pulse,
         decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis,
@@ -96,6 +107,8 @@ public class TestDAL
 
     /*
      * Gets all of the available Visits from the database for a specific patient.
+     * @param patientId The ID of the patient to get visits for.
+     * @return A list of Visit objects for the specified patient.
      */
     public List<Visit> GetVisitsByPatientId(int patientId)
     {
@@ -124,6 +137,11 @@ public class TestDAL
         return visits;
     }
 
+    /*
+     * Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+     * @param patientId The ID of the patient
+     * @return List of Visit objects that meet the criteria
+     */
     public List<Visit> GetVisitsWithCompleteOrNoVisitTests(int patientId)
     {
         var visits = new List<Visit>();
