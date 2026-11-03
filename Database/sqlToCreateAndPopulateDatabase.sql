@@ -242,4 +242,4 @@ INSERT INTO VisitTest (appointment_id, test_code, date_performed, result, isAbno
 (2, 'CHOL',  '2026-09-22 11:00:00', '198',      FALSE),
 (3, 'STREP', '2026-10-01 14:20:00', 'Positive', TRUE),
 (4, 'HGB',   '2026-10-05 11:30:00', '13.1',     FALSE),
-(4, 'GLU',   NULL,                  NULL,       NULL);
+(4, 'K',     '2026-10-05 11:30:00', '4.5',      FALSE);

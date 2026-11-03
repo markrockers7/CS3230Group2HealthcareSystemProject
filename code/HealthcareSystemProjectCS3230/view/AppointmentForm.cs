@@ -72,7 +72,7 @@ namespace HealthcareSystemProjectCS3230.view
             }
 
             RefreshAvailableSlots();
-            }
+        }
 
         private void LoadExistingAppointment()
         {
@@ -456,6 +456,40 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 SetVisitWarning("The visit could not be submitted: " + ex.Message);
             }
+        }
+
+        private void finalDiagnosisPatientSearchControl_PatientSelected(object sender, EventArgs e)
+        {
+            visitDataGridView.Rows.Clear();
+            Patient? patient = finalDiagnosisPatientSearchControl.SelectedPatient;
+            if (patient == null) return;
+            try
+            {
+                var visits = _appointmentController.GetVisitsWithCompleteOrNoTestsForPatient(patient.Id);
+                if (visits.Count == 0)
+                {
+                    SetVisitWarning("No appointments found for this patient.");
+                    return;
+                }
+
+                var doctorNames = _appointmentController.GetDoctorsWithNames();
+                foreach (var visit in visits)
+                {
+                    if (visit.FinalDiagnosis == null && visit.InitialDiagnosis != null)
+                    {
+                        visitDataGridView.Rows.Add(visit.AppointmentId, _appointmentController.GetDoctorNameFromVisit(visit.AppointmentId), visit.InitialDiagnosis);
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                SetVisitWarning(ex.Message);
+            }
+        }
+
+        private void finalDiagnosisPatientSearchControl_SearchRequested(object sender, EventArgs e)
+        {
+            
         }
     }
 }

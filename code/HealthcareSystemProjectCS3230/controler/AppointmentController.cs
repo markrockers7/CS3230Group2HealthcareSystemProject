@@ -256,6 +256,29 @@ public class AppointmentController
                     "Appointment times must be in 15-minute slots between 8:00 AM and 4:45 PM.");
             }
     }
+
+    /*
+     * Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+     */
+    public List<Visit> GetVisitsWithCompleteOrNoTestsForPatient(int patientId)
+    {
+        return testDAL.GetVisitsWithCompleteOrNoVisitTests(patientId);
+    }
+
+    /*
+     * Gets the name of the doctor associated with a visit.
+     */
+    public string GetDoctorNameFromVisit(int visitId)
+    {
+        var doctors = GetDoctorsWithNames();
+        var appointment = GetAppointmentById(visitId);
+        if (appointment == null)
+        {
+            throw new ArgumentException("Appointment not found.");
+        }
+        var scheduledDoctor = doctors.FirstOrDefault(doctor => doctor.DoctorId == appointment.DoctorId);
+        return scheduledDoctor == null ? throw new ArgumentException("Doctor not found.") : scheduledDoctor.FullName;
+    }
 }
 
 public class DoctorView

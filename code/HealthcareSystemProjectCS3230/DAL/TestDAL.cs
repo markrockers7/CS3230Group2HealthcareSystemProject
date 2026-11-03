@@ -39,31 +39,6 @@ public class TestDAL
     }
 
     /*
-     * Gets all of the available tests from the database for a specific patient.
-     */
-    public List<VisitTest> GetVisitTestsByAppointment(int appointmentId)
-    {
-        var visitTests = new List<VisitTest>();
-        using var connection = new MySqlConnection(Connection.ConnectionString);
-        connection.Open();
-        var command = new MySqlCommand("SELECT * FROM VisitTest WHERE AppointmentId = @AppointmentId", connection);
-        command.Parameters.AddWithValue("@AppointmentId", appointmentId);
-        var reader = command.ExecuteReader();
-        while (reader.Read())
-        {
-            visitTests.Add(new VisitTest
-            {
-                AppointmentId = reader.GetInt32("appointment_id"),
-                TestCode = reader.GetString("test_code"),
-                DatePreformed = reader.GetDateTime("date_performed"),
-                Result = reader.GetString("result"),
-                IsAbnormal = reader.GetBoolean("is_abnormal")
-            });
-        }
-        return visitTests;
-    }
-
-    /*
      * Saves a visit and its associated tests to the database.
      */
     public void SaveVisitAndTests(int appointmentId, int systolic, int diastolic, int pulse,
@@ -146,6 +121,36 @@ public class TestDAL
                 FinalDiagnosis = reader.IsDBNull("final_diagnosis") ? null : reader.GetString("final_diagnosis")
             });
         }
+        return visits;
+    }
+
+    public List<Visit> GetVisitsWithCompleteOrNoVisitTests(int patientId)
+    {
+        var visits = new List<Visit>();
+        using var connection = new MySqlConnection(Connection.ConnectionString);
+        connection.Open();
+        var command = new MySqlCommand("SELECT v.* " +
+                                       "FROM visit v JOIN appointment a ON v.appointment_id = a.appointment_id " +
+                                       "WHERE a.patient_id = @PatientId AND v.final_diagnosis IS NULL AND NOT EXISTS " +
+                                       "(SELECT 1 " +
+                                       "FROM visittest t " +
+                                       "WHERE t.appointment_id = a.appointment_id AND t.result IS NULL)", connection);
+        command.Parameters.AddWithValue("@PatientId", patientId);
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+            visits.Add(new Visit
+            {
+                AppointmentId = reader.GetInt32("appointment_id"),
+                SystolicBp = reader.GetInt32("systolic_bp"),
+                DiastolicBp = reader.GetInt32("diastolic_bp"),
+                Pulse = reader.GetInt32("pulse"),
+                BodyTemperature = reader.GetDouble("body_temperature"),
+                Height = reader.GetDouble("height"),
+                Weight = reader.GetDouble("weight"),
+                Symptoms = reader.GetString("symptoms"),
+                InitialDiagnosis = reader.IsDBNull("initial_diagnosis") ? null : reader.GetString("initial_diagnosis"),
+                FinalDiagnosis = reader.IsDBNull("final_diagnosis") ? null : reader.GetString("final_diagnosis")
+            });
         return visits;
     }
 }
