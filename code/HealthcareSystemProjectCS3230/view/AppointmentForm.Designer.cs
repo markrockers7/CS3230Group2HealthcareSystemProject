@@ -72,6 +72,7 @@
             initialDiagnosisTextBox = new TextBox();
             submitVisitButton = new Button();
             finalDiagnosisTabPage = new TabPage();
+            finalDiagnosisWarningLabel = new Label();
             finalDiagnosisSubmitButton = new Button();
             label5 = new Label();
             finalDiagnosisTextBox = new TextBox();
@@ -82,7 +83,6 @@
             visitInitialDiagnosisColumn = new DataGridViewTextBoxColumn();
             label3 = new Label();
             finalDiagnosisPatientSearchControl = new PatientSearchControl();
-            finalDiagnosisWarningLabel = new Label();
             appointmentTabControl.SuspendLayout();
             createAppointmentTabPage.SuspendLayout();
             orderTestTabPage.SuspendLayout();
@@ -469,15 +469,15 @@
             systolicLabel.AutoSize = true;
             systolicLabel.Location = new Point(16, 574);
             systolicLabel.Name = "systolicLabel";
-            systolicLabel.Size = new Size(50, 15);
+            systolicLabel.Size = new Size(104, 15);
             systolicLabel.TabIndex = 8;
-            systolicLabel.Text = "Systolic:";
+            systolicLabel.Text = "Systolic (mm/Hg):";
             // 
             // systolicTextBox
             // 
-            systolicTextBox.Location = new Point(105, 570);
+            systolicTextBox.Location = new Point(126, 570);
             systolicTextBox.Name = "systolicTextBox";
-            systolicTextBox.Size = new Size(80, 23);
+            systolicTextBox.Size = new Size(59, 23);
             systolicTextBox.TabIndex = 7;
             // 
             // diastolicLabel
@@ -485,15 +485,15 @@
             diastolicLabel.AutoSize = true;
             diastolicLabel.Location = new Point(205, 574);
             diastolicLabel.Name = "diastolicLabel";
-            diastolicLabel.Size = new Size(55, 15);
+            diastolicLabel.Size = new Size(109, 15);
             diastolicLabel.TabIndex = 9;
-            diastolicLabel.Text = "Diastolic:";
+            diastolicLabel.Text = "Diastolic (mm/Hg):";
             // 
             // diastolicTextBox
             // 
-            diastolicTextBox.Location = new Point(298, 570);
+            diastolicTextBox.Location = new Point(320, 570);
             diastolicTextBox.Name = "diastolicTextBox";
-            diastolicTextBox.Size = new Size(80, 23);
+            diastolicTextBox.Size = new Size(58, 23);
             diastolicTextBox.TabIndex = 8;
             // 
             // pulseLabel
@@ -501,15 +501,15 @@
             pulseLabel.AutoSize = true;
             pulseLabel.Location = new Point(400, 574);
             pulseLabel.Name = "pulseLabel";
-            pulseLabel.Size = new Size(38, 15);
+            pulseLabel.Size = new Size(74, 15);
             pulseLabel.TabIndex = 10;
-            pulseLabel.Text = "Pulse:";
+            pulseLabel.Text = "Pulse (BPM):";
             // 
             // pulseTextBox
             // 
-            pulseTextBox.Location = new Point(443, 570);
+            pulseTextBox.Location = new Point(475, 570);
             pulseTextBox.Name = "pulseTextBox";
-            pulseTextBox.Size = new Size(80, 23);
+            pulseTextBox.Size = new Size(48, 23);
             pulseTextBox.TabIndex = 9;
             // 
             // bodyTemperatureLabel
@@ -517,9 +517,9 @@
             bodyTemperatureLabel.AutoSize = true;
             bodyTemperatureLabel.Location = new Point(540, 574);
             bodyTemperatureLabel.Name = "bodyTemperatureLabel";
-            bodyTemperatureLabel.Size = new Size(68, 15);
+            bodyTemperatureLabel.Size = new Size(84, 15);
             bodyTemperatureLabel.TabIndex = 11;
-            bodyTemperatureLabel.Text = "Body temp:";
+            bodyTemperatureLabel.Text = "Body temp (°):";
             // 
             // bodyTemperatureTextBox
             // 
@@ -533,9 +533,9 @@
             heightLabel.AutoSize = true;
             heightLabel.Location = new Point(16, 609);
             heightLabel.Name = "heightLabel";
-            heightLabel.Size = new Size(46, 15);
+            heightLabel.Size = new Size(67, 15);
             heightLabel.TabIndex = 12;
-            heightLabel.Text = "Height:";
+            heightLabel.Text = "Height (in):";
             // 
             // heightTextBox
             // 
@@ -549,9 +549,9 @@
             weightLabel.AutoSize = true;
             weightLabel.Location = new Point(205, 609);
             weightLabel.Name = "weightLabel";
-            weightLabel.Size = new Size(48, 15);
+            weightLabel.Size = new Size(77, 15);
             weightLabel.TabIndex = 13;
-            weightLabel.Text = "Weight:";
+            weightLabel.Text = "Weight (Lbs):";
             // 
             // weightTextBox
             // 
@@ -623,6 +623,18 @@
             finalDiagnosisTabPage.TabIndex = 2;
             finalDiagnosisTabPage.Text = "Enter Final Diagnosis";
             finalDiagnosisTabPage.UseVisualStyleBackColor = true;
+            // 
+            // finalDiagnosisWarningLabel
+            // 
+            finalDiagnosisWarningLabel.AutoEllipsis = true;
+            finalDiagnosisWarningLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            finalDiagnosisWarningLabel.ForeColor = Color.Red;
+            finalDiagnosisWarningLabel.Location = new Point(16, 343);
+            finalDiagnosisWarningLabel.Name = "finalDiagnosisWarningLabel";
+            finalDiagnosisWarningLabel.Size = new Size(740, 23);
+            finalDiagnosisWarningLabel.TabIndex = 17;
+            finalDiagnosisWarningLabel.Text = "ERROR";
+            finalDiagnosisWarningLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // finalDiagnosisSubmitButton
             // 
@@ -715,18 +727,6 @@
             finalDiagnosisPatientSearchControl.Size = new Size(760, 300);
             finalDiagnosisPatientSearchControl.TabIndex = 0;
             finalDiagnosisPatientSearchControl.PatientSelected += finalDiagnosisPatientSearchControl_PatientSelected;
-            // 
-            // finalDiagnosisWarningLabel
-            // 
-            finalDiagnosisWarningLabel.AutoEllipsis = true;
-            finalDiagnosisWarningLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            finalDiagnosisWarningLabel.ForeColor = Color.Red;
-            finalDiagnosisWarningLabel.Location = new Point(16, 343);
-            finalDiagnosisWarningLabel.Name = "finalDiagnosisWarningLabel";
-            finalDiagnosisWarningLabel.Size = new Size(740, 23);
-            finalDiagnosisWarningLabel.TabIndex = 17;
-            finalDiagnosisWarningLabel.Text = "ERROR";
-            finalDiagnosisWarningLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // AppointmentForm
             // 
