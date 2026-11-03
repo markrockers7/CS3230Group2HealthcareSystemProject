@@ -94,14 +94,13 @@ namespace HealthcareSystemProjectCS3230.DAL
             return bookedSlots;
         }
 
-        // Uses the stored procedure get_appointments_for_patient
         public List<AppointmentSummary> GetAppointmentsForPatient(int patientId, DateTime today)
         {
             var appointments = new List<AppointmentSummary>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
 
-            using var command = new MySqlCommand("get_appointments_for_patient", connection);
+            using var command = new MySqlCommand("GetAppointmentsForPatient", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add("@p_patient_id", MySqlDbType.Int32).Value = patientId;
             command.Parameters.Add("@p_today", MySqlDbType.Date).Value = today.Date;

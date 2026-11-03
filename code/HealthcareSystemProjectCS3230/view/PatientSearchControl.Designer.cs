@@ -29,6 +29,7 @@ namespace HealthcareSystemProjectCS3230.view
             clearButton = new Button();
             birthdateLabel = new Label();
             birthdatePicker = new DateTimePicker();
+            errorLabel = new Label();
             patientResultsGrid = new DataGridView();
             firstNameColumn = new DataGridViewTextBoxColumn();
             lastNameColumn = new DataGridViewTextBoxColumn();
@@ -104,6 +105,15 @@ namespace HealthcareSystemProjectCS3230.view
             birthdatePicker.ShowCheckBox = true;
             birthdatePicker.Size = new Size(220, 23);
             birthdatePicker.TabIndex = 2;
+            //
+            // errorLabel
+            //
+            errorLabel.AutoSize = true;
+            errorLabel.ForeColor = Color.Firebrick;
+            errorLabel.Location = new Point(325, 48);
+            errorLabel.MaximumSize = new Size(425, 0);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(0, 15);
             //
             // patientResultsGrid
             //
@@ -198,6 +208,7 @@ namespace HealthcareSystemProjectCS3230.view
             Controls.Add(clearButton);
             Controls.Add(birthdateLabel);
             Controls.Add(birthdatePicker);
+            Controls.Add(errorLabel);
             Controls.Add(patientResultsGrid);
             Name = "PatientSearchControl";
             Size = new Size(760, 300);
@@ -216,6 +227,7 @@ namespace HealthcareSystemProjectCS3230.view
         private Button clearButton;
         private Label birthdateLabel;
         private DateTimePicker birthdatePicker;
+        private Label errorLabel;
         private DataGridView patientResultsGrid;
         private DataGridViewTextBoxColumn firstNameColumn;
         private DataGridViewTextBoxColumn lastNameColumn;

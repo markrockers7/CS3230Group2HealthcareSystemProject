@@ -15,6 +15,7 @@ namespace HealthcareSystemProjectCS3230.view
         private ComboBox stateComboBox = null!;
         private TextBox zipcodeTextBox = null!;
         private CheckBox isActiveCheckBox = null!;
+        private Label errorLabel = null!;
         private Button updateButton = null!;
         private Button cancelButton = null!;
         private Label loggedInLabel = null!;
@@ -31,6 +32,7 @@ namespace HealthcareSystemProjectCS3230.view
             stateComboBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
             zipcodeTextBox = new TextBox { Dock = DockStyle.Fill };
             isActiveCheckBox = new CheckBox { Text = "Active", AutoSize = true };
+            errorLabel = new Label { AutoSize = true, ForeColor = Color.Firebrick, MaximumSize = new Size(650, 0) };
             updateButton = new Button { Text = "Update", AutoSize = true };
             cancelButton = new Button { Text = "Cancel", AutoSize = true };
             loggedInLabel = new Label { AutoSize = true, Anchor = AnchorStyles.Left };
@@ -41,7 +43,7 @@ namespace HealthcareSystemProjectCS3230.view
             var layout = new TableLayoutPanel
             {
                 ColumnCount = 2,
-                RowCount = 15,
+                RowCount = 16,
                 Dock = DockStyle.Top,
                 Padding = new Padding(12),
                 AutoSize = true,
@@ -74,11 +76,15 @@ namespace HealthcareSystemProjectCS3230.view
             layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             layout.Controls.Add(isActiveCheckBox, 1, 13);
 
+            // Row 14: error messages
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.Controls.Add(errorLabel, 1, 14);
+
             var buttons = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, Dock = DockStyle.Fill, AutoSize = true };
             buttons.Controls.Add(cancelButton);
             buttons.Controls.Add(updateButton);
             layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            layout.Controls.Add(buttons, 1, 14);
+            layout.Controls.Add(buttons, 1, 15);
 
             Controls.Add(layout);
             AutoScaleMode = AutoScaleMode.Font;

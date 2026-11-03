@@ -178,13 +178,11 @@ CREATE TABLE Appointment (
 );
 
 
-DROP PROCEDURE IF EXISTS get_appointments_for_patient;
+DROP PROCEDURE IF EXISTS GetAppointmentsForPatient;
 
+DELIMITER $
 
-CREATE PROCEDURE get_appointments_for_patient(
-    IN p_patient_id INT,
-    IN p_today DATE
-)
+CREATE PROCEDURE GetAppointmentsForPatient(IN p_patient_id INT,IN p_today DATE)
 BEGIN
     SELECT
         a.appointment_id,
@@ -198,7 +196,11 @@ BEGIN
     JOIN Person p ON p.person_id = d.person_id
     WHERE a.patient_id = p_patient_id
     ORDER BY a.appointment_datetime DESC;
-END $$
+END $
+
+DELIMITER ;
+
+
 INSERT INTO Appointment (appointment_id, doctor_id, appointment_datetime, patient_id, reason) VALUES
 (9,  1, '2026-11-20 09:00:00', 1, 'Cholesterol follow-up'),
 (10, 2, '2026-11-24 13:30:00', 2, 'Blood pressure follow-up'),

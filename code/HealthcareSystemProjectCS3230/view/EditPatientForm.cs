@@ -64,6 +64,7 @@ namespace HealthcareSystemProjectCS3230.view
                 return;
             }
 
+            errorLabel.Text = string.Empty;
             LoadPatientData(selectedPatient);
             EnableEditFields(true);
             Tag = selectedPatient;
@@ -98,6 +99,7 @@ namespace HealthcareSystemProjectCS3230.view
             zipcodeTextBox.Clear();
             isActiveCheckBox.Checked = true;
             stateComboBox.SelectedIndex = -1;
+            errorLabel.Text = string.Empty;
             EnableEditFields(false);
             Tag = null;
         }
@@ -124,6 +126,8 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void updateButton_Click(object? sender, EventArgs e)
         {
+            errorLabel.Text = string.Empty;
+
             if (Tag is not Patient existing) return;
 
             existing.FirstName = firstNameTextBox.Text.Trim();
@@ -146,11 +150,11 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                errorLabel.Text = ex.Message;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                errorLabel.Text = "An unexpected error occurred: " + ex.Message;
             }
         }
     }

@@ -25,6 +25,7 @@ namespace HealthcareSystemProjectCS3230.view
         public PatientSearchControl()
         {
             InitializeComponent();
+            errorLabel.Text = string.Empty;
         }
 
         private void searchButton_Click(object sender, EventArgs e)
@@ -40,6 +41,8 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void RunSearch()
         {
+            errorLabel.Text = string.Empty;
+
             try
             {
                 var patients = patientController.FindPatients(FirstNameFilter, LastNameFilter, BirthdateFilter);
@@ -47,20 +50,12 @@ namespace HealthcareSystemProjectCS3230.view
 
                 if (patients.Count == 0)
                 {
-                    MessageBox.Show(
-                        "No patients matched your search.",
-                        "No Results",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    errorLabel.Text = "No patients matched your search.";
                 }
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    $"Patients could not be searched. {exception.Message}",
-                    "Search Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                errorLabel.Text = $"Patients could not be searched. {exception.Message}";
             }
         }
 
@@ -74,6 +69,7 @@ namespace HealthcareSystemProjectCS3230.view
             firstNameTextBox.Clear();
             lastNameTextBox.Clear();
             birthdatePicker.Checked = false;
+            errorLabel.Text = string.Empty;
             patientResultsGrid.DataSource = null;
             patientResultsGrid.ClearSelection();
         }

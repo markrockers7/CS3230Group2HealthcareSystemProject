@@ -37,6 +37,7 @@
             availabilityStatusLabel = new Label();
             reasonLabel = new Label();
             reasonTextBox = new TextBox();
+            errorLabel = new Label();
             bookButton = new Button();
             cancelButton = new Button();
             SuspendLayout();
@@ -176,9 +177,18 @@
             reasonTextBox.Size = new Size(300, 80);
             reasonTextBox.TabIndex = 4;
             //
+            // errorLabel
+            //
+            errorLabel.AutoSize = true;
+            errorLabel.ForeColor = Color.Firebrick;
+            errorLabel.Location = new Point(130, 702);
+            errorLabel.MaximumSize = new Size(650, 0);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(0, 15);
+            //
             // bookButton
             //
-            bookButton.Location = new Point(250, 710);
+            bookButton.Location = new Point(250, 740);
             bookButton.Name = "bookButton";
             bookButton.Size = new Size(85, 30);
             bookButton.TabIndex = 5;
@@ -188,7 +198,7 @@
             //
             // cancelButton
             //
-            cancelButton.Location = new Point(345, 710);
+            cancelButton.Location = new Point(345, 740);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(85, 30);
             cancelButton.TabIndex = 6;
@@ -201,7 +211,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = cancelButton;
-            ClientSize = new Size(800, 760);
+            ClientSize = new Size(800, 790);
             Controls.Add(loggedInLabel);
             Controls.Add(titleLabel);
             Controls.Add(patientSearchControl);
@@ -219,6 +229,7 @@
             Controls.Add(availabilityStatusLabel);
             Controls.Add(reasonLabel);
             Controls.Add(reasonTextBox);
+            Controls.Add(errorLabel);
             Controls.Add(bookButton);
             Controls.Add(cancelButton);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -250,6 +261,7 @@
         private Label availabilityStatusLabel;
         private Label reasonLabel;
         private TextBox reasonTextBox;
+        private Label errorLabel;
         private Button bookButton;
         private Button cancelButton;
     }

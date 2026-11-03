@@ -54,7 +54,7 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Appointments could not be loaded: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                statusLabel.Text = "Appointments could not be loaded: " + ex.Message;
             }
         }
 
