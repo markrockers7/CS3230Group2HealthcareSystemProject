@@ -1,9 +1,7 @@
 ﻿using HealthcareSystemProjectCS3230.controler;
 using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Globalization;
 
 namespace HealthcareSystemProjectCS3230.view
 {
@@ -74,7 +72,7 @@ namespace HealthcareSystemProjectCS3230.view
             }
 
             RefreshAvailableSlots();
-        }
+            }
 
         private void LoadExistingAppointment()
         {
@@ -300,6 +298,12 @@ namespace HealthcareSystemProjectCS3230.view
             RefreshAvailableSlots();
         }
 
+        private void SetVisitWarning(string message)
+        {
+            selectAppointmentErrorLabel.Text = message;
+            selectAppointmentErrorLabel.Visible = !string.IsNullOrWhiteSpace(message);
+        }
+
         private void doctorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshAvailableSlots();
@@ -326,16 +330,16 @@ namespace HealthcareSystemProjectCS3230.view
         private void ConfigureOrderTestForm()
         {
             selectAppointmentErrorLabel.Visible = false;
-
             testCheckedListBox.DataSource = null;
             testCheckedListBox.Items.Clear();
 
             try
             {
-                foreach (Test test in _appointmentController.GetTests())
-                {
-                    testCheckedListBox.Items.Add(test.Name);
-                }
+                List<Test> tests = _appointmentController.GetTests();
+
+                testCheckedListBox.DisplayMember = nameof(Test.Name);
+                testCheckedListBox.ValueMember = nameof(Test.TestCode);
+                testCheckedListBox.DataSource = tests;
             }
             catch (Exception ex)
             {
@@ -353,16 +357,104 @@ namespace HealthcareSystemProjectCS3230.view
                 try
                 {
                     var appointments = _appointmentController.GetAppointmentsByPatientId(patient.Id);
+                    if (appointments.Count == 0)
+                    {
+                        SetVisitWarning("No appointments found for this patient.");
+                        return;
+                    }
                     foreach (var appt in appointments)
                     {
-                        appointmentDataGridView.Rows.Add(appt.DoctorName, appt.DateTime, appt.Reason);
+                        appointmentDataGridView.Rows.Add(appt.AppointmentId, appt.DoctorName, appt.DateTime, appt.Reason);
                     }
                 }
                 catch (ArgumentException ex)
                 {
-                    selectAppointmentErrorLabel.Text = ex.Message;
-                    selectAppointmentErrorLabel.Visible = true;
+                    SetVisitWarning(ex.Message);
                 }
+            }
+        }
+
+        private static int ParseRequiredInteger(TextBox input, string fieldName)
+        {
+            if (!int.TryParse(input.Text, NumberStyles.Integer, CultureInfo.CurrentCulture, out int value) || value <= 0)
+            {
+                throw new ArgumentException($"Enter a valid {fieldName} greater than zero.");
+            }
+
+            return value;
+        }
+
+        private static decimal ParseRequiredDecimal(TextBox input, string fieldName)
+        {
+            if (!decimal.TryParse(input.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal value) || value <= 0)
+            {
+                throw new ArgumentException($"Enter a valid {fieldName} greater than zero.");
+            }
+
+            return value;
+        }
+
+        private void submitVisitButton_Click(object sender, EventArgs e)
+        {
+            SetVisitWarning(string.Empty);
+
+            try
+            {
+                if (appointmentDataGridView.SelectedRows.Count == 0 ||
+                    appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
+                {
+                    throw new ArgumentException("Please select an appointment.");
+                }
+
+                var selectedAppointmentId = Convert.ToInt32(
+                    appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value,
+                    CultureInfo.InvariantCulture);
+
+                var systolic = ParseRequiredInteger(systolicTextBox, "systolic pressure");
+                var diastolic = ParseRequiredInteger(diastolicTextBox, "diastolic pressure");
+                var pulse = ParseRequiredInteger(pulseTextBox, "pulse");
+                var bodyTemperature = ParseRequiredDecimal(bodyTemperatureTextBox, "body temperature");
+                var height = ParseRequiredDecimal(heightTextBox, "height");
+                var weight = ParseRequiredDecimal(weightTextBox, "weight");
+
+                var selectedTests = testCheckedListBox.CheckedItems
+                    .Cast<Test>()
+                    .ToList();
+
+                _appointmentController.SaveVisitAndTests(
+                    selectedAppointmentId,
+                    systolic,
+                    diastolic,
+                    pulse,
+                    bodyTemperature,
+                    height,
+                    weight,
+                    symptomsTextBox.Text,
+                    initialDiagnosisTextBox.Text,
+                    selectedTests);
+
+                MessageBox.Show("Visit and selected tests submitted.");
+                systolicTextBox.Clear();
+                diastolicTextBox.Clear();
+                pulseTextBox.Clear();
+                bodyTemperatureTextBox.Clear();
+                heightTextBox.Clear();
+                weightTextBox.Clear();
+                symptomsTextBox.Clear();
+                initialDiagnosisTextBox.Clear();
+
+                for (int i = 0; i < testCheckedListBox.Items.Count; i++)
+                {
+                    testCheckedListBox.SetItemChecked(i, false);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                SetVisitWarning(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                SetVisitWarning("The visit could not be submitted: " + ex.Message);
             }
         }
     }

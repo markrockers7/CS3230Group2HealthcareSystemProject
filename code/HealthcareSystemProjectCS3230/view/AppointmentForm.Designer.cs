@@ -45,6 +45,7 @@
             selectAppointmentErrorLabel = new Label();
             label2 = new Label();
             appointmentDataGridView = new DataGridView();
+            appointmentIdColumn = new DataGridViewTextBoxColumn();
             doctorNameColumn = new DataGridViewTextBoxColumn();
             timeColumn = new DataGridViewTextBoxColumn();
             reasonColumn = new DataGridViewTextBoxColumn();
@@ -52,6 +53,24 @@
             orderTestPatientSearchControl = new PatientSearchControl();
             availableTestsLabel = new Label();
             testCheckedListBox = new CheckedListBox();
+            visitDetailsLabel = new Label();
+            systolicLabel = new Label();
+            systolicTextBox = new TextBox();
+            diastolicLabel = new Label();
+            diastolicTextBox = new TextBox();
+            pulseLabel = new Label();
+            pulseTextBox = new TextBox();
+            bodyTemperatureLabel = new Label();
+            bodyTemperatureTextBox = new TextBox();
+            heightLabel = new Label();
+            heightTextBox = new TextBox();
+            weightLabel = new Label();
+            weightTextBox = new TextBox();
+            symptomsLabel = new Label();
+            symptomsTextBox = new TextBox();
+            initialDiagnosisLabel = new Label();
+            initialDiagnosisTextBox = new TextBox();
+            submitVisitButton = new Button();
             appointmentTabControl.SuspendLayout();
             createAppointmentTabPage.SuspendLayout();
             orderTestTabPage.SuspendLayout();
@@ -273,6 +292,7 @@
             // 
             // orderTestTabPage
             // 
+            orderTestTabPage.AutoScroll = true;
             orderTestTabPage.Controls.Add(selectAppointmentErrorLabel);
             orderTestTabPage.Controls.Add(label2);
             orderTestTabPage.Controls.Add(appointmentDataGridView);
@@ -280,21 +300,40 @@
             orderTestTabPage.Controls.Add(orderTestPatientSearchControl);
             orderTestTabPage.Controls.Add(availableTestsLabel);
             orderTestTabPage.Controls.Add(testCheckedListBox);
+            orderTestTabPage.Controls.Add(visitDetailsLabel);
+            orderTestTabPage.Controls.Add(systolicLabel);
+            orderTestTabPage.Controls.Add(systolicTextBox);
+            orderTestTabPage.Controls.Add(diastolicLabel);
+            orderTestTabPage.Controls.Add(diastolicTextBox);
+            orderTestTabPage.Controls.Add(pulseLabel);
+            orderTestTabPage.Controls.Add(pulseTextBox);
+            orderTestTabPage.Controls.Add(bodyTemperatureLabel);
+            orderTestTabPage.Controls.Add(bodyTemperatureTextBox);
+            orderTestTabPage.Controls.Add(heightLabel);
+            orderTestTabPage.Controls.Add(heightTextBox);
+            orderTestTabPage.Controls.Add(weightLabel);
+            orderTestTabPage.Controls.Add(weightTextBox);
+            orderTestTabPage.Controls.Add(symptomsLabel);
+            orderTestTabPage.Controls.Add(symptomsTextBox);
+            orderTestTabPage.Controls.Add(initialDiagnosisLabel);
+            orderTestTabPage.Controls.Add(initialDiagnosisTextBox);
+            orderTestTabPage.Controls.Add(submitVisitButton);
             orderTestTabPage.Location = new Point(4, 24);
             orderTestTabPage.Name = "orderTestTabPage";
             orderTestTabPage.Padding = new Padding(3);
             orderTestTabPage.Size = new Size(791, 714);
             orderTestTabPage.TabIndex = 1;
-            orderTestTabPage.Text = "Order Tests";
+            orderTestTabPage.Text = "Visit / Order Tests";
             orderTestTabPage.UseVisualStyleBackColor = true;
             // 
             // selectAppointmentErrorLabel
             // 
+            selectAppointmentErrorLabel.AutoEllipsis = true;
             selectAppointmentErrorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             selectAppointmentErrorLabel.ForeColor = Color.Red;
             selectAppointmentErrorLabel.Location = new Point(16, 341);
             selectAppointmentErrorLabel.Name = "selectAppointmentErrorLabel";
-            selectAppointmentErrorLabel.Size = new Size(330, 23);
+            selectAppointmentErrorLabel.Size = new Size(740, 23);
             selectAppointmentErrorLabel.TabIndex = 4;
             selectAppointmentErrorLabel.Text = "ERROR";
             selectAppointmentErrorLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -309,36 +348,28 @@
             label2.TabIndex = 3;
             label2.Text = "Select Appointment";
             // 
-            // availableTestsLabel
-            // 
-            availableTestsLabel.AutoSize = true;
-            availableTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            availableTestsLabel.Location = new Point(365, 366);
-            availableTestsLabel.Name = "availableTestsLabel";
-            availableTestsLabel.Size = new Size(111, 21);
-            availableTestsLabel.TabIndex = 5;
-            availableTestsLabel.Text = "Available Tests";
-            // 
             // appointmentDataGridView
             // 
             appointmentDataGridView.AllowUserToAddRows = false;
             appointmentDataGridView.AllowUserToDeleteRows = false;
             appointmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
             appointmentDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            appointmentDataGridView.Columns.AddRange(new DataGridViewColumn[] { doctorNameColumn, timeColumn, reasonColumn });
+            appointmentDataGridView.Columns.AddRange(new DataGridViewColumn[] { appointmentIdColumn, doctorNameColumn, timeColumn, reasonColumn });
             appointmentDataGridView.Location = new Point(16, 390);
+            appointmentDataGridView.MultiSelect = false;
             appointmentDataGridView.Name = "appointmentDataGridView";
             appointmentDataGridView.ReadOnly = true;
+            appointmentDataGridView.RowHeadersVisible = false;
+            appointmentDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             appointmentDataGridView.Size = new Size(330, 134);
             appointmentDataGridView.TabIndex = 2;
             // 
-            // testCheckedListBox
+            // appointmentIdColumn
             // 
-            testCheckedListBox.FormattingEnabled = true;
-            testCheckedListBox.Location = new Point(365, 390);
-            testCheckedListBox.Name = "testCheckedListBox";
-            testCheckedListBox.Size = new Size(400, 134);
-            testCheckedListBox.TabIndex = 6;
+            appointmentIdColumn.HeaderText = "Appointment ID";
+            appointmentIdColumn.Name = "appointmentIdColumn";
+            appointmentIdColumn.ReadOnly = true;
+            appointmentIdColumn.Visible = false;
             // 
             // doctorNameColumn
             // 
@@ -381,6 +412,176 @@
             orderTestPatientSearchControl.Size = new Size(760, 300);
             orderTestPatientSearchControl.TabIndex = 0;
             orderTestPatientSearchControl.PatientSelected += orderTestPatientSearch_PatientSelected;
+            // 
+            // availableTestsLabel
+            // 
+            availableTestsLabel.AutoSize = true;
+            availableTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            availableTestsLabel.Location = new Point(365, 366);
+            availableTestsLabel.Name = "availableTestsLabel";
+            availableTestsLabel.Size = new Size(123, 21);
+            availableTestsLabel.TabIndex = 5;
+            availableTestsLabel.Text = "Available Tests";
+            // 
+            // testCheckedListBox
+            // 
+            testCheckedListBox.FormattingEnabled = true;
+            testCheckedListBox.Location = new Point(365, 390);
+            testCheckedListBox.Name = "testCheckedListBox";
+            testCheckedListBox.Size = new Size(400, 130);
+            testCheckedListBox.TabIndex = 6;
+            // 
+            // visitDetailsLabel
+            // 
+            visitDetailsLabel.AutoSize = true;
+            visitDetailsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            visitDetailsLabel.Location = new Point(16, 540);
+            visitDetailsLabel.Name = "visitDetailsLabel";
+            visitDetailsLabel.Size = new Size(181, 21);
+            visitDetailsLabel.TabIndex = 7;
+            visitDetailsLabel.Text = "Visit Vitals and Details";
+            // 
+            // systolicLabel
+            // 
+            systolicLabel.AutoSize = true;
+            systolicLabel.Location = new Point(16, 574);
+            systolicLabel.Name = "systolicLabel";
+            systolicLabel.Size = new Size(50, 15);
+            systolicLabel.TabIndex = 8;
+            systolicLabel.Text = "Systolic:";
+            // 
+            // systolicTextBox
+            // 
+            systolicTextBox.Location = new Point(105, 570);
+            systolicTextBox.Name = "systolicTextBox";
+            systolicTextBox.Size = new Size(80, 23);
+            systolicTextBox.TabIndex = 7;
+            // 
+            // diastolicLabel
+            // 
+            diastolicLabel.AutoSize = true;
+            diastolicLabel.Location = new Point(205, 574);
+            diastolicLabel.Name = "diastolicLabel";
+            diastolicLabel.Size = new Size(55, 15);
+            diastolicLabel.TabIndex = 9;
+            diastolicLabel.Text = "Diastolic:";
+            // 
+            // diastolicTextBox
+            // 
+            diastolicTextBox.Location = new Point(298, 570);
+            diastolicTextBox.Name = "diastolicTextBox";
+            diastolicTextBox.Size = new Size(80, 23);
+            diastolicTextBox.TabIndex = 8;
+            // 
+            // pulseLabel
+            // 
+            pulseLabel.AutoSize = true;
+            pulseLabel.Location = new Point(400, 574);
+            pulseLabel.Name = "pulseLabel";
+            pulseLabel.Size = new Size(38, 15);
+            pulseLabel.TabIndex = 10;
+            pulseLabel.Text = "Pulse:";
+            // 
+            // pulseTextBox
+            // 
+            pulseTextBox.Location = new Point(443, 570);
+            pulseTextBox.Name = "pulseTextBox";
+            pulseTextBox.Size = new Size(80, 23);
+            pulseTextBox.TabIndex = 9;
+            // 
+            // bodyTemperatureLabel
+            // 
+            bodyTemperatureLabel.AutoSize = true;
+            bodyTemperatureLabel.Location = new Point(540, 574);
+            bodyTemperatureLabel.Name = "bodyTemperatureLabel";
+            bodyTemperatureLabel.Size = new Size(68, 15);
+            bodyTemperatureLabel.TabIndex = 11;
+            bodyTemperatureLabel.Text = "Body temp:";
+            // 
+            // bodyTemperatureTextBox
+            // 
+            bodyTemperatureTextBox.Location = new Point(635, 570);
+            bodyTemperatureTextBox.Name = "bodyTemperatureTextBox";
+            bodyTemperatureTextBox.Size = new Size(100, 23);
+            bodyTemperatureTextBox.TabIndex = 10;
+            // 
+            // heightLabel
+            // 
+            heightLabel.AutoSize = true;
+            heightLabel.Location = new Point(16, 609);
+            heightLabel.Name = "heightLabel";
+            heightLabel.Size = new Size(46, 15);
+            heightLabel.TabIndex = 12;
+            heightLabel.Text = "Height:";
+            // 
+            // heightTextBox
+            // 
+            heightTextBox.Location = new Point(105, 605);
+            heightTextBox.Name = "heightTextBox";
+            heightTextBox.Size = new Size(80, 23);
+            heightTextBox.TabIndex = 11;
+            // 
+            // weightLabel
+            // 
+            weightLabel.AutoSize = true;
+            weightLabel.Location = new Point(205, 609);
+            weightLabel.Name = "weightLabel";
+            weightLabel.Size = new Size(48, 15);
+            weightLabel.TabIndex = 13;
+            weightLabel.Text = "Weight:";
+            // 
+            // weightTextBox
+            // 
+            weightTextBox.Location = new Point(298, 605);
+            weightTextBox.Name = "weightTextBox";
+            weightTextBox.Size = new Size(80, 23);
+            weightTextBox.TabIndex = 12;
+            // 
+            // symptomsLabel
+            // 
+            symptomsLabel.AutoSize = true;
+            symptomsLabel.Location = new Point(16, 647);
+            symptomsLabel.Name = "symptomsLabel";
+            symptomsLabel.Size = new Size(67, 15);
+            symptomsLabel.TabIndex = 14;
+            symptomsLabel.Text = "Symptoms:";
+            // 
+            // symptomsTextBox
+            // 
+            symptomsTextBox.Location = new Point(105, 643);
+            symptomsTextBox.Multiline = true;
+            symptomsTextBox.Name = "symptomsTextBox";
+            symptomsTextBox.ScrollBars = ScrollBars.Vertical;
+            symptomsTextBox.Size = new Size(630, 48);
+            symptomsTextBox.TabIndex = 13;
+            // 
+            // initialDiagnosisLabel
+            // 
+            initialDiagnosisLabel.AutoSize = true;
+            initialDiagnosisLabel.Location = new Point(16, 709);
+            initialDiagnosisLabel.Name = "initialDiagnosisLabel";
+            initialDiagnosisLabel.Size = new Size(92, 15);
+            initialDiagnosisLabel.TabIndex = 15;
+            initialDiagnosisLabel.Text = "Initial diagnosis:";
+            // 
+            // initialDiagnosisTextBox
+            // 
+            initialDiagnosisTextBox.Location = new Point(105, 705);
+            initialDiagnosisTextBox.Multiline = true;
+            initialDiagnosisTextBox.Name = "initialDiagnosisTextBox";
+            initialDiagnosisTextBox.ScrollBars = ScrollBars.Vertical;
+            initialDiagnosisTextBox.Size = new Size(630, 48);
+            initialDiagnosisTextBox.TabIndex = 14;
+            // 
+            // submitVisitButton
+            // 
+            submitVisitButton.Location = new Point(650, 767);
+            submitVisitButton.Name = "submitVisitButton";
+            submitVisitButton.Size = new Size(115, 32);
+            submitVisitButton.TabIndex = 15;
+            submitVisitButton.Text = "Submit Visit";
+            submitVisitButton.UseVisualStyleBackColor = true;
+            submitVisitButton.Click += submitVisitButton_Click;
             // 
             // AppointmentForm
             // 
@@ -433,6 +634,7 @@
         private Label label1;
         private PatientSearchControl orderTestPatientSearchControl;
         private DataGridView appointmentDataGridView;
+        private DataGridViewTextBoxColumn appointmentIdColumn;
         private DataGridViewTextBoxColumn doctorNameColumn;
         private DataGridViewTextBoxColumn timeColumn;
         private DataGridViewTextBoxColumn reasonColumn;
@@ -440,5 +642,23 @@
         private Label label2;
         private Label availableTestsLabel;
         private CheckedListBox testCheckedListBox;
+        private Label visitDetailsLabel;
+        private Label systolicLabel;
+        private TextBox systolicTextBox;
+        private Label diastolicLabel;
+        private TextBox diastolicTextBox;
+        private Label pulseLabel;
+        private TextBox pulseTextBox;
+        private Label bodyTemperatureLabel;
+        private TextBox bodyTemperatureTextBox;
+        private Label heightLabel;
+        private TextBox heightTextBox;
+        private Label weightLabel;
+        private TextBox weightTextBox;
+        private Label symptomsLabel;
+        private TextBox symptomsTextBox;
+        private Label initialDiagnosisLabel;
+        private TextBox initialDiagnosisTextBox;
+        private Button submitVisitButton;
     }
 }
