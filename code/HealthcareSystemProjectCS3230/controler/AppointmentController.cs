@@ -1,8 +1,5 @@
 ﻿using HealthcareSystemProjectCS3230.DAL;
 using HealthcareSystemProjectCS3230.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace HealthcareSystemProjectCS3230.controler
 {
@@ -48,7 +45,7 @@ namespace HealthcareSystemProjectCS3230.controler
         }
         /*
          * Retreives a specific appointment by its ID
-         * 
+         *
          * @param appointmentId The ID of the appointment to retrieve
          * @return Appointment object if found, null otherwise
          */
@@ -141,14 +138,31 @@ namespace HealthcareSystemProjectCS3230.controler
          * @param appointmentDateTime The date and time of the appointment
          * @param reason The reason for the appointment
          */
-        public List<Appointment> GetAppointmentsByPatientId(int patientId)
+        public List<AppointmentView> GetAppointmentsByPatientId(int patientId)
         {
             var appointments = appointmentsDAL.GetAppointmentsByPatientId(patientId);
             if (appointments == null || appointments.Count == 0)
             {
                 throw new ArgumentException("No appointments found for the given patient ID.");
             }
-            return appointments;
+
+            var appointmentViews = new List<AppointmentView>();
+            var doctorNames = GetDoctorsWithNames();
+            foreach (var appt in appointments)
+            {
+                var appointmentView = new AppointmentView
+                {
+                    AppointmentId = appt.AppointmentId,
+                    PatientId = appt.PatientId,
+                    DoctorId = appt.DoctorId,
+                    DateTime = appt.DateTime,
+                    Reason = appt.Reason,
+                    DoctorName = doctorNames.FirstOrDefault(d => d.DoctorId == appt.DoctorId)?.FullName ?? "Unknown"
+                };
+                appointmentViews.Add(appointmentView);
+            }
+
+            return appointmentViews;
         }
 
         private void EnsureSlotIsFree(int doctorId, DateTime appointmentDateTime, int? excludeAppointmentId = null)
@@ -179,7 +193,8 @@ namespace HealthcareSystemProjectCS3230.controler
 
             if (!AppointmentSlotRules.IsValidSlotDateTime(appointmentDateTime))
             {
-                throw new ArgumentException("Appointment times must be in 15-minute slots between 8:00 AM and 4:45 PM.");
+                throw new ArgumentException(
+                    "Appointment times must be in 15-minute slots between 8:00 AM and 4:45 PM.");
             }
         }
     }
@@ -190,5 +205,18 @@ namespace HealthcareSystemProjectCS3230.controler
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
+    }
+
+    /*
+     * Represents a view model for an appointment, including the doctor's name for display purposes
+     */
+    public class AppointmentView
+    {
+        public int AppointmentId { get; set; }
+        public int PatientId { get; set; }
+        public int DoctorId { get; set; }
+        public DateTime DateTime { get; set; }
+        public string Reason { get; set; } = string.Empty;
+        public string DoctorName { get; set; } = string.Empty;
     }
 }

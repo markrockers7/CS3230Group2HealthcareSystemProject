@@ -329,6 +329,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void orderTestPatientSearch_PatientSelected(object sender, EventArgs e)
         {
+            appointmentDataGridView.Rows.Clear();
             selectAppointmentErrorLabel.Visible = false;
             Patient? patient = orderTestPatientSearchControl.SelectedPatient;
             if (patient != null)
@@ -336,14 +337,16 @@ namespace HealthcareSystemProjectCS3230.view
                 try
                 {
                     var appointments = _appointmentController.GetAppointmentsByPatientId(patient.Id);
+                    foreach (var appt in appointments)
+                    {
+                        appointmentDataGridView.Rows.Add(appt.DoctorName, appt.DateTime, appt.Reason);
+                    }
                 }
                 catch (ArgumentException ex)
                 {
                     selectAppointmentErrorLabel.Text = ex.Message;
                     selectAppointmentErrorLabel.Visible = true;
                 }
-
-                // Do something with the retrieved appointments, e.g., display them in a list or grid
             }
         }
     }
