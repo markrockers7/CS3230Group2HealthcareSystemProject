@@ -24,6 +24,7 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureForm();
             LoadDoctors();
             EnableAppointmentFields(false);
+            ConfigureOrderTestForm();
         }
 
         // Edit mode
@@ -319,6 +320,31 @@ namespace HealthcareSystemProjectCS3230.view
         private void cancelButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void ConfigureOrderTestForm()
+        {
+            selectAppointmentErrorLabel.Visible = false;
+        }
+
+        private void orderTestPatientSearch_PatientSelected(object sender, EventArgs e)
+        {
+            selectAppointmentErrorLabel.Visible = false;
+            Patient? patient = orderTestPatientSearchControl.SelectedPatient;
+            if (patient != null)
+            {
+                try
+                {
+                    var appointments = _appointmentController.GetAppointmentsByPatientId(patient.Id);
+                }
+                catch (ArgumentException ex)
+                {
+                    selectAppointmentErrorLabel.Text = ex.Message;
+                    selectAppointmentErrorLabel.Visible = true;
+                }
+
+                // Do something with the retrieved appointments, e.g., display them in a list or grid
+            }
         }
     }
 }

@@ -123,5 +123,36 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return bookedSlots;
         }
+
+        /*
+         * Retrieves a list of appointments for a specific patient.
+         *
+         * @param patient The Patient object for which to retrieve appointments.
+         * @return A list of Appointment objects for the specified patient.
+         */
+        public List<Appointment> GetAppointmentsByPatientId(int patientId)
+        {
+            var appointments = new List<Appointment>();
+            using var connection = new MySqlConnection(Connection.ConnectionString);
+            connection.Open();
+            const string query =
+                "SELECT appointment_id, doctor_id, patient_id, appointment_datetime, reason " +
+                "FROM Appointment WHERE patient_id = @patientId";
+            using var command = new MySqlCommand(query, connection);
+            command.Parameters.Add("@patientId", MySqlDbType.Int32).Value = patientId;
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                appointments.Add(new Appointment(
+                    reader.GetInt32("appointment_id"),
+                    reader.GetInt32("doctor_id"),
+                    reader.GetInt32("patient_id"),
+                    reader.GetDateTime("appointment_datetime"),
+                    reader.GetString("reason")
+                ));
+            }
+
+            return appointments;
+        }
     }
 }

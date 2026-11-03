@@ -133,6 +133,24 @@ namespace HealthcareSystemProjectCS3230.controler
                 throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");
             }
         }
+
+        /*
+         * Validates the input data for booking or updating an appointment
+         * Throws an exception if any of the input data is invalid
+         * @param patientId The ID of the patient
+         * @param appointmentDateTime The date and time of the appointment
+         * @param reason The reason for the appointment
+         */
+        public List<Appointment> GetAppointmentsByPatientId(int patientId)
+        {
+            var appointments = appointmentsDAL.GetAppointmentsByPatientId(patientId);
+            if (appointments == null || appointments.Count == 0)
+            {
+                throw new ArgumentException("No appointments found for the given patient ID.");
+            }
+            return appointments;
+        }
+
         private void EnsureSlotIsFree(int doctorId, DateTime appointmentDateTime, int? excludeAppointmentId = null)
         {
             var freeSlots = GetAvailableSlots(doctorId, appointmentDateTime.Date, excludeAppointmentId);
