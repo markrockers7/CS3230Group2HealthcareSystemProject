@@ -87,7 +87,7 @@ namespace HealthcareSystemProjectCS3230.view
             FormBorderStyle = FormBorderStyle.Sizable;
             MaximizeBox = true;
             MinimizeBox = false;
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Edit Patient";
         }
 

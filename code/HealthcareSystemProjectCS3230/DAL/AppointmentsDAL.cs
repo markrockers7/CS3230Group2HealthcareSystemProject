@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 
@@ -7,7 +8,7 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class AppointmentsDAL
     {
-        public static bool AddAppointment(int patientId, DateTime appointmentDateTime, int doctorId, string reason)
+        public bool AddAppointment(int patientId, DateTime appointmentDateTime, int doctorId, string reason)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -22,7 +23,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return command.ExecuteNonQuery() > 0;
         }
 
-        public static bool UpdateAppointment(int appointmentId, int patientId, DateTime appointmentDateTime, int doctorId, string reason)
+        public bool UpdateAppointment(int appointmentId, int patientId, DateTime appointmentDateTime, int doctorId, string reason)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -39,7 +40,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             return command.ExecuteNonQuery() > 0;
         }
 
-        public static Appointment? GetAppointmentById(int appointmentId)
+        public Appointment? GetAppointmentById(int appointmentId)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
@@ -62,7 +63,7 @@ namespace HealthcareSystemProjectCS3230.DAL
                 reader.GetString("reason"));
         }
 
-        public static List<TimeSpan> GetBookedSlotsForDoctorDate(int doctorId, DateTime appointmentDate, int? excludeAppointmentId = null)
+        public List<TimeSpan> GetBookedSlotsForDoctorDate(int doctorId, DateTime appointmentDate, int? excludeAppointmentId = null)
         {
             var bookedSlots = new List<TimeSpan>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -91,6 +92,35 @@ namespace HealthcareSystemProjectCS3230.DAL
             }
 
             return bookedSlots;
+        }
+
+        // Uses the stored procedure get_appointments_for_patient
+        public List<AppointmentSummary> GetAppointmentsForPatient(int patientId, DateTime today)
+        {
+            var appointments = new List<AppointmentSummary>();
+            using var connection = new MySqlConnection(Connection.ConnectionString);
+            connection.Open();
+
+            using var command = new MySqlCommand("get_appointments_for_patient", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add("@p_patient_id", MySqlDbType.Int32).Value = patientId;
+            command.Parameters.Add("@p_today", MySqlDbType.Date).Value = today.Date;
+
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                appointments.Add(new AppointmentSummary
+                {
+                    AppointmentId = reader.GetInt32("appointment_id"),
+                    AppointmentDateTime = reader.GetDateTime("appointment_datetime"),
+                    DoctorId = reader.GetInt32("doctor_id"),
+                    DoctorName = reader.GetString("doctor_name"),
+                    Reason = reader.GetString("reason"),
+                    CanEdit = Convert.ToInt32(reader["can_edit"]) == 1
+                });
+            }
+
+            return appointments;
         }
     }
 }

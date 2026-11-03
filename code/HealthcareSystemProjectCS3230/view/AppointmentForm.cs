@@ -37,6 +37,13 @@ namespace HealthcareSystemProjectCS3230.view
             LoadExistingAppointment();
         }
 
+        public AppointmentForm(int appointmentId, Patient patient) : this(appointmentId)
+        {
+            patientNameTextBox.Text = patient.FirstName + " " + patient.LastName;
+            patientDobTextBox.Text = patient.Birthdate.ToString("d");
+            patientSearchControl.Visible = false;
+        }
+
         public void setLoginSession(LoginSession session)
         {
             _loginSession = session;

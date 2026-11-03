@@ -32,7 +32,7 @@ namespace HealthcareSystemProjectCS3230.view
             SearchRequested += PatientSearchForm_SearchRequested;
 
             Text = "Patient Search";
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             MinimumSize = new Size(800, 500);
             Size = new Size(1000, 600);
 

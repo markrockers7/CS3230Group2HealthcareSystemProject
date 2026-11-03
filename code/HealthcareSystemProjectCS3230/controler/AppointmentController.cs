@@ -8,6 +8,8 @@ namespace HealthcareSystemProjectCS3230.controler
 {
     public class AppointmentController
     {
+        private readonly AppointmentsDAL _appointmentsDal = new AppointmentsDAL();
+
         public List<Doctor> GetDoctors()
         {
             return DoctorDAL.GetAllDoctors();
@@ -37,7 +39,12 @@ namespace HealthcareSystemProjectCS3230.controler
 
         public Appointment? GetAppointmentById(int appointmentId)
         {
-            return AppointmentsDAL.GetAppointmentById(appointmentId);
+            return _appointmentsDal.GetAppointmentById(appointmentId);
+        }
+
+        public List<AppointmentSummary> GetAppointmentsForPatient(int patientId)
+        {
+            return _appointmentsDal.GetAppointmentsForPatient(patientId, DateTime.Today);
         }
 
         public bool CanEditAppointment(DateTime appointmentDateTime)
@@ -48,7 +55,7 @@ namespace HealthcareSystemProjectCS3230.controler
         public List<TimeSpan> GetAvailableSlots(int doctorId, DateTime date, int? excludeAppointmentId = null)
         {
             List<TimeSpan> allSlots = AppointmentSlotRules.GetDailySlots();
-            HashSet<TimeSpan> bookedSlots = AppointmentsDAL
+            HashSet<TimeSpan> bookedSlots = _appointmentsDal
                 .GetBookedSlotsForDoctorDate(doctorId, date, excludeAppointmentId)
                 .ToHashSet();
 
@@ -60,7 +67,7 @@ namespace HealthcareSystemProjectCS3230.controler
             ValidateAppointment(patientId, appointmentDateTime, reason);
             EnsureSlotIsFree(doctorId, appointmentDateTime);
 
-            bool saved = AppointmentsDAL.AddAppointment(patientId, appointmentDateTime, doctorId, reason.Trim());
+            bool saved = _appointmentsDal.AddAppointment(patientId, appointmentDateTime, doctorId, reason.Trim());
             if (!saved)
             {
                 throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");
@@ -69,7 +76,7 @@ namespace HealthcareSystemProjectCS3230.controler
 
         public void UpdateAppointment(int appointmentId, int patientId, int doctorId, DateTime appointmentDateTime, string reason)
         {
-            Appointment? currentAppointment = AppointmentsDAL.GetAppointmentById(appointmentId);
+            Appointment? currentAppointment = _appointmentsDal.GetAppointmentById(appointmentId);
             if (currentAppointment == null)
             {
                 throw new ArgumentException("The appointment could not be found.");
@@ -83,14 +90,13 @@ namespace HealthcareSystemProjectCS3230.controler
             ValidateAppointment(patientId, appointmentDateTime, reason);
             EnsureSlotIsFree(doctorId, appointmentDateTime, appointmentId);
 
-            bool saved = AppointmentsDAL.UpdateAppointment(appointmentId, patientId, appointmentDateTime, doctorId, reason.Trim());
+            bool saved = _appointmentsDal.UpdateAppointment(appointmentId, patientId, appointmentDateTime, doctorId, reason.Trim());
             if (!saved)
             {
                 throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");
             }
         }
 
-        // Re-checks the database right before saving, in case another user just booked this slot
         private void EnsureSlotIsFree(int doctorId, DateTime appointmentDateTime, int? excludeAppointmentId = null)
         {
             var freeSlots = GetAvailableSlots(doctorId, appointmentDateTime.Date, excludeAppointmentId);
@@ -122,13 +128,5 @@ namespace HealthcareSystemProjectCS3230.controler
                 throw new ArgumentException("Appointment times must be in 15-minute slots between 8:00 AM and 4:45 PM.");
             }
         }
-    }
-
-    public class DoctorView
-    {
-        public int DoctorId { get; set; }
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string FullName { get; set; } = string.Empty;
     }
 }
