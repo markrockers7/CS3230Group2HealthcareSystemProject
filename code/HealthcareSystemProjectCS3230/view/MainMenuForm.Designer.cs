@@ -30,7 +30,6 @@
         {
             appointmentButton = new Button();
             registerPatientButton = new Button();
-            patientSearchButton = new Button();
             editPatientButton = new Button();
             usernameLabel = new Label();
             nurseManagerButton = new Button();
@@ -40,7 +39,7 @@
             // 
             // appointmentButton
             // 
-            appointmentButton.Location = new Point(12, 147);
+            appointmentButton.Location = new Point(12, 198);
             appointmentButton.Name = "appointmentButton";
             appointmentButton.Size = new Size(126, 40);
             appointmentButton.TabIndex = 0;
@@ -58,19 +57,9 @@
             registerPatientButton.UseVisualStyleBackColor = true;
             registerPatientButton.Click += registerPatientButton_Click;
             // 
-            // patientSearchButton
-            // 
-            patientSearchButton.Location = new Point(12, 193);
-            patientSearchButton.Name = "patientSearchButton";
-            patientSearchButton.Size = new Size(126, 40);
-            patientSearchButton.TabIndex = 1;
-            patientSearchButton.Text = "Search Patients";
-            patientSearchButton.UseVisualStyleBackColor = true;
-            patientSearchButton.Click += patientSearchButton_Click;
-            // 
             // editPatientButton
             // 
-            editPatientButton.Location = new Point(12, 239);
+            editPatientButton.Location = new Point(12, 152);
             editPatientButton.Name = "editPatientButton";
             editPatientButton.Size = new Size(126, 40);
             editPatientButton.TabIndex = 3;
@@ -89,7 +78,7 @@
             // 
             // nurseManagerButton
             // 
-            nurseManagerButton.Location = new Point(12, 285);
+            nurseManagerButton.Location = new Point(12, 289);
             nurseManagerButton.Name = "nurseManagerButton";
             nurseManagerButton.Size = new Size(126, 39);
             nurseManagerButton.TabIndex = 5;
@@ -99,7 +88,7 @@
             // 
             // findAppointmentButton
             // 
-            findAppointmentButton.Location = new Point(12, 330);
+            findAppointmentButton.Location = new Point(12, 244);
             findAppointmentButton.Name = "findAppointmentButton";
             findAppointmentButton.Size = new Size(126, 39);
             findAppointmentButton.TabIndex = 7;
@@ -128,7 +117,6 @@
             Controls.Add(findAppointmentButton);
             Controls.Add(usernameLabel);
             Controls.Add(editPatientButton);
-            Controls.Add(patientSearchButton);
             Controls.Add(registerPatientButton);
             Controls.Add(appointmentButton);
             Name = "MainMenuForm";
@@ -141,7 +129,6 @@
 
         private Button appointmentButton;
         private Button registerPatientButton;
-        private Button patientSearchButton;
         private Button editPatientButton;
         private Label usernameLabel;
         private Button nurseManagerButton;

@@ -2,6 +2,7 @@
 using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 using System.Globalization;
+using System.ComponentModel;
 
 namespace HealthcareSystemProjectCS3230.view
 {
@@ -24,6 +25,8 @@ namespace HealthcareSystemProjectCS3230.view
             EnableAppointmentFields(false);
             ConfigureVisitAndOrderTestForm();
             ConfigureFinalDiagnosisForm();
+            ConfigureTestResultsForm();
+            ConfigureViewVisitsForm();
         }
 
         // Edit mode
@@ -37,6 +40,8 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureVisitAndOrderTestForm();
             ConfigureFinalDiagnosisForm();
             LoadExistingAppointment();
+            ConfigureTestResultsForm();
+            ConfigureViewVisitsForm();
         }
 
         // Edit mode, opened from Find Appointment with the patient already known
@@ -302,9 +307,9 @@ namespace HealthcareSystemProjectCS3230.view
                 {
                     _appointmentController.BookAppointment(patientId, doctorId, when, reasonTextBox.Text);
                     MessageBox.Show("Appointment booked.");
+                    ResetCreateAppointmentTab();
                 }
 
-                Close();
             }
             catch (ArgumentException ex)
             {
@@ -320,6 +325,17 @@ namespace HealthcareSystemProjectCS3230.view
                 RefreshAvailableSlots();
                 errorLabel.Text = "Something went wrong: " + ex.Message;
             }
+        }
+
+        private void ResetCreateAppointmentTab()
+        {
+            patientSearchControl.Clear();
+            ClearSelectedPatient();
+            reasonTextBox.Clear();
+            appointmentDatePicker.Value = DateTime.Today;
+            errorLabel.Text = string.Empty;
+            availabilityStatusLabel.Text = string.Empty;
+            RefreshAvailableSlots();
         }
 
         private void HandleSqlSaveError(MySqlException ex)
@@ -589,6 +605,316 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 SetFinalDiagnosisWarning("An error occurred while updating the final diagnosis: " + ex.Message);
             }
+        }
+
+        private Patient? _testResultsPatient;
+
+        private VisitSummary? TestResultsSelectedVisit =>
+            testResultsVisitGrid.SelectedRows.Count == 0 ? null : testResultsVisitGrid.SelectedRows[0].DataBoundItem as VisitSummary;
+
+        private VisitTestResult? TestResultsSelectedTest =>
+            testResultsTestsGrid.SelectedRows.Count == 0 ? null : testResultsTestsGrid.SelectedRows[0].DataBoundItem as VisitTestResult;
+
+        private void ConfigureTestResultsForm()
+        {
+            testResultsErrorLabel.Text = string.Empty;
+            testResultsPatientInfoLabel.Text = string.Empty;
+            ClearTestResultsSelectedTest();
+        }
+
+        private void testResultsPatientSearchControl_PatientSelected(object? sender, EventArgs e)
+        {
+            _testResultsPatient = testResultsPatientSearchControl.SelectedPatient;
+            testResultsErrorLabel.Text = string.Empty;
+            testResultsVisitGrid.DataSource = null;
+            testResultsTestsGrid.DataSource = null;
+            ClearTestResultsSelectedTest();
+
+            if (_testResultsPatient == null)
+            {
+                testResultsPatientInfoLabel.Text = string.Empty;
+                return;
+            }
+
+            testResultsPatientInfoLabel.Text = $"Patient: {_testResultsPatient.FirstName} {_testResultsPatient.LastName}   |   DOB: {_testResultsPatient.Birthdate:d}";
+            LoadTestResultsVisits();
+        }
+
+        private void LoadTestResultsVisits()
+        {
+            if (_testResultsPatient == null) return;
+
+            try
+            {
+                var visits = _appointmentController.GetVisitsWithTestsForPatient(_testResultsPatient.Id);
+                testResultsVisitGrid.DataSource = new BindingList<VisitSummary>(visits);
+
+                if (visits.Count == 0)
+                {
+                    testResultsErrorLabel.Text = "This patient has no visits with ordered tests.";
+                }
+            }
+            catch (Exception ex)
+            {
+                testResultsErrorLabel.Text = "Visits could not be loaded: " + ex.Message;
+            }
+        }
+
+        private void LoadTestResultsTests()
+        {
+            testResultsTestsGrid.DataSource = null;
+            ClearTestResultsSelectedTest();
+
+            var visit = TestResultsSelectedVisit;
+            if (visit == null) return;
+
+            try
+            {
+                var tests = _appointmentController.GetVisitTestResults(visit.AppointmentId);
+                testResultsTestsGrid.DataSource = new BindingList<VisitTestResult>(tests);
+
+                testResultsErrorLabel.Text = visit.IsLocked
+                    ? "This visit has a final diagnosis, so its test results are read-only."
+                    : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                testResultsErrorLabel.Text = "Tests could not be loaded: " + ex.Message;
+            }
+        }
+
+        private void testResultsVisitGrid_SelectionChanged(object? sender, EventArgs e)
+        {
+            LoadTestResultsTests();
+        }
+
+        private void testResultsTestsGrid_SelectionChanged(object? sender, EventArgs e)
+        {
+            ShowTestResultsSelectedTest();
+        }
+
+        // Stops the grids from auto-selecting the first row
+        private void testResultsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            testResultsVisitGrid.ClearSelection();
+        }
+
+        private void testResultsTestsGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            testResultsTestsGrid.ClearSelection();
+        }
+
+        private void ShowTestResultsSelectedTest()
+        {
+            var visit = TestResultsSelectedVisit;
+            var test = TestResultsSelectedTest;
+
+            if (visit == null || test == null)
+            {
+                ClearTestResultsSelectedTest();
+                return;
+            }
+
+            testResultsSelectedTestLabel.Text = $"Test: {test.TestName}   |   Normal range: {test.NormalRange}   |   Doctor: {visit.DoctorName}";
+            testResultsDatePerformedPicker.Value = test.DatePerformed ?? DateTime.Now;
+            testResultsResultTextBox.Text = test.Result ?? string.Empty;
+
+            bool canEdit = !visit.IsLocked;
+            testResultsDatePerformedPicker.Enabled = canEdit;
+            testResultsResultTextBox.Enabled = canEdit;
+            testResultsSaveButton.Enabled = canEdit;
+
+            if (test.HasNormalRange)
+            {
+                // Abnormal is calculated from the range, so the nurse can't change it
+                testResultsAbnormalCheckBox.Enabled = false;
+                UpdateTestResultsAbnormalPreview();
+            }
+            else
+            {
+                testResultsAbnormalCheckBox.Enabled = canEdit;
+                testResultsAbnormalCheckBox.Checked = test.IsAbnormal ?? false;
+            }
+        }
+
+        private void ClearTestResultsSelectedTest()
+        {
+            testResultsSelectedTestLabel.Text = "Select a visit and a test to enter its result.";
+            testResultsDatePerformedPicker.Value = DateTime.Now;
+            testResultsResultTextBox.Clear();
+            testResultsAbnormalCheckBox.Checked = false;
+            testResultsDatePerformedPicker.Enabled = false;
+            testResultsResultTextBox.Enabled = false;
+            testResultsAbnormalCheckBox.Enabled = false;
+            testResultsSaveButton.Enabled = false;
+        }
+
+        private void testResultsResultTextBox_TextChanged(object? sender, EventArgs e)
+        {
+            UpdateTestResultsAbnormalPreview();
+        }
+
+        // For tests with a range, checks the Abnormal box as the nurse types a number
+        private void UpdateTestResultsAbnormalPreview()
+        {
+            var test = TestResultsSelectedTest;
+            if (test == null || !test.HasNormalRange) return;
+
+            try
+            {
+                testResultsAbnormalCheckBox.Checked = _appointmentController.DetermineIsAbnormal(test, testResultsResultTextBox.Text, false);
+            }
+            catch (ArgumentException)
+            {
+                // Not a number yet; leave unchecked until it is
+                testResultsAbnormalCheckBox.Checked = false;
+            }
+        }
+
+        private void testResultsSaveButton_Click(object? sender, EventArgs e)
+        {
+            testResultsErrorLabel.Text = string.Empty;
+
+            var visit = TestResultsSelectedVisit;
+            var test = TestResultsSelectedTest;
+
+            if (visit == null || test == null)
+            {
+                testResultsErrorLabel.Text = "Please select a visit and a test.";
+                return;
+            }
+
+            try
+            {
+                _appointmentController.SaveTestResult(
+                    visit,
+                    test,
+                    testResultsDatePerformedPicker.Value,
+                    testResultsResultTextBox.Text,
+                    testResultsAbnormalCheckBox.Checked);
+
+                MessageBox.Show($"Result saved for {test.TestName}.", "Saved");
+                LoadTestResultsTests();
+            }
+            catch (ArgumentException ex)
+            {
+                testResultsErrorLabel.Text = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                testResultsErrorLabel.Text = "The result could not be saved: " + ex.Message;
+            }
+        }
+
+        private Patient? _viewVisitsPatient;
+
+        private VisitSummary? ViewVisitsSelectedVisit =>
+            viewVisitsVisitGrid.SelectedRows.Count == 0 ? null : viewVisitsVisitGrid.SelectedRows[0].DataBoundItem as VisitSummary;
+
+        private void ConfigureViewVisitsForm()
+        {
+            viewVisitsErrorLabel.Text = string.Empty;
+            viewVisitsDetailsTextBox.Text = "Select a visit to see its details.";
+        }
+
+        private void viewVisitsPatientSearchControl_PatientSelected(object? sender, EventArgs e)
+        {
+            _viewVisitsPatient = viewVisitsPatientSearchControl.SelectedPatient;
+            viewVisitsErrorLabel.Text = string.Empty;
+            viewVisitsVisitGrid.DataSource = null;
+            viewVisitsTestsGrid.DataSource = null;
+            viewVisitsDetailsTextBox.Text = "Select a visit to see its details.";
+
+            if (_viewVisitsPatient == null) return;
+
+            try
+            {
+                var visits = _appointmentController.GetAllVisitsForPatient(_viewVisitsPatient.Id);
+                viewVisitsVisitGrid.DataSource = new BindingList<VisitSummary>(visits);
+
+                if (visits.Count == 0)
+                {
+                    viewVisitsErrorLabel.Text = "This patient has no visits yet.";
+                }
+            }
+            catch (Exception ex)
+            {
+                viewVisitsErrorLabel.Text = "Visits could not be loaded: " + ex.Message;
+            }
+        }
+
+        private void viewVisitsVisitGrid_SelectionChanged(object? sender, EventArgs e)
+        {
+            viewVisitsTestsGrid.DataSource = null;
+
+            var summary = ViewVisitsSelectedVisit;
+            if (summary == null || _viewVisitsPatient == null)
+            {
+                viewVisitsDetailsTextBox.Text = "Select a visit to see its details.";
+                return;
+            }
+
+            try
+            {
+                var visit = _appointmentController.GetVisitById(summary.AppointmentId);
+                if (visit == null)
+                {
+                    viewVisitsErrorLabel.Text = "The visit could not be found.";
+                    return;
+                }
+
+                var tests = _appointmentController.GetVisitTestResults(summary.AppointmentId);
+
+                viewVisitsDetailsTextBox.Text = BuildVisitDetailsText(_viewVisitsPatient, summary, visit);
+                viewVisitsTestsGrid.DataSource = new BindingList<VisitTestResult>(tests);
+                viewVisitsErrorLabel.Text = tests.Count == 0 ? "No tests were ordered for this visit." : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                viewVisitsErrorLabel.Text = "The visit could not be loaded: " + ex.Message;
+            }
+        }
+
+        private static string BuildVisitDetailsText(Patient patient, VisitSummary summary, Visit visit)
+        {
+            string nl = Environment.NewLine;
+
+            return
+                $"Patient: {patient.FirstName} {patient.LastName}   DOB: {patient.Birthdate:d}{nl}" +
+                $"Doctor: {summary.DoctorName}{nl}" +
+                $"Visit date: {summary.AppointmentDateTime:g}{nl}" +
+                $"Status: {summary.StatusText}{nl}" +
+                $"{nl}" +
+                $"Blood pressure: {visit.SystolicBp}/{visit.DiastolicBp} mm/Hg{nl}" +
+                $"Pulse: {visit.Pulse} BPM{nl}" +
+                $"Temperature: {visit.BodyTemperature:0.0} °F{nl}" +
+                $"Height: {visit.Height:0.##} in   Weight: {visit.Weight:0.##} lb{nl}" +
+                $"Symptoms: {visit.Symptoms}{nl}" +
+                $"{nl}" +
+                $"Initial diagnosis: {visit.InitialDiagnosis ?? "(none)"}{nl}" +
+                $"Final diagnosis: {visit.FinalDiagnosis ?? "(not entered yet)"}";
+        }
+
+        // Shows abnormal test results in red so they stand out
+        private void viewVisitsTestsGrid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.CellStyle == null) return;
+
+            if (viewVisitsTestsGrid.Rows[e.RowIndex].DataBoundItem is VisitTestResult { IsAbnormal: true })
+            {
+                e.CellStyle.ForeColor = Color.Firebrick;
+            }
+        }
+
+        // Stops the grids from auto-selecting the first row
+        private void viewVisitsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            viewVisitsVisitGrid.ClearSelection();
+        }
+
+        private void viewVisitsTestsGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            viewVisitsTestsGrid.ClearSelection();
         }
     }
 }
