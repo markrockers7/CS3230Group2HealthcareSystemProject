@@ -1,5 +1,6 @@
 ﻿using HealthcareSystemProjectCS3230.DAL;
 using HealthcareSystemProjectCS3230.model;
+using System.Globalization;
 
 namespace HealthcareSystemProjectCS3230.controler;
 
@@ -52,6 +53,89 @@ public class AppointmentController
     public List<Test> GetTests()
     {
         return testDAL.GetTests();
+    }
+
+    /*
+    * Gets a patient's visits that have at least one ordered test, with the doctor's name.
+    * @param patientId The ID of the patient
+    * @return List of VisitSummary objects, newest first
+    */
+    public List<VisitSummary> GetVisitsWithTestsForPatient(int patientId)
+    {
+        return testDAL.GetVisitSummariesForPatient(patientId);
+    }
+
+    /*
+     * Gets the tests ordered for a visit, with normal ranges and any results entered so far.
+     * @param appointmentId The ID of the visit (appointment)
+     * @return List of VisitTestResult objects
+     */
+    public List<VisitTestResult> GetVisitTestResults(int appointmentId)
+    {
+        return testDAL.GetVisitTestResults(appointmentId);
+    }
+
+    /*
+     * Works out whether a test result is abnormal.
+     * If the test has a low and/or high value, the result must be a number and is normal only if it's within [low, high].
+     * If the test has no low or high value, the nurse's manual choice is used.
+     * @param test The ordered test
+     * @param result The result the nurse entered
+     * @param manualAbnormal The nurse's choice, used only when the test has no range
+     * @return true if the result is abnormal
+     */
+    public bool DetermineIsAbnormal(VisitTestResult test, string result, bool manualAbnormal)
+    {
+        if (!test.HasNormalRange)
+        {
+            return manualAbnormal;
+        }
+
+        if (!decimal.TryParse(result.Trim(), NumberStyles.Number, CultureInfo.CurrentCulture, out decimal value))
+        {
+            throw new ArgumentException($"{test.TestName} has a normal range, so the result must be a number.");
+        }
+
+        bool belowRange = test.LowValue.HasValue && value < test.LowValue.Value;
+        bool aboveRange = test.HighValue.HasValue && value > test.HighValue.Value;
+        return belowRange || aboveRange;
+    }
+
+    /*
+     * Validates and saves the result of one ordered test.
+     * Throws an exception if the visit is finalized or the input is invalid.
+     * @param visit The visit the test belongs to
+     * @param test The ordered test
+     * @param datePerformed When the test was performed
+     * @param result The result the nurse entered
+     * @param manualAbnormal The nurse's abnormal choice, used only when the test has no range
+     */
+    public void SaveTestResult(VisitSummary visit, VisitTestResult test, DateTime datePerformed, string result, bool manualAbnormal)
+    {
+        if (visit.IsLocked)
+        {
+            throw new ArgumentException("This visit has a final diagnosis, so its test results can't be changed.");
+        }
+
+        if (string.IsNullOrWhiteSpace(result))
+        {
+            throw new ArgumentException("Please enter the test result.");
+        }
+
+       
+
+        if (datePerformed.Date < visit.AppointmentDateTime.Date)
+        {
+            throw new ArgumentException("The test can't be performed before the visit date.");
+        }
+
+        bool isAbnormal = DetermineIsAbnormal(test, result, manualAbnormal);
+
+        bool saved = testDAL.SaveTestResult(test.AppointmentId, test.TestCode, datePerformed, result.Trim(), isAbnormal);
+        if (!saved)
+        {
+            throw new InvalidOperationException("The result could not be saved. The visit may have just been finalized.");
+        }
     }
 
     /*

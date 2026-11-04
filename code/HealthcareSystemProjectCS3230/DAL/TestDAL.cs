@@ -171,4 +171,121 @@ public class TestDAL
             });
         return visits;
     }
+
+    /*
+     * Gets a patient's visits that have at least one ordered test, with the doctor's name.
+     * @param patientId The ID of the patient
+     * @return List of VisitSummary objects, newest first
+     */
+    public List<VisitSummary> GetVisitSummariesForPatient(int patientId)
+    {
+        var visits = new List<VisitSummary>();
+        using var connection = new MySqlConnection(Connection.ConnectionString);
+        connection.Open();
+
+        const string sql =
+            "SELECT v.appointment_id, a.appointment_datetime, " +
+            "       CONCAT(p.first_name, ' ', p.last_name) AS doctor_name, " +
+            "       v.initial_diagnosis, v.final_diagnosis " +
+            "FROM Visit v " +
+            "JOIN Appointment a ON a.appointment_id = v.appointment_id " +
+            "JOIN Doctor d ON d.id = a.doctor_id " +
+            "JOIN Person p ON p.person_id = d.person_id " +
+            "WHERE a.patient_id = @patientId " +
+            "  AND EXISTS (SELECT 1 FROM VisitTest vt WHERE vt.appointment_id = v.appointment_id) " +
+            "ORDER BY a.appointment_datetime DESC";
+
+        using var command = new MySqlCommand(sql, connection);
+        command.Parameters.Add("@patientId", MySqlDbType.Int32).Value = patientId;
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            visits.Add(new VisitSummary
+            {
+                AppointmentId = reader.GetInt32("appointment_id"),
+                AppointmentDateTime = reader.GetDateTime("appointment_datetime"),
+                DoctorName = reader.GetString("doctor_name"),
+                InitialDiagnosis = reader.IsDBNull("initial_diagnosis") ? null : reader.GetString("initial_diagnosis"),
+                FinalDiagnosis = reader.IsDBNull("final_diagnosis") ? null : reader.GetString("final_diagnosis")
+            });
+        }
+
+        return visits;
+    }
+
+    /*
+     * Gets the tests ordered for a visit, with each test's name, normal range, and any result entered so far.
+     * @param appointmentId The ID of the visit (appointment)
+     * @return List of VisitTestResult objects
+     */
+    public List<VisitTestResult> GetVisitTestResults(int appointmentId)
+    {
+        var results = new List<VisitTestResult>();
+        using var connection = new MySqlConnection(Connection.ConnectionString);
+        connection.Open();
+
+        const string sql =
+            "SELECT vt.appointment_id, vt.test_code, t.name, t.low_value, t.high_value, t.unit_of_measurement, " +
+            "       vt.date_performed, vt.result, vt.isAbnormal " +
+            "FROM VisitTest vt " +
+            "JOIN Test t ON t.test_code = vt.test_code " +
+            "WHERE vt.appointment_id = @appointmentId " +
+            "ORDER BY t.name";
+
+        using var command = new MySqlCommand(sql, connection);
+        command.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            results.Add(new VisitTestResult
+            {
+                AppointmentId = reader.GetInt32("appointment_id"),
+                TestCode = reader.GetString("test_code"),
+                TestName = reader.GetString("name"),
+                LowValue = reader["low_value"] is DBNull ? null : Convert.ToDecimal(reader["low_value"]),
+                HighValue = reader["high_value"] is DBNull ? null : Convert.ToDecimal(reader["high_value"]),
+                Unit = reader["unit_of_measurement"] is DBNull ? null : reader.GetString("unit_of_measurement"),
+                DatePerformed = reader["date_performed"] is DBNull ? null : reader.GetDateTime("date_performed"),
+                Result = reader["result"] is DBNull ? null : reader.GetString("result"),
+                IsAbnormal = reader["isAbnormal"] is DBNull ? null : Convert.ToBoolean(reader["isAbnormal"])
+            });
+        }
+
+        return results;
+    }
+
+    /*
+     * Saves the result of one ordered test.
+     * Only updates the test if its visit has no final diagnosis yet, so finalized visits can't be changed.
+     * @param appointmentId The ID of the visit (appointment)
+     * @param testCode The code of the test
+     * @param datePerformed When the test was performed
+     * @param result The test result (a number or a description)
+     * @param isAbnormal Whether the result is abnormal
+     * @return true if the result was saved, false if the test wasn't found or the visit is finalized
+     */
+    public bool SaveTestResult(int appointmentId, string testCode, DateTime datePerformed, string result, bool isAbnormal)
+    {
+        using var connection = new MySqlConnection(Connection.ConnectionString);
+        connection.Open();
+
+        const string sql =
+            "UPDATE VisitTest vt " +
+            "JOIN Visit v ON v.appointment_id = vt.appointment_id " +
+            "SET vt.date_performed = @datePerformed, vt.result = @result, vt.isAbnormal = @isAbnormal " +
+            "WHERE vt.appointment_id = @appointmentId " +
+            "  AND vt.test_code = @testCode " +
+            "  AND v.final_diagnosis IS NULL";
+
+        using var command = new MySqlCommand(sql, connection);
+        command.Parameters.Add("@datePerformed", MySqlDbType.DateTime).Value = datePerformed;
+        command.Parameters.Add("@result", MySqlDbType.VarChar).Value = result;
+        command.Parameters.Add("@isAbnormal", MySqlDbType.Bit).Value = isAbnormal;
+        command.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
+        command.Parameters.Add("@testCode", MySqlDbType.VarChar).Value = testCode;
+
+        return command.ExecuteNonQuery() > 0;
+    }
 }

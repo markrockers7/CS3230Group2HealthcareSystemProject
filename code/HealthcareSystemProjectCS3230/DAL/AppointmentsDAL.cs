@@ -175,7 +175,12 @@ namespace HealthcareSystemProjectCS3230.DAL
             command.Parameters.Add("@visitId", MySqlDbType.Int32).Value = visitId;
             return command.ExecuteNonQuery() > 0;
         }
-
+        /*
+         * Retrieves a list of visits for a specific patient.
+         *
+         * @param patientId The ID of the patient for which to retrieve visits.
+         * @return A list of Visit objects for the specified patient.
+         */
         public List<AppointmentSummary> GetAppointmentsForPatient(int patientId, DateTime today)
         {
             var appointments = new List<AppointmentSummary>();
