@@ -42,7 +42,6 @@ namespace HealthcareSystemProjectCS3230.view
         {
             registerPatientButton.Enabled = false;
             appointmentButton.Enabled = false;
-            patientSearchButton.Enabled = false;
             editPatientButton.Enabled = false;
             findAppointmentButton.Enabled = false;
             nurseManagerButton.Enabled = false;
@@ -53,7 +52,6 @@ namespace HealthcareSystemProjectCS3230.view
         {
             registerPatientButton.Enabled = true;
             appointmentButton.Enabled = true;
-            patientSearchButton.Enabled = true;
             editPatientButton.Enabled = true;
             findAppointmentButton.Enabled = true;
         }
@@ -70,15 +68,7 @@ namespace HealthcareSystemProjectCS3230.view
             Show();
         }
 
-        private void patientSearchButton_Click(object sender, EventArgs e)
-        {
-            Hide();
-
-            using var patientSearchForm = new PatientSearchForm(_loginSession);
-            patientSearchForm.ShowDialog();
-
-            Show();
-        }
+       
 
         private void registerPatientButton_Click(object sender, EventArgs e)
         {

@@ -19,6 +19,7 @@ namespace HealthcareSystemProjectCS3230.view
         private TextBox streetTextBox = null!;
         private TextBox cityTextBox = null!;
         private TextBox zipcodeTextBox = null!;
+        private Label errorLabel = null!;
         private Button saveButton = null!;
         private Button cancelButton = null!;
         private Label loggedInLabel = null!;
@@ -30,12 +31,13 @@ namespace HealthcareSystemProjectCS3230.view
             loggedInLabel.Text = $"Hello, {loginSession.FullName}!{Environment.NewLine}Username: {loginSession.Username}{Environment.NewLine}ID: {loginSession.id}";
             PopulateGender();
             PopulateStates();
+            errorLabel.Text = string.Empty;
         }
 
         private void PopulateGender()
         {
             genderComboBox.Items.Clear();
-            genderComboBox.Items.AddRange(new[] { "Male", "Female" });
+            genderComboBox.Items.AddRange(new[] { "Male", "Female", "Unknown" });
             genderComboBox.SelectedIndex = 0;
         }
 
@@ -70,6 +72,7 @@ namespace HealthcareSystemProjectCS3230.view
             streetTextBox = new TextBox { Dock = DockStyle.Fill };
             cityTextBox = new TextBox { Dock = DockStyle.Fill };
             zipcodeTextBox = new TextBox { Dock = DockStyle.Fill };
+            errorLabel = new Label { AutoSize = true, ForeColor = Color.Firebrick, MaximumSize = new Size(260, 0) };
             saveButton = new Button { Text = "Save", AutoSize = true };
             cancelButton = new Button { Text = "Cancel", AutoSize = true };
             loggedInLabel = new Label { AutoSize = true, Anchor = AnchorStyles.Left };
@@ -80,7 +83,7 @@ namespace HealthcareSystemProjectCS3230.view
             var layout = new TableLayoutPanel
             {
                 ColumnCount = 2,
-                RowCount = 11,
+                RowCount = 12,
                 Dock = DockStyle.Fill,
                 Padding = new Padding(12),
                 AutoSize = true,
@@ -102,14 +105,18 @@ namespace HealthcareSystemProjectCS3230.view
             AddField(layout, "State", stateComboBox, 8);
             AddField(layout, "ZIP code", zipcodeTextBox, 9);
 
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.Controls.Add(errorLabel, 1, 10);
+
             var buttons = new FlowLayoutPanel { FlowDirection = FlowDirection.RightToLeft, Dock = DockStyle.Fill, AutoSize = true };
             buttons.Controls.Add(cancelButton);
             buttons.Controls.Add(saveButton);
-            layout.Controls.Add(buttons, 1, 10);
+            layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            layout.Controls.Add(buttons, 1, 11);
 
             Controls.Add(layout);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(420, 470);
+            ClientSize = new Size(420, 510);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -126,6 +133,14 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void saveButton_Click(object? sender, EventArgs e)
         {
+            errorLabel.Text = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(streetTextBox.Text) || string.IsNullOrWhiteSpace(cityTextBox.Text))
+            {
+                errorLabel.Text = "Street and city need to be filled in.";
+                return;
+            }
+
             var patient = new Patient
             {
                 FirstName = firstNameTextBox.Text.Trim(),
@@ -151,11 +166,11 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                errorLabel.Text = ex.Message;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An unexpected error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                errorLabel.Text = "An unexpected error occurred: " + ex.Message;
             }
         }
     }
