@@ -26,6 +26,7 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureVisitAndOrderTestForm();
             ConfigureFinalDiagnosisForm();
             ConfigureTestResultsForm();
+            ConfigureViewVisitsForm();
         }
 
         // Edit mode
@@ -40,6 +41,7 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureFinalDiagnosisForm();
             LoadExistingAppointment();
             ConfigureTestResultsForm();
+            ConfigureViewVisitsForm();
         }
 
         // Edit mode, opened from Find Appointment with the patient already known
@@ -791,6 +793,117 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 testResultsErrorLabel.Text = "The result could not be saved: " + ex.Message;
             }
+        }
+
+        private Patient? _viewVisitsPatient;
+
+        private VisitSummary? ViewVisitsSelectedVisit =>
+            viewVisitsVisitGrid.SelectedRows.Count == 0 ? null : viewVisitsVisitGrid.SelectedRows[0].DataBoundItem as VisitSummary;
+
+        private void ConfigureViewVisitsForm()
+        {
+            viewVisitsErrorLabel.Text = string.Empty;
+            viewVisitsDetailsTextBox.Text = "Select a visit to see its details.";
+        }
+
+        private void viewVisitsPatientSearchControl_PatientSelected(object? sender, EventArgs e)
+        {
+            _viewVisitsPatient = viewVisitsPatientSearchControl.SelectedPatient;
+            viewVisitsErrorLabel.Text = string.Empty;
+            viewVisitsVisitGrid.DataSource = null;
+            viewVisitsTestsGrid.DataSource = null;
+            viewVisitsDetailsTextBox.Text = "Select a visit to see its details.";
+
+            if (_viewVisitsPatient == null) return;
+
+            try
+            {
+                var visits = _appointmentController.GetAllVisitsForPatient(_viewVisitsPatient.Id);
+                viewVisitsVisitGrid.DataSource = new BindingList<VisitSummary>(visits);
+
+                if (visits.Count == 0)
+                {
+                    viewVisitsErrorLabel.Text = "This patient has no visits yet.";
+                }
+            }
+            catch (Exception ex)
+            {
+                viewVisitsErrorLabel.Text = "Visits could not be loaded: " + ex.Message;
+            }
+        }
+
+        private void viewVisitsVisitGrid_SelectionChanged(object? sender, EventArgs e)
+        {
+            viewVisitsTestsGrid.DataSource = null;
+
+            var summary = ViewVisitsSelectedVisit;
+            if (summary == null || _viewVisitsPatient == null)
+            {
+                viewVisitsDetailsTextBox.Text = "Select a visit to see its details.";
+                return;
+            }
+
+            try
+            {
+                var visit = _appointmentController.GetVisitById(summary.AppointmentId);
+                if (visit == null)
+                {
+                    viewVisitsErrorLabel.Text = "The visit could not be found.";
+                    return;
+                }
+
+                var tests = _appointmentController.GetVisitTestResults(summary.AppointmentId);
+
+                viewVisitsDetailsTextBox.Text = BuildVisitDetailsText(_viewVisitsPatient, summary, visit);
+                viewVisitsTestsGrid.DataSource = new BindingList<VisitTestResult>(tests);
+                viewVisitsErrorLabel.Text = tests.Count == 0 ? "No tests were ordered for this visit." : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                viewVisitsErrorLabel.Text = "The visit could not be loaded: " + ex.Message;
+            }
+        }
+
+        private static string BuildVisitDetailsText(Patient patient, VisitSummary summary, Visit visit)
+        {
+            string nl = Environment.NewLine;
+
+            return
+                $"Patient: {patient.FirstName} {patient.LastName}   DOB: {patient.Birthdate:d}{nl}" +
+                $"Doctor: {summary.DoctorName}{nl}" +
+                $"Visit date: {summary.AppointmentDateTime:g}{nl}" +
+                $"Status: {summary.StatusText}{nl}" +
+                $"{nl}" +
+                $"Blood pressure: {visit.SystolicBp}/{visit.DiastolicBp} mm/Hg{nl}" +
+                $"Pulse: {visit.Pulse} BPM{nl}" +
+                $"Temperature: {visit.BodyTemperature:0.0} °F{nl}" +
+                $"Height: {visit.Height:0.##} in   Weight: {visit.Weight:0.##} lb{nl}" +
+                $"Symptoms: {visit.Symptoms}{nl}" +
+                $"{nl}" +
+                $"Initial diagnosis: {visit.InitialDiagnosis ?? "(none)"}{nl}" +
+                $"Final diagnosis: {visit.FinalDiagnosis ?? "(not entered yet)"}";
+        }
+
+        // Shows abnormal test results in red so they stand out
+        private void viewVisitsTestsGrid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.CellStyle == null) return;
+
+            if (viewVisitsTestsGrid.Rows[e.RowIndex].DataBoundItem is VisitTestResult { IsAbnormal: true })
+            {
+                e.CellStyle.ForeColor = Color.Firebrick;
+            }
+        }
+
+        // Stops the grids from auto-selecting the first row
+        private void viewVisitsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            viewVisitsVisitGrid.ClearSelection();
+        }
+
+        private void viewVisitsTestsGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            viewVisitsTestsGrid.ClearSelection();
         }
     }
 }

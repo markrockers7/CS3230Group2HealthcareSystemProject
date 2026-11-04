@@ -382,6 +382,26 @@ public class AppointmentController
     {
         return appointmentsDAL.UpdateVisitFinalDiagnosis(finalDiagnosis, visitId);
     }
+
+    /*
+ * Gets all of a patient's visits, with or without ordered tests.
+ * @param patientId The ID of the patient
+ * @return List of VisitSummary objects, newest first
+ */
+    public List<VisitSummary> GetAllVisitsForPatient(int patientId)
+    {
+        return testDAL.GetVisitSummariesForPatient(patientId, onlyWithTests: false);
+    }
+
+    /*
+     * Gets one visit's checkup details and diagnoses.
+     * @param appointmentId The ID of the visit (appointment)
+     * @return The Visit, or null if it doesn't exist
+     */
+    public Visit? GetVisitById(int appointmentId)
+    {
+        return testDAL.GetVisitById(appointmentId);
+    }
 }
 
 /*

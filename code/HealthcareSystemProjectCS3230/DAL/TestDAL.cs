@@ -173,17 +173,18 @@ public class TestDAL
     }
 
     /*
-     * Gets a patient's visits that have at least one ordered test, with the doctor's name.
-     * @param patientId The ID of the patient
-     * @return List of VisitSummary objects, newest first
-     */
-    public List<VisitSummary> GetVisitSummariesForPatient(int patientId)
+ * Gets a patient's visits with the visit date, doctor's name, and diagnoses.
+ * @param patientId The ID of the patient
+ * @param onlyWithTests If true, only returns visits that have at least one ordered test
+ * @return List of VisitSummary objects, newest first
+ */
+    public List<VisitSummary> GetVisitSummariesForPatient(int patientId, bool onlyWithTests = true)
     {
         var visits = new List<VisitSummary>();
         using var connection = new MySqlConnection(Connection.ConnectionString);
         connection.Open();
 
-        const string sql =
+        string sql =
             "SELECT v.appointment_id, a.appointment_datetime, " +
             "       CONCAT(p.first_name, ' ', p.last_name) AS doctor_name, " +
             "       v.initial_diagnosis, v.final_diagnosis " +
@@ -191,9 +192,14 @@ public class TestDAL
             "JOIN Appointment a ON a.appointment_id = v.appointment_id " +
             "JOIN Doctor d ON d.id = a.doctor_id " +
             "JOIN Person p ON p.person_id = d.person_id " +
-            "WHERE a.patient_id = @patientId " +
-            "  AND EXISTS (SELECT 1 FROM VisitTest vt WHERE vt.appointment_id = v.appointment_id) " +
-            "ORDER BY a.appointment_datetime DESC";
+            "WHERE a.patient_id = @patientId ";
+
+        if (onlyWithTests)
+        {
+            sql += "AND EXISTS (SELECT 1 FROM VisitTest vt WHERE vt.appointment_id = v.appointment_id) ";
+        }
+
+        sql += "ORDER BY a.appointment_datetime DESC";
 
         using var command = new MySqlCommand(sql, connection);
         command.Parameters.Add("@patientId", MySqlDbType.Int32).Value = patientId;
@@ -287,5 +293,41 @@ public class TestDAL
         command.Parameters.Add("@testCode", MySqlDbType.VarChar).Value = testCode;
 
         return command.ExecuteNonQuery() > 0;
+    }
+
+    /*
+ * Gets one visit's checkup details and diagnoses.
+ * @param appointmentId The ID of the visit (appointment)
+ * @return The Visit, or null if it doesn't exist
+ */
+    public Visit? GetVisitById(int appointmentId)
+    {
+        using var connection = new MySqlConnection(Connection.ConnectionString);
+        connection.Open();
+
+        const string sql = "SELECT * FROM Visit WHERE appointment_id = @appointmentId";
+
+        using var command = new MySqlCommand(sql, connection);
+        command.Parameters.Add("@appointmentId", MySqlDbType.Int32).Value = appointmentId;
+
+        using var reader = command.ExecuteReader();
+        if (!reader.Read())
+        {
+            return null;
+        }
+
+        return new Visit
+        {
+            AppointmentId = reader.GetInt32("appointment_id"),
+            SystolicBp = reader.GetInt32("systolic_bp"),
+            DiastolicBp = reader.GetInt32("diastolic_bp"),
+            Pulse = reader.GetInt32("pulse"),
+            BodyTemperature = reader.GetDouble("body_temperature"),
+            Height = reader.GetDouble("height"),
+            Weight = reader.GetDouble("weight"),
+            Symptoms = reader.GetString("symptoms"),
+            InitialDiagnosis = reader.IsDBNull("initial_diagnosis") ? null : reader.GetString("initial_diagnosis"),
+            FinalDiagnosis = reader.IsDBNull("final_diagnosis") ? null : reader.GetString("final_diagnosis")
+        };
     }
 }
