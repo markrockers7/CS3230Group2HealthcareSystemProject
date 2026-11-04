@@ -307,9 +307,9 @@ namespace HealthcareSystemProjectCS3230.view
                 {
                     _appointmentController.BookAppointment(patientId, doctorId, when, reasonTextBox.Text);
                     MessageBox.Show("Appointment booked.");
+                    ResetCreateAppointmentTab();
                 }
 
-                Close();
             }
             catch (ArgumentException ex)
             {
@@ -325,6 +325,17 @@ namespace HealthcareSystemProjectCS3230.view
                 RefreshAvailableSlots();
                 errorLabel.Text = "Something went wrong: " + ex.Message;
             }
+        }
+
+        private void ResetCreateAppointmentTab()
+        {
+            patientSearchControl.Clear();
+            ClearSelectedPatient();
+            reasonTextBox.Clear();
+            appointmentDatePicker.Value = DateTime.Today;
+            errorLabel.Text = string.Empty;
+            availabilityStatusLabel.Text = string.Empty;
+            RefreshAvailableSlots();
         }
 
         private void HandleSqlSaveError(MySqlException ex)

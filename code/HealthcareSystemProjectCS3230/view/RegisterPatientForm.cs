@@ -162,7 +162,7 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 _controller.AddPatient(patient);
                 MessageBox.Show("Patient successfully registered.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Close();
+               
             }
             catch (ArgumentException ex)
             {
