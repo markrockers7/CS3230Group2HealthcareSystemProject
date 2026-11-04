@@ -177,6 +177,35 @@ CREATE TABLE Appointment (
     CONSTRAINT appointment_fk_patient FOREIGN KEY (patient_id) REFERENCES Patient(id)
 );
 
+
+DROP PROCEDURE IF EXISTS GetAppointmentsForPatient;
+
+DELIMITER $
+
+CREATE PROCEDURE GetAppointmentsForPatient(IN p_patient_id INT,IN p_today DATE)
+BEGIN
+    SELECT
+        a.appointment_id,
+        a.appointment_datetime,
+        a.doctor_id,
+        CONCAT(p.first_name, ' ', p.last_name) AS doctor_name,
+        a.reason,
+        (DATE(a.appointment_datetime) > p_today) AS can_edit
+    FROM Appointment a
+    JOIN Doctor d ON d.id = a.doctor_id
+    JOIN Person p ON p.person_id = d.person_id
+    WHERE a.patient_id = p_patient_id
+    ORDER BY a.appointment_datetime DESC;
+END $
+
+DELIMITER ;
+
+
+INSERT INTO Appointment (appointment_id, doctor_id, appointment_datetime, patient_id, reason) VALUES
+(9,  1, '2026-11-20 09:00:00', 1, 'Cholesterol follow-up'),
+(10, 2, '2026-11-24 13:30:00', 2, 'Blood pressure follow-up'),
+(11, 3, '2026-12-03 10:15:00', 4, 'Well-child checkup');
+
 INSERT INTO Appointment (appointment_id, doctor_id, appointment_datetime, patient_id, reason) VALUES
 (1, 1, '2026-09-15 09:00:00', 1, 'Annual physical'),
 (2, 2, '2026-09-22 10:30:00', 2, 'Chest tightness during exercise'),

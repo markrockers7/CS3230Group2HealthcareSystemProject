@@ -44,6 +44,7 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentButton.Enabled = false;
             patientSearchButton.Enabled = false;
             editPatientButton.Enabled = false;
+            findAppointmentButton.Enabled = false;
             nurseManagerButton.Enabled = false;
             nurseManagerButton.Visible = false;
         }
@@ -54,6 +55,7 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentButton.Enabled = true;
             patientSearchButton.Enabled = true;
             editPatientButton.Enabled = true;
+            findAppointmentButton.Enabled = true;
         }
 
         private void appointmentButton_Click(object sender, EventArgs e)
@@ -91,6 +93,19 @@ namespace HealthcareSystemProjectCS3230.view
             Hide();
             using var edit = new EditPatientForm(_loginSession);
             edit.ShowDialog();
+            Show();
+        }
+
+        private void findAppointmentButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            using (var form = new FindAppointmentForm())
+            {
+                form.setLoginSession(_loginSession);
+                form.ShowDialog();
+            }
+
             Show();
         }
 

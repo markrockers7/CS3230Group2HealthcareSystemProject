@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 
@@ -173,6 +174,34 @@ namespace HealthcareSystemProjectCS3230.DAL
             command.Parameters.Add("@finalDiagnosis", MySqlDbType.VarChar).Value = finalDiagnosis;
             command.Parameters.Add("@visitId", MySqlDbType.Int32).Value = visitId;
             return command.ExecuteNonQuery() > 0;
+        }
+
+        public List<AppointmentSummary> GetAppointmentsForPatient(int patientId, DateTime today)
+        {
+            var appointments = new List<AppointmentSummary>();
+            using var connection = new MySqlConnection(Connection.ConnectionString);
+            connection.Open();
+
+            using var command = new MySqlCommand("GetAppointmentsForPatient", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add("@p_patient_id", MySqlDbType.Int32).Value = patientId;
+            command.Parameters.Add("@p_today", MySqlDbType.Date).Value = today.Date;
+
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                appointments.Add(new AppointmentSummary
+                {
+                    AppointmentId = reader.GetInt32("appointment_id"),
+                    AppointmentDateTime = reader.GetDateTime("appointment_datetime"),
+                    DoctorId = reader.GetInt32("doctor_id"),
+                    DoctorName = reader.GetString("doctor_name"),
+                    Reason = reader.GetString("reason"),
+                    CanEdit = Convert.ToInt32(reader["can_edit"]) == 1
+                });
+            }
+
+            return appointments;
         }
     }
 }

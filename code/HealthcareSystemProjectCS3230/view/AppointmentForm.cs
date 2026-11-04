@@ -39,6 +39,14 @@ namespace HealthcareSystemProjectCS3230.view
             LoadExistingAppointment();
         }
 
+        // Edit mode, opened from Find Appointment with the patient already known
+        public AppointmentForm(int appointmentId, Patient patient) : this(appointmentId)
+        {
+            patientNameTextBox.Text = patient.FirstName + " " + patient.LastName;
+            patientDobTextBox.Text = patient.Birthdate.ToString("d");
+            patientSearchControl.Visible = false;
+        }
+
         public void setLoginSession(LoginSession session)
         {
             _loginSession = session;
@@ -57,6 +65,7 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentTimeComboBox.Format += appointmentTimeComboBox_Format;
             availabilityStatusLabel.Text = string.Empty;
             inactivePatientLabel.Text = string.Empty;
+            errorLabel.Text = string.Empty;
         }
 
         private void LoadDoctors()
@@ -70,7 +79,7 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not load doctors: " + ex.Message, "Error");
+                errorLabel.Text = "Could not load doctors: " + ex.Message;
             }
 
             RefreshAvailableSlots();
@@ -83,15 +92,26 @@ namespace HealthcareSystemProjectCS3230.view
                 return;
             }
 
-            Appointment? appointment = _appointmentController.GetAppointmentById(_appointmentId.Value);
-            if (appointment == null)
-            {
-                throw new InvalidOperationException("The appointment could not be found.");
-            }
-
             titleLabel.Text = "Edit Appointment";
             Text = "Edit Appointment";
             bookButton.Text = "Save";
+
+            Appointment? appointment;
+            try
+            {
+                appointment = _appointmentController.GetAppointmentById(_appointmentId.Value);
+            }
+            catch (Exception ex)
+            {
+                LockForm("Could not load the appointment: " + ex.Message);
+                return;
+            }
+
+            if (appointment == null)
+            {
+                LockForm("The appointment could not be found.");
+                return;
+            }
 
             // Keep the appointment's current patient unless the nurse searches and picks a different one
             _selectedPatientId = appointment.PatientId;
@@ -117,9 +137,19 @@ namespace HealthcareSystemProjectCS3230.view
             EnableAppointmentFields(true);
         }
 
+        // Shows an error and makes the whole form read-only
+        private void LockForm(string message)
+        {
+            _isReadOnlyEdit = true;
+            patientSearchControl.Enabled = false;
+            EnableAppointmentFields(false);
+            errorLabel.Text = message;
+        }
+
         private void patientSearchControl_PatientSelected(object? sender, EventArgs e)
         {
             Patient? patient = patientSearchControl.SelectedPatient;
+            errorLabel.Text = string.Empty;
 
             if (patient == null)
             {
@@ -176,9 +206,19 @@ namespace HealthcareSystemProjectCS3230.view
                 return;
             }
 
-            int? excludeAppointmentId = _isEditMode ? _appointmentId : null;
-            DateTime selectedDate = appointmentDatePicker.Value.Date;
-            List<TimeSpan> availableSlots = _appointmentController.GetAvailableSlots(doctorId, selectedDate, excludeAppointmentId);
+            List<TimeSpan> availableSlots;
+            try
+            {
+                int? excludeAppointmentId = _isEditMode ? _appointmentId : null;
+                availableSlots = _appointmentController.GetAvailableSlots(doctorId, appointmentDatePicker.Value.Date, excludeAppointmentId);
+            }
+            catch (Exception ex)
+            {
+                appointmentTimeComboBox.DataSource = null;
+                appointmentTimeComboBox.Enabled = false;
+                errorLabel.Text = "Could not load available times: " + ex.Message;
+                return;
+            }
 
             appointmentTimeComboBox.DataSource = null;
             appointmentTimeComboBox.Items.Clear();
@@ -235,6 +275,8 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void bookButton_Click(object sender, EventArgs e)
         {
+            errorLabel.Text = string.Empty;
+
             try
             {
                 if (!_selectedPatientId.HasValue)
@@ -266,8 +308,8 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message, "Please check your input");
                 RefreshAvailableSlots();
+                errorLabel.Text = ex.Message;
             }
             catch (MySqlException ex)
             {
@@ -275,29 +317,28 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Something went wrong: " + ex.Message, "Error");
                 RefreshAvailableSlots();
+                errorLabel.Text = "Something went wrong: " + ex.Message;
             }
         }
 
         private void HandleSqlSaveError(MySqlException ex)
         {
+            RefreshAvailableSlots();
+
             if (ex.Number == 1062)
             {
-                MessageBox.Show("That time slot was just booked. Please choose another available time.", "Time no longer available");
-                RefreshAvailableSlots();
+                errorLabel.Text = "That time slot was just booked. Please choose another available time.";
                 return;
             }
 
             if (ex.Number == 3819 || ex.Number == 4025)
             {
-                MessageBox.Show("The selected date/time is outside allowed clinic time slots. Please choose a valid slot.", "Invalid appointment time");
-                RefreshAvailableSlots();
+                errorLabel.Text = "The selected date/time is outside allowed clinic time slots. Please choose a valid slot.";
                 return;
             }
 
-            MessageBox.Show("Something went wrong: " + ex.Message, "Error");
-            RefreshAvailableSlots();
+            errorLabel.Text = "Something went wrong: " + ex.Message;
         }
 
         private void SetVisitAndOrderTextWarning(string message)

@@ -34,6 +34,7 @@
             editPatientButton = new Button();
             usernameLabel = new Label();
             nurseManagerButton = new Button();
+            findAppointmentButton = new Button();
             LogoutButton = new Button();
             SuspendLayout();
             // 
@@ -96,6 +97,16 @@
             nurseManagerButton.UseVisualStyleBackColor = true;
             nurseManagerButton.Click += nurseManagerButton_Click;
             // 
+            // findAppointmentButton
+            // 
+            findAppointmentButton.Location = new Point(12, 330);
+            findAppointmentButton.Name = "findAppointmentButton";
+            findAppointmentButton.Size = new Size(126, 39);
+            findAppointmentButton.TabIndex = 7;
+            findAppointmentButton.Text = "Find Appointment";
+            findAppointmentButton.UseVisualStyleBackColor = true;
+            findAppointmentButton.Click += findAppointmentButton_Click;
+            // 
             // LogoutButton
             // 
             LogoutButton.Location = new Point(713, 7);
@@ -114,6 +125,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(LogoutButton);
             Controls.Add(nurseManagerButton);
+            Controls.Add(findAppointmentButton);
             Controls.Add(usernameLabel);
             Controls.Add(editPatientButton);
             Controls.Add(patientSearchButton);
@@ -133,6 +145,7 @@
         private Button editPatientButton;
         private Label usernameLabel;
         private Button nurseManagerButton;
+        private Button findAppointmentButton;
         private Button LogoutButton;
     }
 }

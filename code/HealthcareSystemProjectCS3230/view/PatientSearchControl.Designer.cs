@@ -29,6 +29,7 @@ namespace HealthcareSystemProjectCS3230.view
             clearButton = new Button();
             birthdateLabel = new Label();
             birthdatePicker = new DateTimePicker();
+            errorLabel = new Label();
             patientResultsGrid = new DataGridView();
             firstNameColumn = new DataGridViewTextBoxColumn();
             lastNameColumn = new DataGridViewTextBoxColumn();
@@ -105,6 +106,15 @@ namespace HealthcareSystemProjectCS3230.view
             birthdatePicker.Size = new Size(220, 23);
             birthdatePicker.TabIndex = 2;
             //
+            // errorLabel
+            //
+            errorLabel.AutoSize = true;
+            errorLabel.ForeColor = Color.Firebrick;
+            errorLabel.Location = new Point(325, 48);
+            errorLabel.MaximumSize = new Size(425, 0);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(0, 15);
+            //
             // patientResultsGrid
             //
             patientResultsGrid.AllowUserToAddRows = false;
@@ -117,6 +127,7 @@ namespace HealthcareSystemProjectCS3230.view
             patientResultsGrid.MultiSelect = false;
             patientResultsGrid.Name = "patientResultsGrid";
             patientResultsGrid.ReadOnly = true;
+            patientResultsGrid.ScrollBars = ScrollBars.Both;
             patientResultsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             patientResultsGrid.Size = new Size(740, 210);
             patientResultsGrid.TabIndex = 5;
@@ -129,6 +140,7 @@ namespace HealthcareSystemProjectCS3230.view
             //
             firstNameColumn.DataPropertyName = "FirstName";
             firstNameColumn.HeaderText = "First Name";
+            firstNameColumn.MinimumWidth = 120;
             firstNameColumn.Name = "firstNameColumn";
             firstNameColumn.ReadOnly = true;
             //
@@ -136,6 +148,7 @@ namespace HealthcareSystemProjectCS3230.view
             //
             lastNameColumn.DataPropertyName = "LastName";
             lastNameColumn.HeaderText = "Last Name";
+            lastNameColumn.MinimumWidth = 120;
             lastNameColumn.Name = "lastNameColumn";
             lastNameColumn.ReadOnly = true;
             //
@@ -145,6 +158,7 @@ namespace HealthcareSystemProjectCS3230.view
             birthdateColumn.DataPropertyName = "Birthdate";
             birthdateColumn.DefaultCellStyle = birthdateCellStyle;
             birthdateColumn.HeaderText = "Birthdate";
+            birthdateColumn.MinimumWidth = 90;
             birthdateColumn.Name = "birthdateColumn";
             birthdateColumn.ReadOnly = true;
             //
@@ -153,6 +167,7 @@ namespace HealthcareSystemProjectCS3230.view
             genderColumn.DataPropertyName = "Gender";
             genderColumn.FillWeight = 60F;
             genderColumn.HeaderText = "Gender";
+            genderColumn.MinimumWidth = 70;
             genderColumn.Name = "genderColumn";
             genderColumn.ReadOnly = true;
             //
@@ -160,6 +175,7 @@ namespace HealthcareSystemProjectCS3230.view
             //
             phoneNumberColumn.DataPropertyName = "PhoneNumber";
             phoneNumberColumn.HeaderText = "Phone Number";
+            phoneNumberColumn.MinimumWidth = 110;
             phoneNumberColumn.Name = "phoneNumberColumn";
             phoneNumberColumn.ReadOnly = true;
             //
@@ -167,6 +183,7 @@ namespace HealthcareSystemProjectCS3230.view
             //
             addressColumn.DataPropertyName = "Address";
             addressColumn.HeaderText = "Address";
+            addressColumn.MinimumWidth = 250;
             addressColumn.Name = "addressColumn";
             addressColumn.ReadOnly = true;
             //
@@ -175,6 +192,7 @@ namespace HealthcareSystemProjectCS3230.view
             isActiveColumn.DataPropertyName = "IsActive";
             isActiveColumn.FillWeight = 55F;
             isActiveColumn.HeaderText = "Active";
+            isActiveColumn.MinimumWidth = 55;
             isActiveColumn.Name = "isActiveColumn";
             isActiveColumn.ReadOnly = true;
             //
@@ -190,6 +208,7 @@ namespace HealthcareSystemProjectCS3230.view
             Controls.Add(clearButton);
             Controls.Add(birthdateLabel);
             Controls.Add(birthdatePicker);
+            Controls.Add(errorLabel);
             Controls.Add(patientResultsGrid);
             Name = "PatientSearchControl";
             Size = new Size(760, 300);
@@ -208,6 +227,7 @@ namespace HealthcareSystemProjectCS3230.view
         private Button clearButton;
         private Label birthdateLabel;
         private DateTimePicker birthdatePicker;
+        private Label errorLabel;
         private DataGridView patientResultsGrid;
         private DataGridViewTextBoxColumn firstNameColumn;
         private DataGridViewTextBoxColumn lastNameColumn;

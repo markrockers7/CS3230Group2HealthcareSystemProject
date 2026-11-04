@@ -113,7 +113,7 @@ namespace HealthcareSystemProjectCS3230.view
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Register Patient";
         }
 

@@ -37,6 +37,7 @@
             availabilityStatusLabel = new Label();
             reasonLabel = new Label();
             reasonTextBox = new TextBox();
+            errorLabel = new Label();
             bookButton = new Button();
             cancelButton = new Button();
             appointmentTabControl = new TabControl();
@@ -247,6 +248,16 @@
             reasonTextBox.Size = new Size(300, 80);
             reasonTextBox.TabIndex = 4;
             // 
+            // errorLabel
+            // 
+            errorLabel.AutoSize = true;
+            errorLabel.ForeColor = Color.Firebrick;
+            errorLabel.Location = new Point(430, 680);
+            errorLabel.MaximumSize = new Size(350, 0);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(0, 15);
+            errorLabel.TabIndex = 10;
+            // 
             // bookButton
             // 
             bookButton.Location = new Point(236, 673);
@@ -283,6 +294,7 @@
             createAppointmentTabPage.Controls.Add(titleLabel);
             createAppointmentTabPage.Controls.Add(cancelButton);
             createAppointmentTabPage.Controls.Add(bookButton);
+            createAppointmentTabPage.Controls.Add(errorLabel);
             createAppointmentTabPage.Controls.Add(patientSearchControl);
             createAppointmentTabPage.Controls.Add(reasonTextBox);
             createAppointmentTabPage.Controls.Add(patientNameLabel);
@@ -774,6 +786,7 @@
         private Label availabilityStatusLabel;
         private Label reasonLabel;
         private TextBox reasonTextBox;
+        private Label errorLabel;
         private Button bookButton;
         private Button cancelButton;
         private TabControl appointmentTabControl;

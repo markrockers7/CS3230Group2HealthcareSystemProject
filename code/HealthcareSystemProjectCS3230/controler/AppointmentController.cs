@@ -114,6 +114,10 @@ public class AppointmentController
     {
         return DateTime.Today < appointmentDateTime.Date;
     }
+        public List<AppointmentSummary> GetAppointmentsForPatient(int patientId)
+        {
+            return appointmentsDAL.GetAppointmentsForPatient(patientId, DateTime.Today);
+        }
 
     /*
      * Retrieves a list of available appointment slots for a specific doctor on a specific date
@@ -294,14 +298,6 @@ public class AppointmentController
     {
         return appointmentsDAL.UpdateVisitFinalDiagnosis(finalDiagnosis, visitId);
     }
-}
-
-public class DoctorView
-{
-    public int DoctorId { get; set; }
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string FullName { get; set; } = string.Empty;
 }
 
 /*
