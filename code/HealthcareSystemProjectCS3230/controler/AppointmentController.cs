@@ -151,6 +151,7 @@ public class AppointmentController
         decimal weight,
         string symptoms,
         string? initialDiagnosis,
+        string? finalDiagnosis,
         IReadOnlyCollection<Test> selectedTests)
     {
         if (appointmentId <= 0) throw new ArgumentException("Please select a valid appointment.");
@@ -175,7 +176,25 @@ public class AppointmentController
             weight,
             symptoms.Trim(),
             initialDiagnosis,
+            finalDiagnosis,
             selectedTests);
+    }
+
+    /*
+     * Adds selected tests to an existing visit.
+     * Database access and the transaction remain in the DAL.
+     */
+    public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
+    {
+        if (appointmentId <= 0) throw new ArgumentException("Please select a valid visit.");
+
+        if (selectedTests == null || selectedTests.Count == 0)
+            throw new ArgumentException("Please select at least one test.");
+
+        if (selectedTests.Any(test => string.IsNullOrWhiteSpace(test.TestCode)))
+            throw new ArgumentException("The selected tests are invalid.");
+
+        testDAL.AddTestsToVisit(appointmentId, selectedTests);
     }
 
     /*
