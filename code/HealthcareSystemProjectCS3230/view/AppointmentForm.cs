@@ -462,52 +462,19 @@ namespace HealthcareSystemProjectCS3230.view
             ClearVisitAndOrderTestError();
             try
             {
-                if (appointmentDataGridView.SelectedRows.Count == 0 ||
-                    appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
+                var selectedTests = testCheckedListBox.CheckedItems.Cast<Test>().ToList();
+                var hasOrderedTests = selectedTests.Count > 0;
+                
+                if (hasOrderedTests)
                 {
-                    throw new ArgumentException("Please select an appointment.");
-                }
-
-                var selectedAppointmentId = Convert.ToInt32(
-                    appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value,
-                    CultureInfo.InvariantCulture);
-
-                var systolic = ParseRequiredInteger(systolicTextBox, "systolic pressure");
-                var diastolic = ParseRequiredInteger(diastolicTextBox, "diastolic pressure");
-                var pulse = ParseRequiredInteger(pulseTextBox, "pulse");
-                var bodyTemperature = ParseRequiredDecimal(bodyTemperatureTextBox, "body temperature");
-                var height = ParseRequiredDecimal(heightTextBox, "height");
-                var weight = ParseRequiredDecimal(weightTextBox, "weight");
-
-                var selectedTests = testCheckedListBox.CheckedItems
-                    .Cast<Test>()
-                    .ToList();
-
-                _appointmentController.SaveVisitAndTests(
-                    selectedAppointmentId,
-                    systolic,
-                    diastolic,
-                    pulse,
-                    bodyTemperature,
-                    height,
-                    weight,
-                    symptomsTextBox.Text,
-                    initialDiagnosisTextBox.Text,
-                    selectedTests);
-
-                MessageBox.Show("Visit and selected tests submitted.");
-                systolicTextBox.Clear();
-                diastolicTextBox.Clear();
-                pulseTextBox.Clear();
-                bodyTemperatureTextBox.Clear();
-                heightTextBox.Clear();
-                weightTextBox.Clear();
-                symptomsTextBox.Clear();
-                initialDiagnosisTextBox.Clear();
-
-                for (int i = 0; i < testCheckedListBox.Items.Count; i++)
+                    var confirmOrderResult = ConfirmOrder();
+                    if (confirmOrderResult == DialogResult.Yes)
+                    {
+                        ScheduleVisitAndOrders(selectedTests);
+                    }
+                } else
                 {
-                    testCheckedListBox.SetItemChecked(i, false);
+                    ScheduleVisitAndOrders(selectedTests);
                 }
             }
             catch (ArgumentException ex)
@@ -517,6 +484,60 @@ namespace HealthcareSystemProjectCS3230.view
             catch (Exception ex)
             {
                 SetVisitAndOrderTextWarning("The visit could not be submitted: " + ex.Message);
+            }
+        }
+
+        private DialogResult ConfirmOrder()
+        {
+            return MessageBox.Show("Are you sure you want to order these tests?", "Confirm Order", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        }
+
+        private void ScheduleVisitAndOrders(List<Test> selectedTests)
+        {
+            if (appointmentDataGridView.SelectedRows.Count == 0 ||
+                appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
+            {
+                throw new ArgumentException("Please select an appointment.");
+            }
+
+            var selectedAppointmentId = Convert.ToInt32(
+                appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value,
+                CultureInfo.InvariantCulture);
+
+            var systolic = ParseRequiredInteger(systolicTextBox, "systolic pressure");
+            var diastolic = ParseRequiredInteger(diastolicTextBox, "diastolic pressure");
+            var pulse = ParseRequiredInteger(pulseTextBox, "pulse");
+            var bodyTemperature = ParseRequiredDecimal(bodyTemperatureTextBox, "body temperature");
+            var height = ParseRequiredDecimal(heightTextBox, "height");
+            var weight = ParseRequiredDecimal(weightTextBox, "weight");
+
+            _appointmentController.SaveVisitAndTests(
+                selectedAppointmentId,
+                systolic,
+                diastolic,
+                pulse,
+                bodyTemperature,
+                height,
+                weight,
+                symptomsTextBox.Text,
+                initialDiagnosisTextBox.Text,
+                selectedTests);
+
+            MessageBox.Show("Visit and selected tests submitted.");
+            systolicTextBox.Clear();
+            diastolicTextBox.Clear();
+            pulseTextBox.Clear();
+            bodyTemperatureTextBox.Clear();
+            heightTextBox.Clear();
+            weightTextBox.Clear();
+            symptomsTextBox.Clear();
+            initialDiagnosisTextBox.Clear();
+            appointmentDataGridView.Rows.Clear();
+            orderTestPatientSearchControl.Clear();
+
+            for (int i = 0; i < testCheckedListBox.Items.Count; i++)
+            {
+                testCheckedListBox.SetItemChecked(i, false);
             }
         }
 
