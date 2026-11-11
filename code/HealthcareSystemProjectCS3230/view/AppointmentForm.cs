@@ -555,20 +555,26 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void SetFinalDiagnosisWarning(string message)
         {
-            finalDiagnosisWarningLabel.Text = message;
+            visitAndOrderTestErrorLabel.Text = message;
         }
 
         private void ClearFinalDiagnosisWarning()
         {
-            finalDiagnosisWarningLabel.Text = "";
+            visitAndOrderTestErrorLabel.Text = "";
         }
 
         private void finalDiagnosisPatientSearchControl_PatientSelected(object sender, EventArgs e)
         {
+            Patient? patient = finalDiagnosisPatientSearchControl.SelectedPatient;
+            LoadFinalDiagnosisVisits(patient);
+        }
+
+        private void LoadFinalDiagnosisVisits(Patient? patient)
+        {
             visitDataGridView.Rows.Clear();
             ClearFinalDiagnosisWarning();
-            Patient? patient = finalDiagnosisPatientSearchControl.SelectedPatient;
             if (patient == null) return;
+
             try
             {
                 var visits = _appointmentController.GetVisitsWithCompleteOrNoTestsForPatient(patient.Id);
@@ -603,13 +609,13 @@ namespace HealthcareSystemProjectCS3230.view
                 return;
             }
 
-            if (visitDataGridView.SelectedRows.Count == 0 || visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value == null)
+            if (appointmentDataGridView.SelectedRows.Count == 0 || appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
             {
                 SetFinalDiagnosisWarning("Please select a visit.");
                 return;
             }
 
-            var visitId = Convert.ToInt32(visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value);
+            var visitId = Convert.ToInt32(appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value);
             try
             {
                 if (_appointmentController.UpdateFinalDiagnosis(finalDiagnosis, visitId))

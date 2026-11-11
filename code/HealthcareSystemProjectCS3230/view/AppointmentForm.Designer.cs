@@ -20,10 +20,6 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle testResultsVisitDateCellStyle = new DataGridViewCellStyle();
-            DataGridViewCellStyle testResultsPerformedCellStyle = new DataGridViewCellStyle();
-            DataGridViewCellStyle viewVisitsVisitDateCellStyle = new DataGridViewCellStyle();
-            DataGridViewCellStyle viewVisitsPerformedCellStyle = new DataGridViewCellStyle();
             loggedInLabel = new Label();
             titleLabel = new Label();
             patientSearchControl = new PatientSearchControl();
@@ -76,22 +72,16 @@
             initialDiagnosisLabel = new Label();
             initialDiagnosisTextBox = new TextBox();
             submitVisitButton = new Button();
+            finalDiagnosisTextBox = new TextBox();
+            finalDiagnosisSubmitButton = new Button();
             testResultsTabPage = new TabPage();
             testResultsTitleLabel = new Label();
             testResultsPatientSearchControl = new PatientSearchControl();
             testResultsErrorLabel = new Label();
             testResultsSelectVisitLabel = new Label();
             testResultsVisitGrid = new DataGridView();
-            testResultsVisitDateColumn = new DataGridViewTextBoxColumn();
-            testResultsVisitDoctorColumn = new DataGridViewTextBoxColumn();
-            testResultsVisitStatusColumn = new DataGridViewTextBoxColumn();
             testResultsOrderedTestsLabel = new Label();
             testResultsTestsGrid = new DataGridView();
-            testResultsTestNameColumn = new DataGridViewTextBoxColumn();
-            testResultsNormalRangeColumn = new DataGridViewTextBoxColumn();
-            testResultsResultColumn = new DataGridViewTextBoxColumn();
-            testResultsAbnormalColumn = new DataGridViewTextBoxColumn();
-            testResultsPerformedColumn = new DataGridViewTextBoxColumn();
             testResultsPatientInfoLabel = new Label();
             testResultsSelectedTestLabel = new Label();
             testResultsDatePerformedLabel = new Label();
@@ -100,11 +90,19 @@
             testResultsResultTextBox = new TextBox();
             testResultsAbnormalCheckBox = new CheckBox();
             testResultsSaveButton = new Button();
+            viewVisitsTabPage = new TabPage();
+            viewVisitsTitleLabel = new Label();
+            viewVisitsPatientSearchControl = new PatientSearchControl();
+            viewVisitsErrorLabel = new Label();
+            viewVisitsSelectVisitLabel = new Label();
+            viewVisitsVisitGrid = new DataGridView();
+            viewVisitsDetailsLabel = new Label();
+            viewVisitsDetailsTextBox = new TextBox();
+            viewVisitsTestsLabel = new Label();
+            viewVisitsTestsGrid = new DataGridView();
             finalDiagnosisTabPage = new TabPage();
             finalDiagnosisWarningLabel = new Label();
-            finalDiagnosisSubmitButton = new Button();
             label5 = new Label();
-            finalDiagnosisTextBox = new TextBox();
             label4 = new Label();
             visitDataGridView = new DataGridView();
             finalDiagnosisAppointmentIdColumn = new DataGridViewTextBoxColumn();
@@ -112,24 +110,7 @@
             visitInitialDiagnosisColumn = new DataGridViewTextBoxColumn();
             label3 = new Label();
             finalDiagnosisPatientSearchControl = new PatientSearchControl();
-            viewVisitsTabPage = new TabPage();
-            viewVisitsTitleLabel = new Label();
-            viewVisitsPatientSearchControl = new PatientSearchControl();
-            viewVisitsErrorLabel = new Label();
-            viewVisitsSelectVisitLabel = new Label();
-            viewVisitsVisitGrid = new DataGridView();
-            viewVisitsVisitDateColumn = new DataGridViewTextBoxColumn();
-            viewVisitsVisitDoctorColumn = new DataGridViewTextBoxColumn();
-            viewVisitsVisitStatusColumn = new DataGridViewTextBoxColumn();
-            viewVisitsDetailsLabel = new Label();
-            viewVisitsDetailsTextBox = new TextBox();
-            viewVisitsTestsLabel = new Label();
-            viewVisitsTestsGrid = new DataGridView();
-            viewVisitsTestNameColumn = new DataGridViewTextBoxColumn();
-            viewVisitsNormalRangeColumn = new DataGridViewTextBoxColumn();
-            viewVisitsResultColumn = new DataGridViewTextBoxColumn();
-            viewVisitsAbnormalColumn = new DataGridViewTextBoxColumn();
-            viewVisitsPerformedColumn = new DataGridViewTextBoxColumn();
+            finalDiagnosisLabel = new Label();
             appointmentTabControl.SuspendLayout();
             createAppointmentTabPage.SuspendLayout();
             orderTestTabPage.SuspendLayout();
@@ -137,11 +118,10 @@
             testResultsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)testResultsVisitGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)testResultsTestsGrid).BeginInit();
-            finalDiagnosisTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)visitDataGridView).BeginInit();
             viewVisitsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)viewVisitsVisitGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)viewVisitsTestsGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)visitDataGridView).BeginInit();
             SuspendLayout();
             // 
             // loggedInLabel
@@ -335,7 +315,6 @@
             appointmentTabControl.Controls.Add(createAppointmentTabPage);
             appointmentTabControl.Controls.Add(orderTestTabPage);
             appointmentTabControl.Controls.Add(testResultsTabPage);
-            appointmentTabControl.Controls.Add(finalDiagnosisTabPage);
             appointmentTabControl.Controls.Add(viewVisitsTabPage);
             appointmentTabControl.Location = new Point(0, 18);
             appointmentTabControl.Name = "appointmentTabControl";
@@ -375,6 +354,7 @@
             // orderTestTabPage
             // 
             orderTestTabPage.AutoScroll = true;
+            orderTestTabPage.Controls.Add(finalDiagnosisLabel);
             orderTestTabPage.Controls.Add(visitAndOrderTestErrorLabel);
             orderTestTabPage.Controls.Add(label2);
             orderTestTabPage.Controls.Add(appointmentDataGridView);
@@ -400,6 +380,8 @@
             orderTestTabPage.Controls.Add(initialDiagnosisLabel);
             orderTestTabPage.Controls.Add(initialDiagnosisTextBox);
             orderTestTabPage.Controls.Add(submitVisitButton);
+            orderTestTabPage.Controls.Add(finalDiagnosisTextBox);
+            orderTestTabPage.Controls.Add(finalDiagnosisSubmitButton);
             orderTestTabPage.Location = new Point(4, 24);
             orderTestTabPage.Name = "orderTestTabPage";
             orderTestTabPage.Padding = new Padding(3);
@@ -647,7 +629,7 @@
             // initialDiagnosisLabel
             // 
             initialDiagnosisLabel.AutoSize = true;
-            initialDiagnosisLabel.Location = new Point(16, 709);
+            initialDiagnosisLabel.Location = new Point(16, 722);
             initialDiagnosisLabel.Name = "initialDiagnosisLabel";
             initialDiagnosisLabel.Size = new Size(92, 15);
             initialDiagnosisLabel.TabIndex = 15;
@@ -655,7 +637,7 @@
             // 
             // initialDiagnosisTextBox
             // 
-            initialDiagnosisTextBox.Location = new Point(105, 705);
+            initialDiagnosisTextBox.Location = new Point(105, 709);
             initialDiagnosisTextBox.Multiline = true;
             initialDiagnosisTextBox.Name = "initialDiagnosisTextBox";
             initialDiagnosisTextBox.ScrollBars = ScrollBars.Vertical;
@@ -664,13 +646,32 @@
             // 
             // submitVisitButton
             // 
-            submitVisitButton.Location = new Point(650, 767);
+            submitVisitButton.Location = new Point(491, 843);
             submitVisitButton.Name = "submitVisitButton";
             submitVisitButton.Size = new Size(115, 32);
             submitVisitButton.TabIndex = 15;
             submitVisitButton.Text = "Submit Visit";
             submitVisitButton.UseVisualStyleBackColor = true;
             submitVisitButton.Click += submitVisitButton_Click;
+            // 
+            // finalDiagnosisTextBox
+            // 
+            finalDiagnosisTextBox.Location = new Point(105, 777);
+            finalDiagnosisTextBox.Multiline = true;
+            finalDiagnosisTextBox.Name = "finalDiagnosisTextBox";
+            finalDiagnosisTextBox.ScrollBars = ScrollBars.Vertical;
+            finalDiagnosisTextBox.Size = new Size(630, 48);
+            finalDiagnosisTextBox.TabIndex = 5;
+            // 
+            // finalDiagnosisSubmitButton
+            // 
+            finalDiagnosisSubmitButton.Location = new Point(620, 843);
+            finalDiagnosisSubmitButton.Name = "finalDiagnosisSubmitButton";
+            finalDiagnosisSubmitButton.Size = new Size(115, 32);
+            finalDiagnosisSubmitButton.TabIndex = 16;
+            finalDiagnosisSubmitButton.Text = "Submit Diagnosis";
+            finalDiagnosisSubmitButton.UseVisualStyleBackColor = true;
+            finalDiagnosisSubmitButton.Click += finalDiagnosisSubmitButton_Click;
             // 
             // testResultsTabPage
             // 
@@ -741,47 +742,18 @@
             // 
             testResultsVisitGrid.AllowUserToAddRows = false;
             testResultsVisitGrid.AllowUserToDeleteRows = false;
-            testResultsVisitGrid.AutoGenerateColumns = false;
             testResultsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             testResultsVisitGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            testResultsVisitGrid.Columns.AddRange(new DataGridViewColumn[] { testResultsVisitDateColumn, testResultsVisitDoctorColumn, testResultsVisitStatusColumn });
             testResultsVisitGrid.Location = new Point(16, 390);
             testResultsVisitGrid.MultiSelect = false;
             testResultsVisitGrid.Name = "testResultsVisitGrid";
             testResultsVisitGrid.ReadOnly = true;
             testResultsVisitGrid.RowHeadersVisible = false;
-            testResultsVisitGrid.ScrollBars = ScrollBars.Both;
             testResultsVisitGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             testResultsVisitGrid.Size = new Size(360, 150);
             testResultsVisitGrid.TabIndex = 4;
             testResultsVisitGrid.DataBindingComplete += testResultsVisitGrid_DataBindingComplete;
             testResultsVisitGrid.SelectionChanged += testResultsVisitGrid_SelectionChanged;
-            // 
-            // testResultsVisitDateColumn
-            // 
-            testResultsVisitDateCellStyle.Format = "g";
-            testResultsVisitDateColumn.DataPropertyName = "AppointmentDateTime";
-            testResultsVisitDateColumn.DefaultCellStyle = testResultsVisitDateCellStyle;
-            testResultsVisitDateColumn.HeaderText = "Visit Date";
-            testResultsVisitDateColumn.MinimumWidth = 120;
-            testResultsVisitDateColumn.Name = "testResultsVisitDateColumn";
-            testResultsVisitDateColumn.ReadOnly = true;
-            // 
-            // testResultsVisitDoctorColumn
-            // 
-            testResultsVisitDoctorColumn.DataPropertyName = "DoctorName";
-            testResultsVisitDoctorColumn.HeaderText = "Doctor";
-            testResultsVisitDoctorColumn.MinimumWidth = 110;
-            testResultsVisitDoctorColumn.Name = "testResultsVisitDoctorColumn";
-            testResultsVisitDoctorColumn.ReadOnly = true;
-            // 
-            // testResultsVisitStatusColumn
-            // 
-            testResultsVisitStatusColumn.DataPropertyName = "StatusText";
-            testResultsVisitStatusColumn.HeaderText = "Status";
-            testResultsVisitStatusColumn.MinimumWidth = 100;
-            testResultsVisitStatusColumn.Name = "testResultsVisitStatusColumn";
-            testResultsVisitStatusColumn.ReadOnly = true;
             // 
             // testResultsOrderedTestsLabel
             // 
@@ -789,7 +761,7 @@
             testResultsOrderedTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             testResultsOrderedTestsLabel.Location = new Point(390, 366);
             testResultsOrderedTestsLabel.Name = "testResultsOrderedTestsLabel";
-            testResultsOrderedTestsLabel.Size = new Size(118, 21);
+            testResultsOrderedTestsLabel.Size = new Size(113, 21);
             testResultsOrderedTestsLabel.TabIndex = 5;
             testResultsOrderedTestsLabel.Text = "Ordered Tests";
             // 
@@ -797,63 +769,18 @@
             // 
             testResultsTestsGrid.AllowUserToAddRows = false;
             testResultsTestsGrid.AllowUserToDeleteRows = false;
-            testResultsTestsGrid.AutoGenerateColumns = false;
             testResultsTestsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             testResultsTestsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            testResultsTestsGrid.Columns.AddRange(new DataGridViewColumn[] { testResultsTestNameColumn, testResultsNormalRangeColumn, testResultsResultColumn, testResultsAbnormalColumn, testResultsPerformedColumn });
             testResultsTestsGrid.Location = new Point(390, 390);
             testResultsTestsGrid.MultiSelect = false;
             testResultsTestsGrid.Name = "testResultsTestsGrid";
             testResultsTestsGrid.ReadOnly = true;
             testResultsTestsGrid.RowHeadersVisible = false;
-            testResultsTestsGrid.ScrollBars = ScrollBars.Both;
             testResultsTestsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             testResultsTestsGrid.Size = new Size(375, 150);
             testResultsTestsGrid.TabIndex = 6;
             testResultsTestsGrid.DataBindingComplete += testResultsTestsGrid_DataBindingComplete;
             testResultsTestsGrid.SelectionChanged += testResultsTestsGrid_SelectionChanged;
-            // 
-            // testResultsTestNameColumn
-            // 
-            testResultsTestNameColumn.DataPropertyName = "TestName";
-            testResultsTestNameColumn.HeaderText = "Test";
-            testResultsTestNameColumn.MinimumWidth = 110;
-            testResultsTestNameColumn.Name = "testResultsTestNameColumn";
-            testResultsTestNameColumn.ReadOnly = true;
-            // 
-            // testResultsNormalRangeColumn
-            // 
-            testResultsNormalRangeColumn.DataPropertyName = "NormalRange";
-            testResultsNormalRangeColumn.HeaderText = "Normal Range";
-            testResultsNormalRangeColumn.MinimumWidth = 100;
-            testResultsNormalRangeColumn.Name = "testResultsNormalRangeColumn";
-            testResultsNormalRangeColumn.ReadOnly = true;
-            // 
-            // testResultsResultColumn
-            // 
-            testResultsResultColumn.DataPropertyName = "ResultText";
-            testResultsResultColumn.HeaderText = "Result";
-            testResultsResultColumn.MinimumWidth = 70;
-            testResultsResultColumn.Name = "testResultsResultColumn";
-            testResultsResultColumn.ReadOnly = true;
-            // 
-            // testResultsAbnormalColumn
-            // 
-            testResultsAbnormalColumn.DataPropertyName = "AbnormalText";
-            testResultsAbnormalColumn.HeaderText = "Abnormal";
-            testResultsAbnormalColumn.MinimumWidth = 65;
-            testResultsAbnormalColumn.Name = "testResultsAbnormalColumn";
-            testResultsAbnormalColumn.ReadOnly = true;
-            // 
-            // testResultsPerformedColumn
-            // 
-            testResultsPerformedCellStyle.Format = "g";
-            testResultsPerformedColumn.DataPropertyName = "DatePerformed";
-            testResultsPerformedColumn.DefaultCellStyle = testResultsPerformedCellStyle;
-            testResultsPerformedColumn.HeaderText = "Performed";
-            testResultsPerformedColumn.MinimumWidth = 115;
-            testResultsPerformedColumn.Name = "testResultsPerformedColumn";
-            testResultsPerformedColumn.ReadOnly = true;
             // 
             // testResultsPatientInfoLabel
             // 
@@ -914,7 +841,7 @@
             testResultsAbnormalCheckBox.AutoSize = true;
             testResultsAbnormalCheckBox.Location = new Point(390, 642);
             testResultsAbnormalCheckBox.Name = "testResultsAbnormalCheckBox";
-            testResultsAbnormalCheckBox.Size = new Size(77, 19);
+            testResultsAbnormalCheckBox.Size = new Size(79, 19);
             testResultsAbnormalCheckBox.TabIndex = 13;
             testResultsAbnormalCheckBox.Text = "Abnormal";
             testResultsAbnormalCheckBox.UseVisualStyleBackColor = true;
@@ -928,128 +855,6 @@
             testResultsSaveButton.Text = "Save Result";
             testResultsSaveButton.UseVisualStyleBackColor = true;
             testResultsSaveButton.Click += testResultsSaveButton_Click;
-            // 
-            // finalDiagnosisTabPage
-            // 
-            finalDiagnosisTabPage.Controls.Add(finalDiagnosisWarningLabel);
-            finalDiagnosisTabPage.Controls.Add(finalDiagnosisSubmitButton);
-            finalDiagnosisTabPage.Controls.Add(label5);
-            finalDiagnosisTabPage.Controls.Add(finalDiagnosisTextBox);
-            finalDiagnosisTabPage.Controls.Add(label4);
-            finalDiagnosisTabPage.Controls.Add(visitDataGridView);
-            finalDiagnosisTabPage.Controls.Add(label3);
-            finalDiagnosisTabPage.Controls.Add(finalDiagnosisPatientSearchControl);
-            finalDiagnosisTabPage.Location = new Point(4, 24);
-            finalDiagnosisTabPage.Name = "finalDiagnosisTabPage";
-            finalDiagnosisTabPage.Padding = new Padding(3);
-            finalDiagnosisTabPage.Size = new Size(791, 714);
-            finalDiagnosisTabPage.TabIndex = 2;
-            finalDiagnosisTabPage.Text = "Enter Final Diagnosis";
-            finalDiagnosisTabPage.UseVisualStyleBackColor = true;
-            // 
-            // finalDiagnosisWarningLabel
-            // 
-            finalDiagnosisWarningLabel.AutoEllipsis = true;
-            finalDiagnosisWarningLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            finalDiagnosisWarningLabel.ForeColor = Color.Red;
-            finalDiagnosisWarningLabel.Location = new Point(16, 343);
-            finalDiagnosisWarningLabel.Name = "finalDiagnosisWarningLabel";
-            finalDiagnosisWarningLabel.Size = new Size(740, 23);
-            finalDiagnosisWarningLabel.TabIndex = 17;
-            finalDiagnosisWarningLabel.Text = "ERROR";
-            finalDiagnosisWarningLabel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // finalDiagnosisSubmitButton
-            // 
-            finalDiagnosisSubmitButton.Location = new Point(676, 682);
-            finalDiagnosisSubmitButton.Name = "finalDiagnosisSubmitButton";
-            finalDiagnosisSubmitButton.Size = new Size(115, 32);
-            finalDiagnosisSubmitButton.TabIndex = 16;
-            finalDiagnosisSubmitButton.Text = "Submit Diagnosis";
-            finalDiagnosisSubmitButton.UseVisualStyleBackColor = true;
-            finalDiagnosisSubmitButton.Click += finalDiagnosisSubmitButton_Click;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(16, 557);
-            label5.Name = "label5";
-            label5.Size = new Size(170, 21);
-            label5.TabIndex = 6;
-            label5.Text = "Enter Final Diagnosis";
-            // 
-            // finalDiagnosisTextBox
-            // 
-            finalDiagnosisTextBox.Location = new Point(16, 581);
-            finalDiagnosisTextBox.Multiline = true;
-            finalDiagnosisTextBox.Name = "finalDiagnosisTextBox";
-            finalDiagnosisTextBox.Size = new Size(728, 87);
-            finalDiagnosisTextBox.TabIndex = 5;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(16, 366);
-            label4.Name = "label4";
-            label4.Size = new Size(94, 21);
-            label4.TabIndex = 4;
-            label4.Text = "Select Visit";
-            // 
-            // visitDataGridView
-            // 
-            visitDataGridView.AllowUserToAddRows = false;
-            visitDataGridView.AllowUserToDeleteRows = false;
-            visitDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            visitDataGridView.Columns.AddRange(new DataGridViewColumn[] { finalDiagnosisAppointmentIdColumn, visitDoctorNameColumn, visitInitialDiagnosisColumn });
-            visitDataGridView.Location = new Point(16, 390);
-            visitDataGridView.Name = "visitDataGridView";
-            visitDataGridView.ReadOnly = true;
-            visitDataGridView.RowHeadersWidth = 62;
-            visitDataGridView.Size = new Size(464, 150);
-            visitDataGridView.TabIndex = 3;
-            // 
-            // finalDiagnosisAppointmentIdColumn
-            // 
-            finalDiagnosisAppointmentIdColumn.HeaderText = "Appointment ID";
-            finalDiagnosisAppointmentIdColumn.MinimumWidth = 8;
-            finalDiagnosisAppointmentIdColumn.Name = "finalDiagnosisAppointmentIdColumn";
-            finalDiagnosisAppointmentIdColumn.ReadOnly = true;
-            finalDiagnosisAppointmentIdColumn.Width = 150;
-            // 
-            // visitDoctorNameColumn
-            // 
-            visitDoctorNameColumn.HeaderText = "Doctor Name";
-            visitDoctorNameColumn.Name = "visitDoctorNameColumn";
-            visitDoctorNameColumn.ReadOnly = true;
-            // 
-            // visitInitialDiagnosisColumn
-            // 
-            visitInitialDiagnosisColumn.HeaderText = "Initial Diagnosis";
-            visitInitialDiagnosisColumn.MinimumWidth = 8;
-            visitInitialDiagnosisColumn.Name = "visitInitialDiagnosisColumn";
-            visitInitialDiagnosisColumn.ReadOnly = true;
-            visitInitialDiagnosisColumn.Width = 150;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(3, 3);
-            label3.Name = "label3";
-            label3.Size = new Size(148, 21);
-            label3.TabIndex = 2;
-            label3.Text = "Search For Patient";
-            // 
-            // finalDiagnosisPatientSearchControl
-            // 
-            finalDiagnosisPatientSearchControl.Location = new Point(6, 38);
-            finalDiagnosisPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
-            finalDiagnosisPatientSearchControl.Name = "finalDiagnosisPatientSearchControl";
-            finalDiagnosisPatientSearchControl.Size = new Size(760, 300);
-            finalDiagnosisPatientSearchControl.TabIndex = 0;
-            finalDiagnosisPatientSearchControl.PatientSelected += finalDiagnosisPatientSearchControl_PatientSelected;
             // 
             // viewVisitsTabPage
             // 
@@ -1114,47 +919,18 @@
             // 
             viewVisitsVisitGrid.AllowUserToAddRows = false;
             viewVisitsVisitGrid.AllowUserToDeleteRows = false;
-            viewVisitsVisitGrid.AutoGenerateColumns = false;
             viewVisitsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             viewVisitsVisitGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            viewVisitsVisitGrid.Columns.AddRange(new DataGridViewColumn[] { viewVisitsVisitDateColumn, viewVisitsVisitDoctorColumn, viewVisitsVisitStatusColumn });
             viewVisitsVisitGrid.Location = new Point(16, 390);
             viewVisitsVisitGrid.MultiSelect = false;
             viewVisitsVisitGrid.Name = "viewVisitsVisitGrid";
             viewVisitsVisitGrid.ReadOnly = true;
             viewVisitsVisitGrid.RowHeadersVisible = false;
-            viewVisitsVisitGrid.ScrollBars = ScrollBars.Both;
             viewVisitsVisitGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             viewVisitsVisitGrid.Size = new Size(360, 170);
             viewVisitsVisitGrid.TabIndex = 4;
             viewVisitsVisitGrid.DataBindingComplete += viewVisitsVisitGrid_DataBindingComplete;
             viewVisitsVisitGrid.SelectionChanged += viewVisitsVisitGrid_SelectionChanged;
-            // 
-            // viewVisitsVisitDateColumn
-            // 
-            viewVisitsVisitDateCellStyle.Format = "g";
-            viewVisitsVisitDateColumn.DataPropertyName = "AppointmentDateTime";
-            viewVisitsVisitDateColumn.DefaultCellStyle = viewVisitsVisitDateCellStyle;
-            viewVisitsVisitDateColumn.HeaderText = "Visit Date";
-            viewVisitsVisitDateColumn.MinimumWidth = 120;
-            viewVisitsVisitDateColumn.Name = "viewVisitsVisitDateColumn";
-            viewVisitsVisitDateColumn.ReadOnly = true;
-            // 
-            // viewVisitsVisitDoctorColumn
-            // 
-            viewVisitsVisitDoctorColumn.DataPropertyName = "DoctorName";
-            viewVisitsVisitDoctorColumn.HeaderText = "Doctor";
-            viewVisitsVisitDoctorColumn.MinimumWidth = 110;
-            viewVisitsVisitDoctorColumn.Name = "viewVisitsVisitDoctorColumn";
-            viewVisitsVisitDoctorColumn.ReadOnly = true;
-            // 
-            // viewVisitsVisitStatusColumn
-            // 
-            viewVisitsVisitStatusColumn.DataPropertyName = "StatusText";
-            viewVisitsVisitStatusColumn.HeaderText = "Status";
-            viewVisitsVisitStatusColumn.MinimumWidth = 100;
-            viewVisitsVisitStatusColumn.Name = "viewVisitsVisitStatusColumn";
-            viewVisitsVisitStatusColumn.ReadOnly = true;
             // 
             // viewVisitsDetailsLabel
             // 
@@ -1162,7 +938,7 @@
             viewVisitsDetailsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             viewVisitsDetailsLabel.Location = new Point(390, 366);
             viewVisitsDetailsLabel.Name = "viewVisitsDetailsLabel";
-            viewVisitsDetailsLabel.Size = new Size(104, 21);
+            viewVisitsDetailsLabel.Size = new Size(101, 21);
             viewVisitsDetailsLabel.TabIndex = 5;
             viewVisitsDetailsLabel.Text = "Visit Details";
             // 
@@ -1192,63 +968,123 @@
             // 
             viewVisitsTestsGrid.AllowUserToAddRows = false;
             viewVisitsTestsGrid.AllowUserToDeleteRows = false;
-            viewVisitsTestsGrid.AutoGenerateColumns = false;
             viewVisitsTestsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             viewVisitsTestsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            viewVisitsTestsGrid.Columns.AddRange(new DataGridViewColumn[] { viewVisitsTestNameColumn, viewVisitsNormalRangeColumn, viewVisitsResultColumn, viewVisitsAbnormalColumn, viewVisitsPerformedColumn });
             viewVisitsTestsGrid.Location = new Point(16, 592);
             viewVisitsTestsGrid.MultiSelect = false;
             viewVisitsTestsGrid.Name = "viewVisitsTestsGrid";
             viewVisitsTestsGrid.ReadOnly = true;
             viewVisitsTestsGrid.RowHeadersVisible = false;
-            viewVisitsTestsGrid.ScrollBars = ScrollBars.Both;
             viewVisitsTestsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             viewVisitsTestsGrid.Size = new Size(749, 112);
             viewVisitsTestsGrid.TabIndex = 8;
             viewVisitsTestsGrid.CellFormatting += viewVisitsTestsGrid_CellFormatting;
             viewVisitsTestsGrid.DataBindingComplete += viewVisitsTestsGrid_DataBindingComplete;
             // 
-            // viewVisitsTestNameColumn
+            // finalDiagnosisTabPage
             // 
-            viewVisitsTestNameColumn.DataPropertyName = "TestName";
-            viewVisitsTestNameColumn.HeaderText = "Test";
-            viewVisitsTestNameColumn.MinimumWidth = 140;
-            viewVisitsTestNameColumn.Name = "viewVisitsTestNameColumn";
-            viewVisitsTestNameColumn.ReadOnly = true;
+            finalDiagnosisTabPage.Location = new Point(4, 24);
+            finalDiagnosisTabPage.Name = "finalDiagnosisTabPage";
+            finalDiagnosisTabPage.Padding = new Padding(3);
+            finalDiagnosisTabPage.Size = new Size(791, 714);
+            finalDiagnosisTabPage.TabIndex = 2;
+            finalDiagnosisTabPage.Text = "Enter Final Diagnosis";
+            finalDiagnosisTabPage.UseVisualStyleBackColor = true;
             // 
-            // viewVisitsNormalRangeColumn
+            // finalDiagnosisWarningLabel
             // 
-            viewVisitsNormalRangeColumn.DataPropertyName = "NormalRange";
-            viewVisitsNormalRangeColumn.HeaderText = "Normal Range";
-            viewVisitsNormalRangeColumn.MinimumWidth = 140;
-            viewVisitsNormalRangeColumn.Name = "viewVisitsNormalRangeColumn";
-            viewVisitsNormalRangeColumn.ReadOnly = true;
+            finalDiagnosisWarningLabel.AutoEllipsis = true;
+            finalDiagnosisWarningLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            finalDiagnosisWarningLabel.ForeColor = Color.Red;
+            finalDiagnosisWarningLabel.Location = new Point(16, 1160);
+            finalDiagnosisWarningLabel.Name = "finalDiagnosisWarningLabel";
+            finalDiagnosisWarningLabel.Size = new Size(740, 23);
+            finalDiagnosisWarningLabel.TabIndex = 17;
+            finalDiagnosisWarningLabel.Text = "ERROR";
+            finalDiagnosisWarningLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // viewVisitsResultColumn
+            // label5
             // 
-            viewVisitsResultColumn.DataPropertyName = "ResultText";
-            viewVisitsResultColumn.HeaderText = "Result";
-            viewVisitsResultColumn.MinimumWidth = 100;
-            viewVisitsResultColumn.Name = "viewVisitsResultColumn";
-            viewVisitsResultColumn.ReadOnly = true;
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(16, 1305);
+            label5.Name = "label5";
+            label5.Size = new Size(170, 21);
+            label5.TabIndex = 6;
+            label5.Text = "Enter Final Diagnosis";
             // 
-            // viewVisitsAbnormalColumn
+            // label4
             // 
-            viewVisitsAbnormalColumn.DataPropertyName = "AbnormalText";
-            viewVisitsAbnormalColumn.HeaderText = "Abnormal";
-            viewVisitsAbnormalColumn.MinimumWidth = 75;
-            viewVisitsAbnormalColumn.Name = "viewVisitsAbnormalColumn";
-            viewVisitsAbnormalColumn.ReadOnly = true;
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(16, 1185);
+            label4.Name = "label4";
+            label4.Size = new Size(94, 21);
+            label4.TabIndex = 4;
+            label4.Text = "Select Visit";
             // 
-            // viewVisitsPerformedColumn
+            // visitDataGridView
             // 
-            viewVisitsPerformedCellStyle.Format = "g";
-            viewVisitsPerformedColumn.DataPropertyName = "DatePerformed";
-            viewVisitsPerformedColumn.DefaultCellStyle = viewVisitsPerformedCellStyle;
-            viewVisitsPerformedColumn.HeaderText = "Performed";
-            viewVisitsPerformedColumn.MinimumWidth = 130;
-            viewVisitsPerformedColumn.Name = "viewVisitsPerformedColumn";
-            viewVisitsPerformedColumn.ReadOnly = true;
+            visitDataGridView.AllowUserToAddRows = false;
+            visitDataGridView.AllowUserToDeleteRows = false;
+            visitDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            visitDataGridView.Columns.AddRange(new DataGridViewColumn[] { finalDiagnosisAppointmentIdColumn, visitDoctorNameColumn, visitInitialDiagnosisColumn });
+            visitDataGridView.Location = new Point(16, 1210);
+            visitDataGridView.Name = "visitDataGridView";
+            visitDataGridView.ReadOnly = true;
+            visitDataGridView.RowHeadersWidth = 62;
+            visitDataGridView.Size = new Size(464, 150);
+            visitDataGridView.TabIndex = 3;
+            // 
+            // finalDiagnosisAppointmentIdColumn
+            // 
+            finalDiagnosisAppointmentIdColumn.HeaderText = "Appointment ID";
+            finalDiagnosisAppointmentIdColumn.MinimumWidth = 8;
+            finalDiagnosisAppointmentIdColumn.Name = "finalDiagnosisAppointmentIdColumn";
+            finalDiagnosisAppointmentIdColumn.ReadOnly = true;
+            finalDiagnosisAppointmentIdColumn.Width = 150;
+            // 
+            // visitDoctorNameColumn
+            // 
+            visitDoctorNameColumn.HeaderText = "Doctor Name";
+            visitDoctorNameColumn.Name = "visitDoctorNameColumn";
+            visitDoctorNameColumn.ReadOnly = true;
+            // 
+            // visitInitialDiagnosisColumn
+            // 
+            visitInitialDiagnosisColumn.HeaderText = "Initial Diagnosis";
+            visitInitialDiagnosisColumn.MinimumWidth = 8;
+            visitInitialDiagnosisColumn.Name = "visitInitialDiagnosisColumn";
+            visitInitialDiagnosisColumn.ReadOnly = true;
+            visitInitialDiagnosisColumn.Width = 150;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(3, 3);
+            label3.Name = "label3";
+            label3.Size = new Size(148, 21);
+            label3.TabIndex = 2;
+            label3.Text = "Search For Patient";
+            // 
+            // finalDiagnosisPatientSearchControl
+            // 
+            finalDiagnosisPatientSearchControl.Location = new Point(6, 38);
+            finalDiagnosisPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            finalDiagnosisPatientSearchControl.Name = "finalDiagnosisPatientSearchControl";
+            finalDiagnosisPatientSearchControl.Size = new Size(760, 300);
+            finalDiagnosisPatientSearchControl.TabIndex = 0;
+            finalDiagnosisPatientSearchControl.PatientSelected += finalDiagnosisPatientSearchControl_PatientSelected;
+            // 
+            // finalDiagnosisLabel
+            // 
+            finalDiagnosisLabel.AutoSize = true;
+            finalDiagnosisLabel.Location = new Point(16, 791);
+            finalDiagnosisLabel.Name = "finalDiagnosisLabel";
+            finalDiagnosisLabel.Size = new Size(88, 15);
+            finalDiagnosisLabel.TabIndex = 17;
+            finalDiagnosisLabel.Text = "Final diagnosis:";
             // 
             // AppointmentForm
             // 
@@ -1274,13 +1110,11 @@
             testResultsTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)testResultsVisitGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)testResultsTestsGrid).EndInit();
-            finalDiagnosisTabPage.ResumeLayout(false);
-            finalDiagnosisTabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)visitDataGridView).EndInit();
             viewVisitsTabPage.ResumeLayout(false);
             viewVisitsTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)viewVisitsVisitGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)viewVisitsTestsGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)visitDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1393,5 +1227,6 @@
         private DataGridViewTextBoxColumn viewVisitsResultColumn;
         private DataGridViewTextBoxColumn viewVisitsAbnormalColumn;
         private DataGridViewTextBoxColumn viewVisitsPerformedColumn;
+        private Label finalDiagnosisLabel;
     }
 }
