@@ -110,56 +110,11 @@ public class TestDAL
 
     /*
      * Adds tests to an existing visit without changing tests already ordered for it.
-     * Uses a transaction and row lock to ensure a finalized visit cannot receive new tests.
-     * Duplicate tests are ignored.
      * @param appointmentId The ID of the existing visit (appointment).
      * @param selectedTests The tests to add.
      */
     public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
     {
-        /*
-         * Execute this MySQL script once before using this method:
-         *
-         * DROP PROCEDURE IF EXISTS AddTestToVisit;
-         * DELIMITER //
-         * CREATE PROCEDURE AddTestToVisit(
-         *     IN p_appointment_id INT,
-         *     IN p_test_code VARCHAR(50),
-         *     IN p_date_performed DATETIME
-         * )
-         * BEGIN
-         *     DECLARE v_final_diagnosis VARCHAR(255);
-         *     DECLARE v_visit_not_found BOOLEAN DEFAULT FALSE;
-         *
-         *     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_visit_not_found = TRUE;
-         *
-         *     SELECT final_diagnosis
-         *       INTO v_final_diagnosis
-         *       FROM Visit
-         *      WHERE appointment_id = p_appointment_id
-         *      FOR UPDATE;
-         *
-         *     IF v_visit_not_found THEN
-         *         SIGNAL SQLSTATE '45000'
-         *             SET MESSAGE_TEXT = 'The selected visit could not be found.';
-         *     ELSEIF v_final_diagnosis IS NOT NULL THEN
-         *         SIGNAL SQLSTATE '45000'
-         *             SET MESSAGE_TEXT = 'This visit has a final diagnosis, so additional tests can''t be ordered.';
-         *     ELSE
-         *         INSERT INTO VisitTest
-         *             (appointment_id, test_code, date_performed, result, isAbnormal)
-         *         SELECT p_appointment_id, p_test_code, p_date_performed, NULL, NULL
-         *           FROM DUAL
-         *          WHERE NOT EXISTS (
-         *                SELECT 1
-         *                  FROM VisitTest
-         *                 WHERE appointment_id = p_appointment_id
-         *                   AND test_code = p_test_code
-         *          );
-         *     END IF;
-         * END//
-         * DELIMITER ;
-         */
         using var connection = new MySqlConnection(Connection.ConnectionString);
         connection.Open();
 

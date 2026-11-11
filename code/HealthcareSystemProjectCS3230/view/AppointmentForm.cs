@@ -16,7 +16,6 @@ namespace HealthcareSystemProjectCS3230.view
         private TimeSpan? _currentSlot;
         private int? _selectedPatientId;
 
-        // Create mode
         public AppointmentForm()
         {
             InitializeComponent();
@@ -29,7 +28,6 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureViewVisitsForm();
         }
 
-        // Edit mode
         public AppointmentForm(int appointmentId)
         {
             InitializeComponent();
@@ -44,7 +42,9 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureViewVisitsForm();
         }
 
-        // Edit mode, opened from Find Appointment with the patient already known
+        /**
+         * Edit mode, opened from Find Appointment with the patient already known
+         */
         public AppointmentForm(int appointmentId, Patient patient) : this(appointmentId)
         {
             patientNameTextBox.Text = patient.FirstName + " " + patient.LastName;
@@ -60,7 +60,6 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ConfigureForm()
         {
-            // Past dates are only blocked when creating; an old appointment may be opened to view
             if (!_isEditMode)
             {
                 appointmentDatePicker.MinDate = DateTime.Today;
@@ -77,7 +76,6 @@ namespace HealthcareSystemProjectCS3230.view
         {
             try
             {
-                // Set Display/Value members first so SelectedValue is the doctor id right away
                 doctorComboBox.DisplayMember = nameof(DoctorView.FullName);
                 doctorComboBox.ValueMember = nameof(DoctorView.DoctorId);
                 doctorComboBox.DataSource = _appointmentController.GetDoctorsWithNames();
@@ -142,7 +140,9 @@ namespace HealthcareSystemProjectCS3230.view
             EnableAppointmentFields(true);
         }
 
-        // Shows an error and makes the whole form read-only
+        /// <summary>
+        /// Shows an error and makes the whole form read-only
+        /// </summary>
         private void LockForm(string message)
         {
             _isReadOnlyEdit = true;
@@ -463,7 +463,6 @@ namespace HealthcareSystemProjectCS3230.view
             ClearVisitAndOrderTestError();
             try
             {
-                // A checkup is submitted independently of test orders.
                 ScheduleVisitAndOrders(new List<Test>());
             }
             catch (ArgumentException ex)
@@ -540,7 +539,6 @@ namespace HealthcareSystemProjectCS3230.view
 
             try
             {
-                // GetAllVisitsForPatient returns submitted visits; final-diagnosis visits are locked.
                 var visits = _appointmentController.GetAllVisitsForPatient(_orderTestsPatient.Id);
                 foreach (var visit in visits.Where(v => !v.IsLocked))
                 {
@@ -655,7 +653,6 @@ namespace HealthcareSystemProjectCS3230.view
                 {
                     if (visit.FinalDiagnosis == null)
                     {
-                        // An initial diagnosis is optional; the final diagnosis can be entered without one.
                         visitDataGridView.Rows.Add(
                             visit.AppointmentId,
                             _appointmentController.GetDoctorNameFromVisit(visit.AppointmentId),
@@ -790,7 +787,6 @@ namespace HealthcareSystemProjectCS3230.view
             ShowTestResultsSelectedTest();
         }
 
-        // Stops the grids from auto-selecting the first row
         private void testResultsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             testResultsVisitGrid.ClearSelection();
@@ -823,7 +819,6 @@ namespace HealthcareSystemProjectCS3230.view
 
             if (test.HasNormalRange)
             {
-                // Abnormal is calculated from the range, so the nurse can't change it
                 testResultsAbnormalCheckBox.Enabled = false;
                 UpdateTestResultsAbnormalPreview();
             }
@@ -851,7 +846,6 @@ namespace HealthcareSystemProjectCS3230.view
             UpdateTestResultsAbnormalPreview();
         }
 
-        // For tests with a range, checks the Abnormal box as the nurse types a number
         private void UpdateTestResultsAbnormalPreview()
         {
             var test = TestResultsSelectedTest;
@@ -863,7 +857,6 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (ArgumentException)
             {
-                // Not a number yet; leave unchecked until it is
                 testResultsAbnormalCheckBox.Checked = false;
             }
         }
@@ -992,7 +985,6 @@ namespace HealthcareSystemProjectCS3230.view
                 $"Final diagnosis: {visit.FinalDiagnosis ?? "(not entered yet)"}";
         }
 
-        // Shows abnormal test results in red so they stand out
         private void viewVisitsTestsGrid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0 || e.CellStyle == null) return;
@@ -1003,7 +995,6 @@ namespace HealthcareSystemProjectCS3230.view
             }
         }
 
-        // Stops the grids from auto-selecting the first row
         private void viewVisitsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             viewVisitsVisitGrid.ClearSelection();
