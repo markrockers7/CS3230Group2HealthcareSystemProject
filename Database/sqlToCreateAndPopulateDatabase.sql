@@ -76,12 +76,12 @@ CREATE TABLE Account (
 );
 
 INSERT INTO Account (username, password, type) VALUES
-('ejohnson', 'nurse123',   'nurse'),
-('mbrown',   'nurse456',   'nurse'),
-('adavis',   'nurse789',   'nurse'),
-('janedoe',  'janedoe123', 'nurse'),
-('rwilson',  'admin123',   'administrator'),
-('johndoe',  'johndoe123', 'administrator');
+('ejohnson', '35608F3146571AA100227A3E68290979BA8A452179A080F888625106076E7DE2',   'nurse'), -- nurse123
+('mbrown',   '526E41A97978E8AC82DC08D40AF00322FA9F82B872A205EF0FA83ACF0CF56D6E',   'nurse'), -- nurse456
+('adavis',   '9C6F925B46D51C41C13703F2E69983319DCDC6CB6F2C94CB8A704AF598814218',   'nurse'), -- nurse789
+('janedoe',  '0C5A7B90985D4B4B436F41FB790EDAFF88E411D3E00E62BB25DE5CB214A54E7E', 'nurse'), -- janedoe123
+('rwilson',  '240BE518FABD2724DDB6F04EEB1DA5967448D7E831C08C8FA822809F74C720A9',   'administrator'), -- admin123
+('johndoe',  '22A89F6F93412ECAD98CEC961CEC37A2CA019D7205CD07812C358205AE3E4233', 'administrator'); -- johndoe123
 
 CREATE TABLE Doctor (
     id         INT AUTO_INCREMENT PRIMARY KEY,
