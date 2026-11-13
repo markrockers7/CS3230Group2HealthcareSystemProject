@@ -730,6 +730,7 @@
             orderTestsAppointmentGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             orderTestsAppointmentGrid.Size = new Size(749, 150);
             orderTestsAppointmentGrid.TabIndex = 3;
+            orderTestsAppointmentGrid.SelectionChanged += orderTestsAppointmentGrid_SelectionChanged;
             // 
             // orderTestsAppointmentIdColumn
             // 

@@ -16,6 +16,8 @@ namespace HealthcareSystemProjectCS3230.view
         private TimeSpan? _currentSlot;
         private int? _selectedPatientId;
 
+        private Dictionary<VisitSummary, List<VisitTestResult>> orderTestsTabVisitsAndTests;
+
         public AppointmentForm()
         {
             InitializeComponent();
@@ -539,8 +541,9 @@ namespace HealthcareSystemProjectCS3230.view
 
             try
             {
-                var visits = _appointmentController.GetAllVisitsForPatient(_orderTestsPatient.Id);
-                foreach (var visit in visits.Where(v => !v.IsLocked))
+                orderTestsTabVisitsAndTests = _appointmentController.GetAllVisitsAndTheirTestsForPatient(_orderTestsPatient.Id);
+                
+                foreach (var visit in orderTestsTabVisitsAndTests.Keys)
                 {
                     orderTestsAppointmentGrid.Rows.Add(
                         visit.AppointmentId,
@@ -588,6 +591,7 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 _appointmentController.AddTestsToVisit(visitId, selectedTests);
 
+                testCheckedListBox.Tag = null;
                 for (int index = 0; index < testCheckedListBox.Items.Count; index++)
                 {
                     testCheckedListBox.SetItemChecked(index, false);
@@ -1003,6 +1007,82 @@ namespace HealthcareSystemProjectCS3230.view
         private void viewVisitsTestsGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             viewVisitsTestsGrid.ClearSelection();
+        }
+
+        private void orderTestsAppointmentGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            testCheckedListBox.ItemCheck -= orderedTestCheckbox_ItemCheck;
+            testCheckedListBox.ItemCheck += orderedTestCheckbox_ItemCheck;
+
+            if (testCheckedListBox.Tag is Tuple<HashSet<string>, ToolTip> oldState)
+            {
+                oldState.Item2.Dispose();
+            }
+            testCheckedListBox.Tag = null;
+
+            for (int index = 0; index < testCheckedListBox.Items.Count; index++)
+            {
+                testCheckedListBox.SetItemChecked(index, false);
+            }
+
+            if (orderTestsAppointmentGrid.SelectedRows.Count == 0 ||
+                orderTestsAppointmentGrid.SelectedRows[0].Cells[nameof(orderTestsAppointmentIdColumn)].Value == null)
+            {
+                return;
+            }
+
+            int visitId = Convert.ToInt32(
+                orderTestsAppointmentGrid.SelectedRows[0].Cells[nameof(orderTestsAppointmentIdColumn)].Value,
+                CultureInfo.InvariantCulture);
+
+            var visitEntry = orderTestsTabVisitsAndTests
+                .FirstOrDefault(entry => entry.Key.AppointmentId == visitId);
+
+            if (visitEntry.Key == null)
+            {
+                return;
+            }
+
+            var orderedTestCodes = visitEntry.Value
+                .Select(test => test.TestCode)
+                .ToHashSet(StringComparer.Ordinal);
+
+            for (int index = 0; index < testCheckedListBox.Items.Count; index++)
+            {
+                if (testCheckedListBox.Items[index] is Test test &&
+                    orderedTestCodes.Contains(test.TestCode))
+                {
+                    testCheckedListBox.SetItemChecked(index, true);
+                }
+            }
+
+            if (orderedTestCodes.Count > 0)
+            {
+                var toolTip = new ToolTip();
+                toolTip.SetToolTip(
+                    testCheckedListBox,
+                    "This test has already been ordered for this visit");
+                testCheckedListBox.Tag = Tuple.Create(orderedTestCodes, toolTip);
+            }
+        }
+
+        private void orderedTestCheckbox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            var state = testCheckedListBox.Tag as Tuple<HashSet<string>, ToolTip>;
+            var test = testCheckedListBox.Items[e.Index] as Test;
+
+            var isGettingChecked = e.NewValue == CheckState.Checked;
+            var hasNoAlreadyOrderedTests = state is not Tuple<HashSet<string>, ToolTip> || state.Item1.Count == 0;
+            var isNotATest = test is not Test;
+            if (isGettingChecked || hasNoAlreadyOrderedTests || isNotATest || state is null || test is null)
+            {
+                return;
+            }
+
+            if (state.Item1.Contains(test.TestCode))
+            {
+                e.NewValue = CheckState.Checked;
+            }
         }
     }
 }

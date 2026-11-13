@@ -412,6 +412,11 @@ public class AppointmentController
         return testDAL.GetVisitSummariesForPatient(patientId, onlyWithTests: false);
     }
 
+    public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
+    {
+        return testDAL.GetAllVisitsAndTheirTestsForPatient(patientId);
+    }
+
     /*
      * Gets one visit's checkup details and diagnoses.
      * @param appointmentId The ID of the visit (appointment)

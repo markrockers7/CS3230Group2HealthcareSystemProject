@@ -264,6 +264,20 @@ public class TestDAL
         return visits;
     }
 
+    public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
+    {
+        var visitDictionary = new Dictionary<VisitSummary, List<VisitTestResult>>();
+        var visitSummaries = GetVisitSummariesForPatient(patientId, onlyWithTests: false);
+
+        foreach (var visit in visitSummaries)
+        {
+            var testResults = GetVisitTestResults(visit.AppointmentId);
+            visitDictionary[visit] = testResults;
+        }
+
+        return visitDictionary;
+    }
+
     /*
      * Gets the tests ordered for a visit, with each test's name, normal range, and any result entered so far.
      * @param appointmentId The ID of the visit (appointment)
