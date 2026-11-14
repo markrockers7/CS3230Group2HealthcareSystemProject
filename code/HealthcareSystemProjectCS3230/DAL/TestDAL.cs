@@ -53,7 +53,7 @@ public class TestDAL
      * @param selectedTests The selected tests.
      */
     public void SaveVisitAndTests(int appointmentId, int systolic, int diastolic, int pulse,
-        decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis,
+        decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis, string? finalDiagnosis,
         IReadOnlyCollection<Test> selectedTests)
     {
         using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -64,8 +64,8 @@ public class TestDAL
         try
         {
             const string visitSql =
-                "INSERT INTO Visit(appointment_id, systolic_bp, diastolic_bp, pulse,body_temperature, height, weight, symptoms, initial_diagnosis)" +
-                " VALUES(@appointmentId, @systolic, @diastolic, @pulse, @bodyTemperature, @height, @weight, @symptoms, @initialDiagnosis)";
+                "INSERT INTO Visit(appointment_id, systolic_bp, diastolic_bp, pulse,body_temperature, height, weight, symptoms, initial_diagnosis, final_diagnosis)" +
+                " VALUES(@appointmentId, @systolic, @diastolic, @pulse, @bodyTemperature, @height, @weight, @symptoms, @initialDiagnosis, @finalDiagnosis)";
 
             using (var visitCommand = new MySqlCommand(visitSql, connection, transaction))
             {
@@ -80,6 +80,9 @@ public class TestDAL
                 visitCommand.Parameters.AddWithValue(
                     "@initialDiagnosis",
                     string.IsNullOrWhiteSpace(initialDiagnosis) ? DBNull.Value : initialDiagnosis.Trim());
+                visitCommand.Parameters.AddWithValue(
+                    "@finalDiagnosis",
+                    string.IsNullOrWhiteSpace(finalDiagnosis) ? DBNull.Value : finalDiagnosis.Trim());
                 visitCommand.ExecuteNonQuery();
             }
 
@@ -97,6 +100,47 @@ public class TestDAL
             }
 
             transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    /*
+     * Adds tests to an existing visit without changing tests already ordered for it.
+     * @param appointmentId The ID of the existing visit (appointment).
+     * @param selectedTests The tests to add.
+     */
+    public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
+    {
+        using var connection = new MySqlConnection(Connection.ConnectionString);
+        connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+        try
+        {
+            foreach (var test in selectedTests)
+            {
+                using var testCommand = new MySqlCommand("AddTestToVisit", connection, transaction)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                testCommand.Parameters.Add("p_appointment_id", MySqlDbType.Int32).Value = appointmentId;
+                testCommand.Parameters.Add("p_test_code", MySqlDbType.VarChar).Value = test.TestCode;
+                testCommand.Parameters.Add("p_date_performed", MySqlDbType.DateTime).Value = DateTime.Now;
+                testCommand.ExecuteNonQuery();
+            }
+
+            transaction.Commit();
+        }
+        catch (MySqlException ex) when (
+            ex.Message.Contains("The selected visit could not be found.", StringComparison.Ordinal) ||
+            ex.Message.Contains("This visit has a final diagnosis", StringComparison.Ordinal))
+        {
+            transaction.Rollback();
+            throw new ArgumentException(ex.Message, ex);
         }
         catch
         {
@@ -138,21 +182,18 @@ public class TestDAL
     }
 
     /*
-     * Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+     * Gets all the visits that don't already have a final diagnosis.
      * @param patientId The ID of the patient
      * @return List of Visit objects that meet the criteria
      */
-    public List<Visit> GetVisitsWithCompleteOrNoVisitTests(int patientId)
+    public List<Visit> GetVisitsWithNoFinalDiagnosis(int patientId)
     {
         var visits = new List<Visit>();
         using var connection = new MySqlConnection(Connection.ConnectionString);
         connection.Open();
         var command = new MySqlCommand("SELECT v.* " +
                                        "FROM visit v JOIN appointment a ON v.appointment_id = a.appointment_id " +
-                                       "WHERE a.patient_id = @PatientId AND v.final_diagnosis IS NULL AND NOT EXISTS " +
-                                       "(SELECT 1 " +
-                                       "FROM visittest t " +
-                                       "WHERE t.appointment_id = a.appointment_id AND t.result IS NULL)", connection);
+                                       "WHERE a.patient_id = @PatientId AND v.final_diagnosis IS NULL", connection);
         command.Parameters.AddWithValue("@PatientId", patientId);
         var reader = command.ExecuteReader();
         while (reader.Read())
@@ -218,6 +259,20 @@ public class TestDAL
         }
 
         return visits;
+    }
+
+    public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
+    {
+        var visitDictionary = new Dictionary<VisitSummary, List<VisitTestResult>>();
+        var visitSummaries = GetVisitSummariesForPatient(patientId, onlyWithTests: false);
+
+        foreach (var visit in visitSummaries)
+        {
+            var testResults = GetVisitTestResults(visit.AppointmentId);
+            visitDictionary[visit] = testResults;
+        }
+
+        return visitDictionary;
     }
 
     /*

@@ -198,6 +198,43 @@ BEGIN
     ORDER BY a.appointment_datetime DESC;
 END $
 
+CREATE PROCEDURE AddTestToVisit(
+    IN p_appointment_id INT,
+    IN p_test_code VARCHAR(20),
+    IN p_date_performed DATETIME
+)
+BEGIN
+    DECLARE v_final_diagnosis VARCHAR(500);
+    DECLARE v_visit_not_found BOOLEAN DEFAULT FALSE;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND
+        SET v_visit_not_found = TRUE;
+
+SELECT final_diagnosis
+INTO v_final_diagnosis
+FROM Visit
+WHERE appointment_id = p_appointment_id;
+
+IF v_visit_not_found THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'The selected visit could not be found.';
+    ELSEIF v_final_diagnosis IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT =
+                'This visit has a final diagnosis, so additional tests can''t be ordered.';
+    ELSEIF NOT EXISTS (
+        SELECT 1
+        FROM VisitTest
+        WHERE appointment_id = p_appointment_id
+          AND test_code = p_test_code
+    ) THEN
+        INSERT INTO VisitTest
+            (appointment_id, test_code, date_performed, result, isAbnormal)
+        VALUES
+            (p_appointment_id, p_test_code, p_date_performed, NULL, NULL);
+END IF;
+END $
+
 DELIMITER ;
 
 
