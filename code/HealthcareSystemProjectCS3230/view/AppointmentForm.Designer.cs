@@ -22,7 +22,7 @@
         {
             loggedInLabel = new Label();
             titleLabel = new Label();
-            patientSearchControl = new PatientSearchControl();
+            createAppointmentPatientSearchControl = new PatientSearchControl();
             patientNameLabel = new Label();
             patientNameTextBox = new TextBox();
             patientDobLabel = new Label();
@@ -47,13 +47,13 @@
             visitCheckupFinalDiagnosisLabel = new Label();
             visitAndOrderTestErrorLabel = new Label();
             label2 = new Label();
-            appointmentDataGridView = new DataGridView();
+            visitCheckupAppointmentDataGridView = new DataGridView();
             appointmentIdColumn = new DataGridViewTextBoxColumn();
             doctorNameColumn = new DataGridViewTextBoxColumn();
             timeColumn = new DataGridViewTextBoxColumn();
             reasonColumn = new DataGridViewTextBoxColumn();
             label1 = new Label();
-            orderTestPatientSearchControl = new PatientSearchControl();
+            visitCheckupPatientSearchControl = new PatientSearchControl();
             visitDetailsLabel = new Label();
             systolicLabel = new Label();
             systolicTextBox = new TextBox();
@@ -73,15 +73,17 @@
             initialDiagnosisTextBox = new TextBox();
             submitVisitButton = new Button();
             orderTestsTabPage = new TabPage();
+            label5 = new Label();
+            orderTestsAlreadyOrderedTestsCheckedListBox = new CheckedListBox();
             orderTestsTitleLabel = new Label();
             orderTestsPatientSearchControl = new PatientSearchControl();
             orderTestsSelectVisitLabel = new Label();
-            orderTestsAppointmentGrid = new DataGridView();
+            orderTestsVisitGrid = new DataGridView();
             orderTestsAppointmentIdColumn = new DataGridViewTextBoxColumn();
             orderTestsDoctorColumn = new DataGridViewTextBoxColumn();
             orderTestsDateColumn = new DataGridViewTextBoxColumn();
             availableTestsLabel = new Label();
-            testCheckedListBox = new CheckedListBox();
+            orderTestsUnorderedTestsCheckedListBox = new CheckedListBox();
             orderTestsErrorLabel = new Label();
             orderTestsSubmitButton = new Button();
             testResultsTabPage = new TabPage();
@@ -125,9 +127,9 @@
             appointmentTabControl.SuspendLayout();
             createAppointmentTabPage.SuspendLayout();
             orderTestTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)appointmentDataGridView).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)visitCheckupAppointmentDataGridView).BeginInit();
             orderTestsTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)orderTestsAppointmentGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)orderTestsVisitGrid).BeginInit();
             testResultsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)testResultsVisitGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)testResultsTestsGrid).BeginInit();
@@ -158,14 +160,14 @@
             titleLabel.TabIndex = 1;
             titleLabel.Text = "Create Appointment";
             // 
-            // patientSearchControl
+            // createAppointmentPatientSearchControl
             // 
-            patientSearchControl.Location = new Point(6, 38);
-            patientSearchControl.Margin = new Padding(4, 5, 4, 5);
-            patientSearchControl.Name = "patientSearchControl";
-            patientSearchControl.Size = new Size(760, 300);
-            patientSearchControl.TabIndex = 0;
-            patientSearchControl.PatientSelected += patientSearchControl_PatientSelected;
+            createAppointmentPatientSearchControl.Location = new Point(6, 38);
+            createAppointmentPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            createAppointmentPatientSearchControl.Name = "createAppointmentPatientSearchControl";
+            createAppointmentPatientSearchControl.Size = new Size(760, 300);
+            createAppointmentPatientSearchControl.TabIndex = 0;
+            createAppointmentPatientSearchControl.PatientSelected += patientSearchControl_PatientSelected;
             // 
             // patientNameLabel
             // 
@@ -344,7 +346,7 @@
             createAppointmentTabPage.Controls.Add(cancelButton);
             createAppointmentTabPage.Controls.Add(bookButton);
             createAppointmentTabPage.Controls.Add(errorLabel);
-            createAppointmentTabPage.Controls.Add(patientSearchControl);
+            createAppointmentTabPage.Controls.Add(createAppointmentPatientSearchControl);
             createAppointmentTabPage.Controls.Add(reasonTextBox);
             createAppointmentTabPage.Controls.Add(patientNameLabel);
             createAppointmentTabPage.Controls.Add(reasonLabel);
@@ -374,9 +376,9 @@
             orderTestTabPage.Controls.Add(visitCheckupFinalDiagnosisLabel);
             orderTestTabPage.Controls.Add(visitAndOrderTestErrorLabel);
             orderTestTabPage.Controls.Add(label2);
-            orderTestTabPage.Controls.Add(appointmentDataGridView);
+            orderTestTabPage.Controls.Add(visitCheckupAppointmentDataGridView);
             orderTestTabPage.Controls.Add(label1);
-            orderTestTabPage.Controls.Add(orderTestPatientSearchControl);
+            orderTestTabPage.Controls.Add(visitCheckupPatientSearchControl);
             orderTestTabPage.Controls.Add(visitDetailsLabel);
             orderTestTabPage.Controls.Add(systolicLabel);
             orderTestTabPage.Controls.Add(systolicTextBox);
@@ -443,22 +445,22 @@
             label2.TabIndex = 3;
             label2.Text = "Select Appointment";
             // 
-            // appointmentDataGridView
+            // visitCheckupAppointmentDataGridView
             // 
-            appointmentDataGridView.AllowUserToAddRows = false;
-            appointmentDataGridView.AllowUserToDeleteRows = false;
-            appointmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
-            appointmentDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            appointmentDataGridView.Columns.AddRange(new DataGridViewColumn[] { appointmentIdColumn, doctorNameColumn, timeColumn, reasonColumn });
-            appointmentDataGridView.Location = new Point(16, 390);
-            appointmentDataGridView.MultiSelect = false;
-            appointmentDataGridView.Name = "appointmentDataGridView";
-            appointmentDataGridView.ReadOnly = true;
-            appointmentDataGridView.RowHeadersVisible = false;
-            appointmentDataGridView.RowHeadersWidth = 62;
-            appointmentDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            appointmentDataGridView.Size = new Size(330, 134);
-            appointmentDataGridView.TabIndex = 2;
+            visitCheckupAppointmentDataGridView.AllowUserToAddRows = false;
+            visitCheckupAppointmentDataGridView.AllowUserToDeleteRows = false;
+            visitCheckupAppointmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            visitCheckupAppointmentDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            visitCheckupAppointmentDataGridView.Columns.AddRange(new DataGridViewColumn[] { appointmentIdColumn, doctorNameColumn, timeColumn, reasonColumn });
+            visitCheckupAppointmentDataGridView.Location = new Point(16, 390);
+            visitCheckupAppointmentDataGridView.MultiSelect = false;
+            visitCheckupAppointmentDataGridView.Name = "visitCheckupAppointmentDataGridView";
+            visitCheckupAppointmentDataGridView.ReadOnly = true;
+            visitCheckupAppointmentDataGridView.RowHeadersVisible = false;
+            visitCheckupAppointmentDataGridView.RowHeadersWidth = 62;
+            visitCheckupAppointmentDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            visitCheckupAppointmentDataGridView.Size = new Size(330, 134);
+            visitCheckupAppointmentDataGridView.TabIndex = 2;
             // 
             // appointmentIdColumn
             // 
@@ -506,14 +508,14 @@
             label1.TabIndex = 1;
             label1.Text = "Search For Patient";
             // 
-            // orderTestPatientSearchControl
+            // visitCheckupPatientSearchControl
             // 
-            orderTestPatientSearchControl.Location = new Point(6, 38);
-            orderTestPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
-            orderTestPatientSearchControl.Name = "orderTestPatientSearchControl";
-            orderTestPatientSearchControl.Size = new Size(760, 300);
-            orderTestPatientSearchControl.TabIndex = 0;
-            orderTestPatientSearchControl.PatientSelected += orderTestPatientSearch_PatientSelected;
+            visitCheckupPatientSearchControl.Location = new Point(6, 38);
+            visitCheckupPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            visitCheckupPatientSearchControl.Name = "visitCheckupPatientSearchControl";
+            visitCheckupPatientSearchControl.Size = new Size(760, 300);
+            visitCheckupPatientSearchControl.TabIndex = 0;
+            visitCheckupPatientSearchControl.PatientSelected += visitCheckupPatientSearch_PatientSelected;
             // 
             // visitDetailsLabel
             // 
@@ -670,12 +672,14 @@
             // orderTestsTabPage
             // 
             orderTestsTabPage.AutoScroll = true;
+            orderTestsTabPage.Controls.Add(label5);
+            orderTestsTabPage.Controls.Add(orderTestsAlreadyOrderedTestsCheckedListBox);
             orderTestsTabPage.Controls.Add(orderTestsTitleLabel);
             orderTestsTabPage.Controls.Add(orderTestsPatientSearchControl);
             orderTestsTabPage.Controls.Add(orderTestsSelectVisitLabel);
-            orderTestsTabPage.Controls.Add(orderTestsAppointmentGrid);
+            orderTestsTabPage.Controls.Add(orderTestsVisitGrid);
             orderTestsTabPage.Controls.Add(availableTestsLabel);
-            orderTestsTabPage.Controls.Add(testCheckedListBox);
+            orderTestsTabPage.Controls.Add(orderTestsUnorderedTestsCheckedListBox);
             orderTestsTabPage.Controls.Add(orderTestsErrorLabel);
             orderTestsTabPage.Controls.Add(orderTestsSubmitButton);
             orderTestsTabPage.Location = new Point(4, 24);
@@ -685,6 +689,25 @@
             orderTestsTabPage.TabIndex = 2;
             orderTestsTabPage.Text = "Order Tests";
             orderTestsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(420, 425);
+            label5.Name = "label5";
+            label5.Size = new Size(176, 21);
+            label5.TabIndex = 7;
+            label5.Text = "Already Ordered Tests";
+            // 
+            // orderTestsAlreadyOrderedTestsCheckedListBox
+            // 
+            orderTestsAlreadyOrderedTestsCheckedListBox.Enabled = false;
+            orderTestsAlreadyOrderedTestsCheckedListBox.FormattingEnabled = true;
+            orderTestsAlreadyOrderedTestsCheckedListBox.Location = new Point(420, 452);
+            orderTestsAlreadyOrderedTestsCheckedListBox.Name = "orderTestsAlreadyOrderedTestsCheckedListBox";
+            orderTestsAlreadyOrderedTestsCheckedListBox.Size = new Size(329, 112);
+            orderTestsAlreadyOrderedTestsCheckedListBox.TabIndex = 8;
             // 
             // orderTestsTitleLabel
             // 
@@ -715,22 +738,22 @@
             orderTestsSelectVisitLabel.TabIndex = 2;
             orderTestsSelectVisitLabel.Text = "Select Visit";
             // 
-            // orderTestsAppointmentGrid
+            // orderTestsVisitGrid
             // 
-            orderTestsAppointmentGrid.AllowUserToAddRows = false;
-            orderTestsAppointmentGrid.AllowUserToDeleteRows = false;
-            orderTestsAppointmentGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            orderTestsAppointmentGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            orderTestsAppointmentGrid.Columns.AddRange(new DataGridViewColumn[] { orderTestsAppointmentIdColumn, orderTestsDoctorColumn, orderTestsDateColumn });
-            orderTestsAppointmentGrid.Location = new Point(16, 252);
-            orderTestsAppointmentGrid.MultiSelect = false;
-            orderTestsAppointmentGrid.Name = "orderTestsAppointmentGrid";
-            orderTestsAppointmentGrid.ReadOnly = true;
-            orderTestsAppointmentGrid.RowHeadersVisible = false;
-            orderTestsAppointmentGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            orderTestsAppointmentGrid.Size = new Size(749, 150);
-            orderTestsAppointmentGrid.TabIndex = 3;
-            orderTestsAppointmentGrid.SelectionChanged += orderTestsAppointmentGrid_SelectionChanged;
+            orderTestsVisitGrid.AllowUserToAddRows = false;
+            orderTestsVisitGrid.AllowUserToDeleteRows = false;
+            orderTestsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            orderTestsVisitGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            orderTestsVisitGrid.Columns.AddRange(new DataGridViewColumn[] { orderTestsAppointmentIdColumn, orderTestsDoctorColumn, orderTestsDateColumn });
+            orderTestsVisitGrid.Location = new Point(16, 252);
+            orderTestsVisitGrid.MultiSelect = false;
+            orderTestsVisitGrid.Name = "orderTestsVisitGrid";
+            orderTestsVisitGrid.ReadOnly = true;
+            orderTestsVisitGrid.RowHeadersVisible = false;
+            orderTestsVisitGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            orderTestsVisitGrid.Size = new Size(749, 150);
+            orderTestsVisitGrid.TabIndex = 3;
+            orderTestsVisitGrid.SelectionChanged += orderTestsAppointmentGrid_SelectionChanged;
             // 
             // orderTestsAppointmentIdColumn
             // 
@@ -755,19 +778,19 @@
             // 
             availableTestsLabel.AutoSize = true;
             availableTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            availableTestsLabel.Location = new Point(16, 425);
+            availableTestsLabel.Location = new Point(40, 425);
             availableTestsLabel.Name = "availableTestsLabel";
             availableTestsLabel.Size = new Size(123, 21);
             availableTestsLabel.TabIndex = 5;
             availableTestsLabel.Text = "Available Tests";
             // 
-            // testCheckedListBox
+            // orderTestsUnorderedTestsCheckedListBox
             // 
-            testCheckedListBox.FormattingEnabled = true;
-            testCheckedListBox.Location = new Point(16, 452);
-            testCheckedListBox.Name = "testCheckedListBox";
-            testCheckedListBox.Size = new Size(749, 112);
-            testCheckedListBox.TabIndex = 6;
+            orderTestsUnorderedTestsCheckedListBox.FormattingEnabled = true;
+            orderTestsUnorderedTestsCheckedListBox.Location = new Point(40, 452);
+            orderTestsUnorderedTestsCheckedListBox.Name = "orderTestsUnorderedTestsCheckedListBox";
+            orderTestsUnorderedTestsCheckedListBox.Size = new Size(329, 112);
+            orderTestsUnorderedTestsCheckedListBox.TabIndex = 6;
             // 
             // orderTestsErrorLabel
             // 
@@ -1238,10 +1261,10 @@
             createAppointmentTabPage.PerformLayout();
             orderTestTabPage.ResumeLayout(false);
             orderTestTabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)appointmentDataGridView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)visitCheckupAppointmentDataGridView).EndInit();
             orderTestsTabPage.ResumeLayout(false);
             orderTestsTabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)orderTestsAppointmentGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)orderTestsVisitGrid).EndInit();
             testResultsTabPage.ResumeLayout(false);
             testResultsTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)testResultsVisitGrid).EndInit();
@@ -1261,7 +1284,7 @@
 
         private Label loggedInLabel;
         private Label titleLabel;
-        private PatientSearchControl patientSearchControl;
+        private PatientSearchControl createAppointmentPatientSearchControl;
         private Label patientNameLabel;
         private TextBox patientNameTextBox;
         private Label patientDobLabel;
@@ -1284,7 +1307,7 @@
         private TabPage orderTestTabPage;
         private TabPage orderTestsTabPage;
         private PatientSearchControl orderTestsPatientSearchControl;
-        private DataGridView orderTestsAppointmentGrid;
+        private DataGridView orderTestsVisitGrid;
         private DataGridViewTextBoxColumn orderTestsAppointmentIdColumn;
         private DataGridViewTextBoxColumn orderTestsDoctorColumn;
         private DataGridViewTextBoxColumn orderTestsDateColumn;
@@ -1293,8 +1316,8 @@
         private Label orderTestsSelectVisitLabel;
         private Button orderTestsSubmitButton;
         private Label label1;
-        private PatientSearchControl orderTestPatientSearchControl;
-        private DataGridView appointmentDataGridView;
+        private PatientSearchControl visitCheckupPatientSearchControl;
+        private DataGridView visitCheckupAppointmentDataGridView;
         private DataGridViewTextBoxColumn appointmentIdColumn;
         private DataGridViewTextBoxColumn doctorNameColumn;
         private DataGridViewTextBoxColumn timeColumn;
@@ -1302,7 +1325,7 @@
         private Label visitAndOrderTestErrorLabel;
         private Label label2;
         private Label availableTestsLabel;
-        private CheckedListBox testCheckedListBox;
+        private CheckedListBox orderTestsUnorderedTestsCheckedListBox;
         private Label visitDetailsLabel;
         private Label systolicLabel;
         private TextBox systolicTextBox;
@@ -1377,5 +1400,7 @@
         private Label finalDiagnosisLabel;
         private TextBox visitCheckupFinalDiagnosisTextBox;
         private Label visitCheckupFinalDiagnosisLabel;
+        private Label label5;
+        private CheckedListBox orderTestsAlreadyOrderedTestsCheckedListBox;
     }
 }

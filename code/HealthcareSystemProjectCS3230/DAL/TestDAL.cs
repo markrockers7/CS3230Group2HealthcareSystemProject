@@ -182,21 +182,18 @@ public class TestDAL
     }
 
     /*
-     * Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+     * Gets all the visits that don't already have a final diagnosis.
      * @param patientId The ID of the patient
      * @return List of Visit objects that meet the criteria
      */
-    public List<Visit> GetVisitsWithCompleteOrNoVisitTests(int patientId)
+    public List<Visit> GetVisitsWithNoFinalDiagnosis(int patientId)
     {
         var visits = new List<Visit>();
         using var connection = new MySqlConnection(Connection.ConnectionString);
         connection.Open();
         var command = new MySqlCommand("SELECT v.* " +
                                        "FROM visit v JOIN appointment a ON v.appointment_id = a.appointment_id " +
-                                       "WHERE a.patient_id = @PatientId AND v.final_diagnosis IS NULL AND NOT EXISTS " +
-                                       "(SELECT 1 " +
-                                       "FROM visittest t " +
-                                       "WHERE t.appointment_id = a.appointment_id AND t.result IS NULL)", connection);
+                                       "WHERE a.patient_id = @PatientId AND v.final_diagnosis IS NULL", connection);
         command.Parameters.AddWithValue("@PatientId", patientId);
         var reader = command.ExecuteReader();
         while (reader.Read())

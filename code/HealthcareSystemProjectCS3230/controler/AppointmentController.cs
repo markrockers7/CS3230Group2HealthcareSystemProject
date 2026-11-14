@@ -289,6 +289,31 @@ public class AppointmentController
             }
     }
 
+    public List<AppointmentView> GetAllPatientAppointments(int patientId)
+    {
+        var appointments = appointmentsDAL.GetAppointmentsByPatientId(patientId);
+        if (appointments == null || appointments.Count == 0)
+        {
+            throw new ArgumentException("No appointments found for the given patient ID.");
+        }
+        var appointmentViews = new List<AppointmentView>();
+        var doctorNames = GetDoctorsWithNames();
+        foreach (var appt in appointments)
+        {
+            var appointmentView = new AppointmentView
+            {
+                AppointmentId = appt.AppointmentId,
+                PatientId = appt.PatientId,
+                DoctorId = appt.DoctorId,
+                DateTime = appt.DateTime,
+                Reason = appt.Reason,
+                DoctorName = doctorNames.FirstOrDefault(d => d.DoctorId == appt.DoctorId)?.FullName ?? "Unknown"
+            };
+            appointmentViews.Add(appointmentView);
+        }
+        return appointmentViews;
+    }
+
     /*
      * Validates the input data for booking or updating an appointment
      * Throws an exception if any of the input data is invalid
@@ -365,13 +390,13 @@ public class AppointmentController
     }
 
     /*
-     * Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+     * Gets all the visits that ddon't have a final diagnosis.
      * @param patientId The ID of the patient
      * @return List of Visit objects that meet the criteria
      */
-    public List<Visit> GetVisitsWithCompleteOrNoTestsForPatient(int patientId)
+    public List<Visit> GetVisitsWithNoFinalDiagnosis(int patientId)
     {
-        return testDAL.GetVisitsWithCompleteOrNoVisitTests(patientId);
+        return testDAL.GetVisitsWithNoFinalDiagnosis(patientId);
     }
 
     /*
