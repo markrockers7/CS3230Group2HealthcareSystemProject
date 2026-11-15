@@ -202,6 +202,33 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentTimeComboBox.Enabled = enabled && appointmentTimeComboBox.Items.Count > 0;
         }
 
+        private void EnableVisitCheckupFields(bool enabled)
+        {
+            systolicTextBox.Enabled = enabled;
+            diastolicTextBox.Enabled = enabled;
+            pulseTextBox.Enabled = enabled;
+            bodyTemperatureTextBox.Enabled = enabled;
+            heightTextBox.Enabled = enabled;
+            weightTextBox.Enabled = enabled;
+            symptomsTextBox.Enabled = enabled;
+            initialDiagnosisTextBox.Enabled = enabled;
+            visitCheckupFinalDiagnosisTextBox.Enabled = enabled;
+            submitVisitButton.Enabled = enabled;
+        }
+
+        private void ClearVisitCheckupFields()
+        {
+            systolicTextBox.Clear();
+            diastolicTextBox.Clear();
+            pulseTextBox.Clear();
+            bodyTemperatureTextBox.Clear();
+            heightTextBox.Clear();
+            weightTextBox.Clear();
+            symptomsTextBox.Clear();
+            initialDiagnosisTextBox.Clear();
+            visitCheckupFinalDiagnosisTextBox.Clear();
+        }
+
         private bool CanEditFields => _selectedPatientId.HasValue && !_isReadOnlyEdit;
 
         private void RefreshAvailableSlots()
@@ -1046,6 +1073,58 @@ namespace HealthcareSystemProjectCS3230.view
 
             orderTestsAlreadyOrderedTestsCheckedListBox.DataSource =
                 allTests.Where(test => orderedTestCodes.Contains(test.TestCode)).ToList();
+        }
+
+        private void visitCheckupAppointmentDataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            ClearVisitCheckupFields();
+            EnableVisitCheckupFields(true);
+            ClearVisitAndOrderTestError();
+
+            if (visitCheckupAppointmentDataGridView.SelectedRows.Count == 0 ||
+                visitCheckupAppointmentDataGridView.SelectedRows[0]
+                    .Cells[nameof(appointmentIdColumn)].Value == null)
+            {
+                return;
+            }
+
+            try
+            {
+                int appointmentId = Convert.ToInt32(
+                    visitCheckupAppointmentDataGridView.SelectedRows[0]
+                        .Cells[nameof(appointmentIdColumn)].Value,
+                    CultureInfo.InvariantCulture);
+
+                Visit? visit = _appointmentController.GetVisitById(appointmentId);
+                if (visit == null)
+                {
+                    // A visit has not yet been made for the selected appointment (new entry)
+                    return;
+                }
+
+                systolicTextBox.Text = visit.SystolicBp.ToString(CultureInfo.CurrentCulture);
+                diastolicTextBox.Text = visit.DiastolicBp.ToString(CultureInfo.CurrentCulture);
+                pulseTextBox.Text = visit.Pulse.ToString(CultureInfo.CurrentCulture);
+                bodyTemperatureTextBox.Text = visit.BodyTemperature.ToString(CultureInfo.CurrentCulture);
+                heightTextBox.Text = visit.Height.ToString(CultureInfo.CurrentCulture);
+                weightTextBox.Text = visit.Weight.ToString(CultureInfo.CurrentCulture);
+                symptomsTextBox.Text = visit.Symptoms;
+                initialDiagnosisTextBox.Text = visit.InitialDiagnosis ?? string.Empty;
+                visitCheckupFinalDiagnosisTextBox.Text = visit.FinalDiagnosis ?? string.Empty;
+
+                bool isFinalized = !string.IsNullOrWhiteSpace(visit.FinalDiagnosis);
+                EnableVisitCheckupFields(!isFinalized);
+
+                if (isFinalized)
+                {
+                    SetVisitAndOrderTextWarning(
+                        "This visit has a final diagnosis and cannot be edited.");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetVisitAndOrderTextWarning("The visit could not be loaded: " + ex.Message);
+            }
         }
     }
 }

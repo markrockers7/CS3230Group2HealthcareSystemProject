@@ -461,6 +461,7 @@
             visitCheckupAppointmentDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             visitCheckupAppointmentDataGridView.Size = new Size(330, 134);
             visitCheckupAppointmentDataGridView.TabIndex = 2;
+            visitCheckupAppointmentDataGridView.SelectionChanged += visitCheckupAppointmentDataGridView_SelectionChanged;
             // 
             // appointmentIdColumn
             // 
