@@ -65,7 +65,17 @@ public class TestDAL
         {
             const string visitSql =
                 "INSERT INTO Visit(appointment_id, systolic_bp, diastolic_bp, pulse,body_temperature, height, weight, symptoms, initial_diagnosis, final_diagnosis)" +
-                " VALUES(@appointmentId, @systolic, @diastolic, @pulse, @bodyTemperature, @height, @weight, @symptoms, @initialDiagnosis, @finalDiagnosis)";
+                " VALUES(@appointmentId, @systolic, @diastolic, @pulse, @bodyTemperature, @height, @weight, @symptoms, @initialDiagnosis, @finalDiagnosis)" +
+                " ON DUPLICATE KEY UPDATE" +
+                " systolic_bp = VALUES(systolic_bp)," +
+                " diastolic_bp = VALUES(diastolic_bp)," +
+                " pulse = VALUES(pulse)," +
+                " body_temperature = VALUES(body_temperature)," +
+                " height = VALUES(height)," +
+                " weight = VALUES(weight)," +
+                " symptoms = VALUES(symptoms)," +
+                " initial_diagnosis = VALUES(initial_diagnosis)," +
+                " final_diagnosis = VALUES(final_diagnosis)";
 
             using (var visitCommand = new MySqlCommand(visitSql, connection, transaction))
             {
@@ -88,7 +98,9 @@ public class TestDAL
 
             const string visitTestSql =
                 "INSERT INTO VisitTest(appointment_id, test_code, date_performed, result, isAbnormal)" +
-                " VALUES(@appointmentId, @testCode, @datePerformed, NULL, NULL)";
+                " VALUES(@appointmentId, @testCode, @datePerformed, NULL, NULL)" +
+                " ON DUPLICATE KEY UPDATE" +
+                " test_code = VALUES(test_code)";
 
             foreach (var test in selectedTests)
             {
