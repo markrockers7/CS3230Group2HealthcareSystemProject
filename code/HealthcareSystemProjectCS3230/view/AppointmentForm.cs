@@ -25,7 +25,6 @@ namespace HealthcareSystemProjectCS3230.view
             LoadDoctors();
             EnableAppointmentFields(false);
             ConfigureVisitAndOrderTestForm();
-            ConfigureFinalDiagnosisForm();
             ConfigureTestResultsForm();
             ConfigureViewVisitsForm();
         }
@@ -38,7 +37,6 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureForm();
             LoadDoctors();
             ConfigureVisitAndOrderTestForm();
-            ConfigureFinalDiagnosisForm();
             LoadExistingAppointment();
             ConfigureTestResultsForm();
             ConfigureViewVisitsForm();
@@ -640,102 +638,6 @@ namespace HealthcareSystemProjectCS3230.view
                 orderTestsErrorLabel.Text = "The tests could not be ordered: " + ex.Message;
             }
         }
-
-        private void ConfigureFinalDiagnosisForm()
-        {
-            ClearFinalDiagnosisForm();
-        }
-
-        private void ClearFinalDiagnosisForm()
-        {
-            ClearFinalDiagnosisWarning();
-            visitDataGridView.Rows.Clear();
-            finalDiagnosisPatientSearchControl.Clear();
-        }
-
-        private void SetFinalDiagnosisWarning(string message)
-        {
-            finalDiagnosisWarningLabel.Text = message;
-        }
-
-        private void ClearFinalDiagnosisWarning()
-        {
-            finalDiagnosisWarningLabel.Text = "";
-        }
-
-        private void finalDiagnosisPatientSearchControl_PatientSelected(object sender, EventArgs e)
-        {
-            Patient? patient = finalDiagnosisPatientSearchControl.SelectedPatient;
-            LoadFinalDiagnosisVisits(patient);
-        }
-
-        private void LoadFinalDiagnosisVisits(Patient? patient)
-        {
-            visitDataGridView.Rows.Clear();
-            ClearFinalDiagnosisWarning();
-            if (patient == null) return;
-
-            try
-            {
-                var visits = _appointmentController.GetVisitsWithNoFinalDiagnosis(patient.Id);
-                if (visits.Count == 0)
-                {
-                    SetFinalDiagnosisWarning("No appointments found for this patient.");
-                    return;
-                }
-
-                foreach (var visit in visits)
-                {
-                    if (visit.FinalDiagnosis == null)
-                    {
-                        visitDataGridView.Rows.Add(
-                            visit.AppointmentId,
-                            _appointmentController.GetDoctorNameFromVisit(visit.AppointmentId),
-                            visit.InitialDiagnosis ?? "(none)");
-                    }
-                }
-            }
-            catch (ArgumentException ex)
-            {
-                SetFinalDiagnosisWarning(ex.Message);
-            }
-        }
-
-        private void finalDiagnosisSubmitButton_Click(object sender, EventArgs e)
-        {
-            ClearFinalDiagnosisWarning();
-            var finalDiagnosis = finalDiagnosisTextBox.Text;
-            if (string.IsNullOrWhiteSpace(finalDiagnosis))
-            {
-                SetFinalDiagnosisWarning("Please enter a final diagnosis.");
-                return;
-            }
-
-            if (visitDataGridView.SelectedRows.Count == 0 || visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value == null)
-            {
-                SetFinalDiagnosisWarning("Please select a visit.");
-                return;
-            }
-
-            var visitId = Convert.ToInt32(visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value);
-            try
-            {
-                if (_appointmentController.UpdateFinalDiagnosis(finalDiagnosis, visitId))
-                {
-                    MessageBox.Show("Final diagnosis updated successfully.");
-                    ClearFinalDiagnosisForm();
-                }
-                else
-                {
-                    SetFinalDiagnosisWarning("Failed to update final diagnosis.");
-                }
-            }
-            catch (Exception ex)
-            {
-                SetFinalDiagnosisWarning("An error occurred while updating the final diagnosis: " + ex.Message);
-            }
-        }
-
         private Patient? _testResultsPatient;
 
         private VisitSummary? TestResultsSelectedVisit =>
