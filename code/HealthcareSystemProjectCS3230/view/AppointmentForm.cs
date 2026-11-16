@@ -415,26 +415,10 @@ namespace HealthcareSystemProjectCS3230.view
         private void ConfigureVisitAndOrderTestForm()
         {
             ClearVisitAndOrderTestError();
-            orderTestsUnorderedTestsCheckedListBox.DataSource = null;
-            orderTestsUnorderedTestsCheckedListBox.Items.Clear();
-            orderTestsAlreadyOrderedTestsCheckedListBox.DataSource = null;
-            orderTestsAlreadyOrderedTestsCheckedListBox.Items.Clear();
-            orderTestsErrorLabel.Text = string.Empty;
-
-            try
-            {
-                List<Test> tests = _appointmentController.GetTests();
-
-                orderTestsUnorderedTestsCheckedListBox.DisplayMember = nameof(Test.Name);
-                orderTestsUnorderedTestsCheckedListBox.ValueMember = nameof(Test.TestCode);
-                orderTestsAlreadyOrderedTestsCheckedListBox.DisplayMember = nameof(Test.Name);
-                orderTestsAlreadyOrderedTestsCheckedListBox.ValueMember = nameof(Test.TestCode);
-                orderTestsUnorderedTestsCheckedListBox.DataSource = tests;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Could not load tests: " + ex.Message, "Error");
-            }
+            orderTestsUnorderedTestsCheckedListBox.DisplayMember = nameof(Test.Name);
+            orderTestsUnorderedTestsCheckedListBox.ValueMember = nameof(Test.TestCode);
+            orderTestsAlreadyOrderedTestsCheckedListBox.DisplayMember = nameof(Test.Name);
+            orderTestsAlreadyOrderedTestsCheckedListBox.ValueMember = nameof(Test.TestCode);
         }
 
         private void ClearVisitAndOrderTestError()
@@ -944,6 +928,9 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void orderTestsAppointmentGrid_SelectionChanged(object sender, EventArgs e)
         {
+            orderTestsUnorderedTestsCheckedListBox.DataSource = null;
+            orderTestsAlreadyOrderedTestsCheckedListBox.DataSource = null;
+
             if (orderTestsVisitGrid.SelectedRows.Count == 0 ||
                 orderTestsVisitGrid.SelectedRows[0]
                     .Cells[nameof(orderTestsAppointmentIdColumn)].Value == null)
