@@ -179,6 +179,8 @@ CREATE TABLE Appointment (
 
 
 DROP PROCEDURE IF EXISTS GetAppointmentsForPatient;
+DROP PROCEDURE IF EXISTS GetAppointmentsByPatientId;
+DROP PROCEDURE IF EXISTS AddTestToVisit;
 
 DELIMITER $
 
@@ -196,6 +198,13 @@ BEGIN
     JOIN Person p ON p.person_id = d.person_id
     WHERE a.patient_id = p_patient_id
     ORDER BY a.appointment_datetime DESC;
+END $
+
+CREATE PROCEDURE GetAppointmentsByPatientId(IN patientId INT)
+BEGIN
+	SELECT appointment_id, doctor_id, patient_id, appointment_datetime, reason
+    FROM Appointment a
+    WHERE a.patient_id = patientId;
 END $
 
 CREATE PROCEDURE AddTestToVisit(
