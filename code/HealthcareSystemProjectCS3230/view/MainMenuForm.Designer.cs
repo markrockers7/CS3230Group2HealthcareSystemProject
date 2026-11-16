@@ -35,6 +35,7 @@
             nurseManagerButton = new Button();
             findAppointmentButton = new Button();
             LogoutButton = new Button();
+            statisticsButton = new Button();
             SuspendLayout();
             // 
             // appointmentButton
@@ -78,7 +79,7 @@
             // 
             // nurseManagerButton
             // 
-            nurseManagerButton.Location = new Point(12, 289);
+            nurseManagerButton.Location = new Point(231, 198);
             nurseManagerButton.Name = "nurseManagerButton";
             nurseManagerButton.Size = new Size(126, 39);
             nurseManagerButton.TabIndex = 5;
@@ -107,11 +108,21 @@
             LogoutButton.UseVisualStyleBackColor = true;
             LogoutButton.Click += LogoutButton_Click;
             // 
+            // statisticsButton
+            // 
+            statisticsButton.Location = new Point(393, 199);
+            statisticsButton.Name = "statisticsButton";
+            statisticsButton.Size = new Size(126, 39);
+            statisticsButton.TabIndex = 8;
+            statisticsButton.Text = "Test Statistics";
+            statisticsButton.UseVisualStyleBackColor = true;
+            // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(statisticsButton);
             Controls.Add(LogoutButton);
             Controls.Add(nurseManagerButton);
             Controls.Add(findAppointmentButton);
@@ -134,5 +145,6 @@
         private Button nurseManagerButton;
         private Button findAppointmentButton;
         private Button LogoutButton;
+        private Button statisticsButton;
     }
 }
