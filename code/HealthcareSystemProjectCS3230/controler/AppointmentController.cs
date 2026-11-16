@@ -139,7 +139,21 @@ public class AppointmentController
     }
 
     /*
-     * Saves the visit and any selected tests. Database access remains in the DAL.
+     * Validates and saves a visit and its selected tests. An existing visit is updated.
+     * A null or whitespace final diagnosis is stored as no final diagnosis.
+     * Throws ArgumentException when the appointment or numeric values are invalid, or when symptoms are blank.
+     * Throws ArgumentNullException when selectedTests is null.
+     * @param appointmentId The ID of the appointment associated with the visit.
+     * @param systolic The systolic blood pressure; must be greater than zero.
+     * @param diastolic The diastolic blood pressure; must be greater than zero.
+     * @param pulse The pulse rate; must be greater than zero.
+     * @param bodyTemperature The body temperature; must be greater than zero.
+     * @param height The patient's height; must be greater than zero.
+     * @param weight The patient's weight; must be greater than zero.
+     * @param symptoms The patient's symptoms; must not be blank.
+     * @param initialDiagnosis The initial diagnosis.
+     * @param finalDiagnosis The final diagnosis, or null or whitespace to clear it.
+     * @param selectedTests The tests to order for the visit.
      */
     public void SaveVisitAndTests(
         int appointmentId,
@@ -181,8 +195,11 @@ public class AppointmentController
     }
 
     /*
-     * Adds selected tests to an existing visit.
-     * Database access and the transaction remain in the DAL.
+     * Validates and adds selected tests to an existing visit without replacing tests already ordered.
+     * Throws ArgumentException when the appointment ID is invalid, no tests are selected, or a test code is blank.
+     * The DAL throws ArgumentException when the visit does not exist or already has a final diagnosis.
+     * @param appointmentId The ID of the existing visit (appointment).
+     * @param selectedTests The tests to add.
      */
     public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
     {
@@ -289,6 +306,13 @@ public class AppointmentController
             }
     }
 
+    /**
+     * Retrieves all appointments for a patient and includes each doctor's display name.
+     * If a doctor cannot be matched, the returned view uses "Unknown" as the doctor's name.
+     * @param patientId The ID of the patient.
+     * @return A list of AppointmentView objects representing the patient's appointments.
+     * @throws ArgumentException If no appointments are found for the patient.
+     */
     public List<AppointmentView> GetAllPatientAppointments(int patientId)
     {
         var appointments = appointmentsDAL.GetAppointmentsByPatientId(patientId);
@@ -314,6 +338,12 @@ public class AppointmentController
         return appointmentViews;
     }
 
+    /**
+     * Determines whether every ordered test in a visit has a nonblank result.
+     * If the visit has no ordered tests, this returns true because no test lacks a result.
+     * @param appointmentId The ID of the appointment associated with the visit.
+     * @return True if every retrieved test has a nonblank result; otherwise false.
+     */
     public bool DoAllTestsInVisitHaveAResult(int appointmentId)
     {
         var allTests = testDAL.GetVisitTestResults(appointmentId);
@@ -354,15 +384,21 @@ public class AppointmentController
     }
 
     /*
- * Gets all of a patient's visits, with or without ordered tests.
- * @param patientId The ID of the patient
- * @return List of VisitSummary objects, newest first
- */
+     * Gets all of a patient's visits, with or without ordered tests.
+     * @param patientId The ID of the patient
+     * @return List of VisitSummary objects, newest first
+     */
     public List<VisitSummary> GetAllVisitsForPatient(int patientId)
     {
         return testDAL.GetVisitSummariesForPatient(patientId, onlyWithTests: false);
     }
 
+     /**
+      * Gets every visit for a patient and its associated tests.
+      * @param patientId The ID of the patient.
+      * @return A dictionary mapping each visit to its test results. Visits without ordered
+      *         tests have an empty list, and visits are represented by their VisitSummary.
+      */
     public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
     {
         return testDAL.GetAllVisitsAndTheirTestsForPatient(patientId);

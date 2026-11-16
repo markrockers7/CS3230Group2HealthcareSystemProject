@@ -50,7 +50,11 @@ public class TestDAL
      * @param weight The weight.
      * @param symptoms The symptoms.
      * @param initialDiagnosis The initial diagnosis.
+     * @param finalDiagnosis The final diagnosis, or null or whitespace to clear it.
      * @param selectedTests The selected tests.
+     * Updates an existing visit when the appointment already has a visit record.
+     * Adds each selected test if it has not already been ordered for the visit.
+     * Commits all visit and test changes together, or rolls them back if a database error occurs.
      */
     public void SaveVisitAndTests(int appointmentId, int systolic, int diastolic, int pulse,
         decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis, string? finalDiagnosis,
@@ -124,6 +128,7 @@ public class TestDAL
      * Adds tests to an existing visit without changing tests already ordered for it.
      * @param appointmentId The ID of the existing visit (appointment).
      * @param selectedTests The tests to add.
+     * Throws an ArgumentException if the visit does not exist or already has a final diagnosis.
      */
     public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
     {
@@ -194,9 +199,10 @@ public class TestDAL
     }
 
     /*
-     * Gets all the visits that don't already have a final diagnosis.
+     * Gets all visits for a patient that do not already have a final diagnosis.
      * @param patientId The ID of the patient
-     * @return List of Visit objects that meet the criteria
+     * @return List of Visit objects with a null final diagnosis; visits may have ordered
+     *         tests with or without results
      */
     public List<Visit> GetVisitsWithNoFinalDiagnosis(int patientId)
     {
@@ -229,7 +235,8 @@ public class TestDAL
  * Gets a patient's visits with the visit date, doctor's name, and diagnoses.
  * @param patientId The ID of the patient
  * @param onlyWithTests If true, only returns visits that have at least one ordered test
- * @return List of VisitSummary objects, newest first
+     * @return List of VisitSummary objects, newest first. If onlyWithTests is true,
+     *         only visits with at least one ordered test are returned; otherwise all visits are returned.
  */
     public List<VisitSummary> GetVisitSummariesForPatient(int patientId, bool onlyWithTests = true)
     {
@@ -273,6 +280,12 @@ public class TestDAL
         return visits;
     }
 
+    /*
+     * Gets every visit for a patient and the ordered tests associated with each visit.
+     * @param patientId The ID of the patient.
+     * @return A dictionary whose keys are the patient's visits and whose values are the
+     *         corresponding test results. Visits without ordered tests have an empty list.
+     */
     public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
     {
         var visitDictionary = new Dictionary<VisitSummary, List<VisitTestResult>>();
