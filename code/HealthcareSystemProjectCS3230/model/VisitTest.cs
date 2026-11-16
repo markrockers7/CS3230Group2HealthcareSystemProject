@@ -1,8 +1,8 @@
 ﻿namespace HealthcareSystemProjectCS3230.model;
 
-/*
- * Represents a visit to a healthcare provider, including details such as the appointment ID, blood pressure, pulse, body temperature, height, weight, symptoms, and diagnoses.
- */
+/// <summary>
+/// Represents a visit to a healthcare provider, including details such as the appointment ID, blood pressure, pulse, body temperature, height, weight, symptoms, and diagnoses.
+/// </summary>
 public class VisitTest
 {
     public int AppointmentId { get; set; }

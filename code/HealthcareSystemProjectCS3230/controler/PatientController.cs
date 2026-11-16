@@ -9,15 +9,14 @@ namespace HealthcareSystemProjectCS3230.controler
     public class PatientController
     {
         private PatientsDAL patientsDAL = new PatientsDAL();
-        /*
-         * Finds patients based on the provided search criteria (first and last name, the date, or both must be provided).
-         * Throws ArgumentException if the search criteria are invalid.
-         *
-         * @param firstName The first name of the patient (optional).
-         * @param lastName The last name of the patient (optional).
-         * @param dateOfBirth The date of birth of the patient (optional).
-         * @return A list of patients matching the search criteria.
-         */
+        /// <summary>
+        /// Finds patients based on the provided search criteria (first and last name, the date, or both must be provided).
+        /// </summary>
+        /// <exception cref="ArgumentException">Thrown if the search criteria are invalid.</exception>"
+        /// <param name="firstName">The first name of the patient (optional).</param>
+        /// <param name="lastName">The last name of the patient (optional).</param>
+        /// <param name="dateOfBirth">The date of birth of the patient (optional).</param>
+        /// <returns>A list of patients matching the search criteria.</returns>
         public List<Patient> FindPatients(string? firstName, string? lastName, DateTime? dateOfBirth)
         {
             var hasFirstName = !string.IsNullOrWhiteSpace(firstName);
@@ -46,32 +45,30 @@ namespace HealthcareSystemProjectCS3230.controler
             return patientsDAL.GetPatientsByName(firstName, lastName);
         }
 
-        /*
-         * Retrieves a list of all patients from the database.
-         *
-         * @return A list of all patients.
-         */
+        /// <summary>
+        /// Retrieves a list of all patients from the database.
+        /// </summary>
+        /// <returns>A list of all patients.</returns>
         public List<Patient> GetAllPatients()
         {
             return patientsDAL.GetAllPatients();
         }
-        /*
-         * Retrieves a patient by their id.
-         *
-         * @param id The unique identifier of the patient.
-         * @return The patient with the specified ID, or null if not found.
-         */
+        /// <summary>
+        /// Retrieves a patient by their id.
+        /// </summary>
+        /// <param name="id">The unique identifier of the patient.</param>
+        /// <returns>The patient with the specified ID, or null if not found.</returns>
         public Patient? GetPatientById(int id)
         {
             return patientsDAL.GetPatientByPatientId(id);
         }
 
-        /*
-         * Adds a new patient to the database
-         * Throws ArgumentException if validation fails.
-         * 
-         * @param p The Patient object to be added.
-         */
+        /// <summary>
+        /// Adds a new patient to the database.
+        /// </summary>
+        /// <param name="p">The Patient object to be added.</param>
+        /// <exception cref="ArgumentException">Thrown if validation fails.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if an error occurs while saving the patient.</exception>
         public void AddPatient(Patient p)
         {
             ValidatePatient(p);
@@ -79,12 +76,14 @@ namespace HealthcareSystemProjectCS3230.controler
             if (!ok) throw new InvalidOperationException("An error occurred while saving the patient.");
         }
 
-        /*
-         * Updates an existing patient in the database
-         * Throws ArgumentException if validation fails.
-         * 
-         * @param p The Patient object to be updated.
-         */
+        /// <summary>
+        /// Updates an existing patient in the database.
+        /// </summary>
+        /// <param name="p">The Patient object to be updated.</param>
+        /// <exception cref="ArgumentException">Thrown if validation fails.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if an error occurs while updating the patient.</exception>
+        /// <exception cref="ArgumentException">Thrown if validation fails.</exception>
+        /// <param name="p">The Patient object to be updated.</param>
         public void UpdatePatient(Patient p)
         {
             ValidatePatient(p);

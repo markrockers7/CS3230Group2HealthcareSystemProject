@@ -4,9 +4,9 @@ using System.Text;
 
 namespace HealthcareSystemProjectCS3230.model
 {
-    /*
-     * Represents a summary of an appointment, including details such as the appointment ID, date and time, doctor information, reason for the appointment, and whether the appointment can be edited.
-     */
+    /// <summary>
+    /// Represents a summary of an appointment, including details such as the appointment ID, date and time, doctor information, reason for the appointment, and whether the appointment can be edited.
+    /// </summary>
     public class VisitSummary
     {
         public int AppointmentId { get; set; }

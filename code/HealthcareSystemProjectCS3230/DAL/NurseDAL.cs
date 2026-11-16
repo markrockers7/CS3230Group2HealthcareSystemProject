@@ -8,10 +8,10 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class NurseDAL
     {
-        /*
-         * Retrieves a list of all nurses from the database.
-         * @returns A list of Nurse objects.
-         */
+        /// <summary>
+        /// Retrieves a list of all nurses from the database.
+        /// </summary>
+        /// <returns>A list of Nurse objects.</returns>
         public List<Nurse> GetAllNurses()
         {
             var nurses = new List<Nurse>();
@@ -50,11 +50,11 @@ namespace HealthcareSystemProjectCS3230.DAL
             return nurses;
         }
 
-        /*
-         * Retrieves a nurse from the database by their ID.
-         * @param id The ID of the nurse to retrieve.
-         * @returns A Nurse object if found, otherwise null.
-         */
+        /// <summary>
+        /// Retrieves a nurse from the database by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the nurse to retrieve.</param>
+        /// <returns>A Nurse object if found, otherwise null.</returns>
         public Nurse GetNurseByID(int id)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -97,12 +97,12 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return null;
         }
-        /*
-         * Adds a new nurse to the database.
-         * @param nurse The nurse object to add.
-         * @param password The password for the nurse's account.
-         * @returns true if the nurse was added successfully, otherwise false.
-         */
+        /// <summary>
+        /// Adds a new nurse to the database.
+        /// </summary>
+        /// <param name="nurse">The nurse object to add.</param>
+        /// <param name="password">The password for the nurse's account.</param>
+        /// <returns>true if the nurse was added successfully, otherwise false.</returns>
         public bool AddNurse(Nurse nurse, string password)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -167,11 +167,11 @@ namespace HealthcareSystemProjectCS3230.DAL
             }
         }
 
-        /*
-         * Updates an existing nurse in the database.
-         * @param nurse The nurse object with updated information.
-         * @returns true if the nurse was updated successfully, otherwise false.
-         */
+        /// <summary>
+        /// Updates an existing nurse in the database.
+        /// </summary>
+        /// <param name="nurse">The nurse object with updated information.</param>
+        /// <returns>true if the nurse was updated successfully, otherwise false.</returns>
         public bool UpdateNurse(Nurse nurse)
         {
            using var connection = new MySqlConnection(Connection.ConnectionString);

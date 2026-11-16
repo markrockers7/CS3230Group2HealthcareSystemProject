@@ -92,13 +92,13 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return null;
         }
-        /*
-         * Adds a new account to the database with the specified username, password, and account type.
-         * @param username The username for the new account.
-         * @param password The password for the new account.
-         * @param accountType The type of the account (e.g., "nurse", "administrator").
-         * @returns True if the account was successfully added; otherwise, false.
-         */
+        /// <summary>
+        /// Adds a new account to the database with the specified username, password, and account type.
+        /// </summary>
+        /// <param name="username">The username for the new account.</param>
+        /// <param name="password">The password for the new account.</param>
+        /// <param name="accountType">The type of the account (e.g., "nurse", "administrator").</param>
+        /// <returns>True if the account was successfully added; otherwise, false.</returns>
         public bool AddAccount(string username, string password, string accountType)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -111,6 +111,11 @@ namespace HealthcareSystemProjectCS3230.DAL
             int rowsAffected = command.ExecuteNonQuery();
             return rowsAffected > 0;
         }
+        /// <summary>
+        /// Gets the hashed version of the provided password.
+        /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <returns>The hashed password.</returns>
         public static string GetHashedPassword(string password)
         {
             var hashedPassword = SHA256.HashData(Encoding.UTF8.GetBytes(password));
