@@ -39,23 +39,23 @@ public class TestDAL
         return tests;
     }
 
-    /*
-     * Saves a visit and its associated tests to the database.
-     * @param appointmentId The ID of the appointment associated with the visit.
-     * @param systolic The systolic blood pressure.
-     * @param diastolic The diastolic blood pressure.
-     * @param pulse The pulse rate.
-     * @param bodyTemperature The body temperature.
-     * @param height The height.
-     * @param weight The weight.
-     * @param symptoms The symptoms.
-     * @param initialDiagnosis The initial diagnosis.
-     * @param finalDiagnosis The final diagnosis, or null or whitespace to clear it.
-     * @param selectedTests The selected tests.
-     * Updates an existing visit when the appointment already has a visit record.
-     * Adds each selected test if it has not already been ordered for the visit.
-     * Commits all visit and test changes together, or rolls them back if a database error occurs.
-     */
+    /// <summary>
+    /// Saves a visit and its associated tests to the database. Updates an existing visit
+    /// when the appointment already has a visit record and does not replace tests that
+    /// have already been ordered for the visit.
+    /// All visit and test changes are committed together or rolled back if a database error occurs.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the appointment associated with the visit.</param>
+    /// <param name="systolic">The systolic blood pressure.</param>
+    /// <param name="diastolic">The diastolic blood pressure.</param>
+    /// <param name="pulse">The pulse rate.</param>
+    /// <param name="bodyTemperature">The body temperature.</param>
+    /// <param name="height">The patient's height.</param>
+    /// <param name="weight">The patient's weight.</param>
+    /// <param name="symptoms">The patient's symptoms.</param>
+    /// <param name="initialDiagnosis">The initial diagnosis.</param>
+    /// <param name="finalDiagnosis">The final diagnosis, or null or whitespace to clear it.</param>
+    /// <param name="selectedTests">The tests to order for the visit.</param>
     public void SaveVisitAndTests(int appointmentId, int systolic, int diastolic, int pulse,
         decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis, string? finalDiagnosis,
         IReadOnlyCollection<Test> selectedTests)
@@ -124,12 +124,15 @@ public class TestDAL
         }
     }
 
-    /*
-     * Adds tests to an existing visit without changing tests already ordered for it.
-     * @param appointmentId The ID of the existing visit (appointment).
-     * @param selectedTests The tests to add.
-     * Throws an ArgumentException if the visit does not exist or already has a final diagnosis.
-     */
+    /// <summary>
+    /// Adds tests to an existing visit without changing tests already ordered for it.
+    /// Uses a database transaction and rolls back all additions if an error occurs.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the existing visit (appointment).</param>
+    /// <param name="selectedTests">The tests to add.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the visit does not exist or already has a final diagnosis.
+    /// </exception>
     public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
     {
         using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -231,13 +234,14 @@ public class TestDAL
         return visits;
     }
 
-    /*
- * Gets a patient's visits with the visit date, doctor's name, and diagnoses.
- * @param patientId The ID of the patient
- * @param onlyWithTests If true, only returns visits that have at least one ordered test
-     * @return List of VisitSummary objects, newest first. If onlyWithTests is true,
-     *         only visits with at least one ordered test are returned; otherwise all visits are returned.
- */
+    /// <summary>
+    /// Gets a patient's visits with the visit date, doctor's name, and diagnoses.
+    /// </summary>
+    /// <param name="patientId">The ID of the patient.</param>
+    /// <param name="onlyWithTests">
+    /// If true, only visits with at least one ordered test are returned; otherwise all visits are returned.
+    /// </param>
+    /// <returns>A list of visit summaries in newest-first order.</returns>
     public List<VisitSummary> GetVisitSummariesForPatient(int patientId, bool onlyWithTests = true)
     {
         var visits = new List<VisitSummary>();
@@ -280,12 +284,14 @@ public class TestDAL
         return visits;
     }
 
-    /*
-     * Gets every visit for a patient and the ordered tests associated with each visit.
-     * @param patientId The ID of the patient.
-     * @return A dictionary whose keys are the patient's visits and whose values are the
-     *         corresponding test results. Visits without ordered tests have an empty list.
-     */
+    /// <summary>
+    /// Gets every visit for a patient and the ordered tests associated with each visit.
+    /// </summary>
+    /// <param name="patientId">The ID of the patient.</param>
+    /// <returns>
+    /// A dictionary whose keys are the patient's visits and whose values are the corresponding
+    /// test results. Visits without ordered tests have an empty list.
+    /// </returns>
     public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
     {
         var visitDictionary = new Dictionary<VisitSummary, List<VisitTestResult>>();
