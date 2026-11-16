@@ -3,6 +3,7 @@ using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 using System.Globalization;
 using System.ComponentModel;
+using System.Text;
 
 namespace HealthcareSystemProjectCS3230.view
 {
@@ -16,7 +17,8 @@ namespace HealthcareSystemProjectCS3230.view
         private TimeSpan? _currentSlot;
         private int? _selectedPatientId;
 
-        // Create mode
+        private Dictionary<VisitSummary, List<VisitTestResult>> orderTestsTabVisitsAndTests;
+
         public AppointmentForm()
         {
             InitializeComponent();
@@ -24,12 +26,10 @@ namespace HealthcareSystemProjectCS3230.view
             LoadDoctors();
             EnableAppointmentFields(false);
             ConfigureVisitAndOrderTestForm();
-            ConfigureFinalDiagnosisForm();
             ConfigureTestResultsForm();
             ConfigureViewVisitsForm();
         }
 
-        // Edit mode
         public AppointmentForm(int appointmentId)
         {
             InitializeComponent();
@@ -38,18 +38,19 @@ namespace HealthcareSystemProjectCS3230.view
             ConfigureForm();
             LoadDoctors();
             ConfigureVisitAndOrderTestForm();
-            ConfigureFinalDiagnosisForm();
             LoadExistingAppointment();
             ConfigureTestResultsForm();
             ConfigureViewVisitsForm();
         }
 
-        // Edit mode, opened from Find Appointment with the patient already known
+        /**
+         * Edit mode, opened from Find Appointment with the patient already known
+         */
         public AppointmentForm(int appointmentId, Patient patient) : this(appointmentId)
         {
             patientNameTextBox.Text = patient.FirstName + " " + patient.LastName;
             patientDobTextBox.Text = patient.Birthdate.ToString("d");
-            patientSearchControl.Visible = false;
+            createAppointmentPatientSearchControl.Visible = false;
         }
 
         public void setLoginSession(LoginSession session)
@@ -60,7 +61,6 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ConfigureForm()
         {
-            // Past dates are only blocked when creating; an old appointment may be opened to view
             if (!_isEditMode)
             {
                 appointmentDatePicker.MinDate = DateTime.Today;
@@ -77,7 +77,6 @@ namespace HealthcareSystemProjectCS3230.view
         {
             try
             {
-                // Set Display/Value members first so SelectedValue is the doctor id right away
                 doctorComboBox.DisplayMember = nameof(DoctorView.FullName);
                 doctorComboBox.ValueMember = nameof(DoctorView.DoctorId);
                 doctorComboBox.DataSource = _appointmentController.GetDoctorsWithNames();
@@ -133,7 +132,7 @@ namespace HealthcareSystemProjectCS3230.view
             if (!_appointmentController.CanEditAppointment(appointment.DateTime))
             {
                 _isReadOnlyEdit = true;
-                patientSearchControl.Enabled = false;
+                createAppointmentPatientSearchControl.Enabled = false;
                 EnableAppointmentFields(false);
                 availabilityStatusLabel.Text = "This appointment cannot be edited on or after its date.";
                 return;
@@ -142,18 +141,20 @@ namespace HealthcareSystemProjectCS3230.view
             EnableAppointmentFields(true);
         }
 
-        // Shows an error and makes the whole form read-only
+        /// <summary>
+        /// Shows an error and makes the whole form read-only
+        /// </summary>
         private void LockForm(string message)
         {
             _isReadOnlyEdit = true;
-            patientSearchControl.Enabled = false;
+            createAppointmentPatientSearchControl.Enabled = false;
             EnableAppointmentFields(false);
             errorLabel.Text = message;
         }
 
         private void patientSearchControl_PatientSelected(object? sender, EventArgs e)
         {
-            Patient? patient = patientSearchControl.SelectedPatient;
+            Patient? patient = createAppointmentPatientSearchControl.SelectedPatient;
             errorLabel.Text = string.Empty;
 
             if (patient == null)
@@ -198,6 +199,33 @@ namespace HealthcareSystemProjectCS3230.view
             reasonTextBox.Enabled = enabled;
             bookButton.Enabled = enabled;
             appointmentTimeComboBox.Enabled = enabled && appointmentTimeComboBox.Items.Count > 0;
+        }
+
+        private void EnableVisitCheckupFields(bool enabled, bool canFinalize)
+        {
+            systolicTextBox.Enabled = enabled;
+            diastolicTextBox.Enabled = enabled;
+            pulseTextBox.Enabled = enabled;
+            bodyTemperatureTextBox.Enabled = enabled;
+            heightTextBox.Enabled = enabled;
+            weightTextBox.Enabled = enabled;
+            symptomsTextBox.Enabled = enabled;
+            initialDiagnosisTextBox.Enabled = enabled;
+            visitCheckupFinalDiagnosisTextBox.Enabled = enabled && canFinalize;
+            submitVisitButton.Enabled = enabled;
+        }
+
+        private void ClearVisitCheckupFields()
+        {
+            systolicTextBox.Clear();
+            diastolicTextBox.Clear();
+            pulseTextBox.Clear();
+            bodyTemperatureTextBox.Clear();
+            heightTextBox.Clear();
+            weightTextBox.Clear();
+            symptomsTextBox.Clear();
+            initialDiagnosisTextBox.Clear();
+            visitCheckupFinalDiagnosisTextBox.Clear();
         }
 
         private bool CanEditFields => _selectedPatientId.HasValue && !_isReadOnlyEdit;
@@ -329,7 +357,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ResetCreateAppointmentTab()
         {
-            patientSearchControl.Clear();
+            createAppointmentPatientSearchControl.Clear();
             ClearSelectedPatient();
             reasonTextBox.Clear();
             appointmentDatePicker.Value = DateTime.Today;
@@ -388,21 +416,10 @@ namespace HealthcareSystemProjectCS3230.view
         private void ConfigureVisitAndOrderTestForm()
         {
             ClearVisitAndOrderTestError();
-            testCheckedListBox.DataSource = null;
-            testCheckedListBox.Items.Clear();
-
-            try
-            {
-                List<Test> tests = _appointmentController.GetTests();
-
-                testCheckedListBox.DisplayMember = nameof(Test.Name);
-                testCheckedListBox.ValueMember = nameof(Test.TestCode);
-                testCheckedListBox.DataSource = tests;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Could not load tests: " + ex.Message, "Error");
-            }
+            orderTestsUnorderedTestsCheckedListBox.DisplayMember = nameof(Test.Name);
+            orderTestsUnorderedTestsCheckedListBox.ValueMember = nameof(Test.TestCode);
+            orderTestsAlreadyOrderedTestsCheckedListBox.DisplayMember = nameof(Test.Name);
+            orderTestsAlreadyOrderedTestsCheckedListBox.ValueMember = nameof(Test.TestCode);
         }
 
         private void ClearVisitAndOrderTestError()
@@ -410,16 +427,16 @@ namespace HealthcareSystemProjectCS3230.view
             visitAndOrderTestErrorLabel.Text = "";
         }
 
-        private void orderTestPatientSearch_PatientSelected(object sender, EventArgs e)
+        private void visitCheckupPatientSearch_PatientSelected(object sender, EventArgs e)
         {
-            appointmentDataGridView.Rows.Clear();
+            visitCheckupAppointmentDataGridView.Rows.Clear();
             ClearVisitAndOrderTestError();
-            Patient? patient = orderTestPatientSearchControl.SelectedPatient;
+            Patient? patient = visitCheckupPatientSearchControl.SelectedPatient;
             if (patient != null)
             {
                 try
                 {
-                    var appointments = _appointmentController.GetAppointmentsByPatientId(patient.Id);
+                    var appointments = _appointmentController.GetAllPatientAppointments(patient.Id);
                     if (appointments.Count == 0)
                     {
                         SetVisitAndOrderTextWarning("No appointments found for this patient.");
@@ -427,7 +444,7 @@ namespace HealthcareSystemProjectCS3230.view
                     }
                     foreach (var appt in appointments)
                     {
-                        appointmentDataGridView.Rows.Add(appt.AppointmentId, appt.DoctorName, appt.DateTime, appt.Reason);
+                        visitCheckupAppointmentDataGridView.Rows.Add(appt.AppointmentId, appt.DoctorName, appt.DateTime, appt.Reason);
                     }
                 }
                 catch (ArgumentException ex)
@@ -462,20 +479,7 @@ namespace HealthcareSystemProjectCS3230.view
             ClearVisitAndOrderTestError();
             try
             {
-                var selectedTests = testCheckedListBox.CheckedItems.Cast<Test>().ToList();
-                var hasOrderedTests = selectedTests.Count > 0;
-                
-                if (hasOrderedTests)
-                {
-                    var confirmOrderResult = ConfirmOrder();
-                    if (confirmOrderResult == DialogResult.Yes)
-                    {
-                        ScheduleVisitAndOrders(selectedTests);
-                    }
-                } else
-                {
-                    ScheduleVisitAndOrders(selectedTests);
-                }
+                ScheduleVisitAndOrders(new List<Test>());
             }
             catch (ArgumentException ex)
             {
@@ -494,14 +498,14 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ScheduleVisitAndOrders(List<Test> selectedTests)
         {
-            if (appointmentDataGridView.SelectedRows.Count == 0 ||
-                appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
+            if (visitCheckupAppointmentDataGridView.SelectedRows.Count == 0 ||
+                visitCheckupAppointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
             {
                 throw new ArgumentException("Please select an appointment.");
             }
 
             var selectedAppointmentId = Convert.ToInt32(
-                appointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value,
+                visitCheckupAppointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value,
                 CultureInfo.InvariantCulture);
 
             var systolic = ParseRequiredInteger(systolicTextBox, "systolic pressure");
@@ -521,9 +525,10 @@ namespace HealthcareSystemProjectCS3230.view
                 weight,
                 symptomsTextBox.Text,
                 initialDiagnosisTextBox.Text,
+                this.visitCheckupFinalDiagnosisTextBox.Text,
                 selectedTests);
 
-            MessageBox.Show("Visit and selected tests submitted.");
+            MessageBox.Show("Checkup submitted.");
             systolicTextBox.Clear();
             diastolicTextBox.Clear();
             pulseTextBox.Clear();
@@ -532,102 +537,92 @@ namespace HealthcareSystemProjectCS3230.view
             weightTextBox.Clear();
             symptomsTextBox.Clear();
             initialDiagnosisTextBox.Clear();
-            appointmentDataGridView.Rows.Clear();
-            orderTestPatientSearchControl.Clear();
+            visitCheckupAppointmentDataGridView.Rows.Clear();
+            visitCheckupPatientSearchControl.Clear();
 
-            for (int i = 0; i < testCheckedListBox.Items.Count; i++)
-            {
-                testCheckedListBox.SetItemChecked(i, false);
-            }
         }
 
-        private void ConfigureFinalDiagnosisForm()
-        {
-            ClearFinalDiagnosisForm();
-        }
+        private Patient? _orderTestsPatient;
 
-        private void ClearFinalDiagnosisForm()
+        private void orderTestsPatientSearchControl_PatientSelected(object? sender, EventArgs e)
         {
-            ClearFinalDiagnosisWarning();
-            visitDataGridView.Rows.Clear();
-            finalDiagnosisPatientSearchControl.Clear();
-        }
+            _orderTestsPatient = orderTestsPatientSearchControl.SelectedPatient;
+            orderTestsErrorLabel.Text = string.Empty;
+            orderTestsVisitGrid.Rows.Clear();
 
-        private void SetFinalDiagnosisWarning(string message)
-        {
-            finalDiagnosisWarningLabel.Text = message;
-        }
+            if (_orderTestsPatient == null)
+                return;
 
-        private void ClearFinalDiagnosisWarning()
-        {
-            finalDiagnosisWarningLabel.Text = "";
-        }
-
-        private void finalDiagnosisPatientSearchControl_PatientSelected(object sender, EventArgs e)
-        {
-            visitDataGridView.Rows.Clear();
-            ClearFinalDiagnosisWarning();
-            Patient? patient = finalDiagnosisPatientSearchControl.SelectedPatient;
-            if (patient == null) return;
             try
             {
-                var visits = _appointmentController.GetVisitsWithCompleteOrNoTestsForPatient(patient.Id);
-                if (visits.Count == 0)
+                orderTestsTabVisitsAndTests = _appointmentController.GetAllVisitsAndTheirTestsForPatient(_orderTestsPatient.Id);
+
+                foreach (var visit in orderTestsTabVisitsAndTests.Keys)
                 {
-                    SetFinalDiagnosisWarning("No appointments found for this patient.");
-                    return;
+                    orderTestsVisitGrid.Rows.Add(
+                        visit.AppointmentId,
+                        visit.DoctorName,
+                        visit.AppointmentDateTime);
                 }
 
-                var doctorNames = _appointmentController.GetDoctorsWithNames();
-                foreach (var visit in visits)
-                {
-                    if (visit.FinalDiagnosis == null && visit.InitialDiagnosis != null)
-                    {
-                        visitDataGridView.Rows.Add(visit.AppointmentId, _appointmentController.GetDoctorNameFromVisit(visit.AppointmentId), visit.InitialDiagnosis);
-                    }
-                }
-            }
-            catch (ArgumentException ex)
-            {
-                SetFinalDiagnosisWarning(ex.Message);
-            }
-        }
+                orderTestsVisitGrid.ClearSelection();
 
-        private void finalDiagnosisSubmitButton_Click(object sender, EventArgs e)
-        {
-            ClearFinalDiagnosisWarning();
-            var finalDiagnosis = finalDiagnosisTextBox.Text;
-            if (string.IsNullOrWhiteSpace(finalDiagnosis))
-            {
-                SetFinalDiagnosisWarning("Please enter a final diagnosis.");
-                return;
-            }
-
-            if (visitDataGridView.SelectedRows.Count == 0 || visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value == null)
-            {
-                SetFinalDiagnosisWarning("Please select a visit.");
-                return;
-            }
-
-            var visitId = Convert.ToInt32(visitDataGridView.SelectedRows[0].Cells[nameof(finalDiagnosisAppointmentIdColumn)].Value);
-            try
-            {
-                if (_appointmentController.UpdateFinalDiagnosis(finalDiagnosis, visitId))
-                {
-                    MessageBox.Show("Final diagnosis updated successfully.");
-                    ClearFinalDiagnosisForm();
-                }
-                else
-                {
-                    SetFinalDiagnosisWarning("Failed to update final diagnosis.");
-                }
+                if (orderTestsVisitGrid.Rows.Count == 0)
+                    orderTestsErrorLabel.Text = "No visits eligible for additional test orders were found.";
             }
             catch (Exception ex)
             {
-                SetFinalDiagnosisWarning("An error occurred while updating the final diagnosis: " + ex.Message);
+                orderTestsErrorLabel.Text = "Visits could not be loaded: " + ex.Message;
             }
         }
 
+        private void orderTestsSubmitButton_Click(object? sender, EventArgs e)
+        {
+            orderTestsErrorLabel.Text = string.Empty;
+
+            if (orderTestsVisitGrid.SelectedRows.Count == 0 ||
+                orderTestsVisitGrid.SelectedRows[0].Cells[nameof(orderTestsAppointmentIdColumn)].Value == null)
+            {
+                orderTestsErrorLabel.Text = "Please select a visit.";
+                return;
+            }
+
+            var selectedTests = orderTestsUnorderedTestsCheckedListBox.CheckedItems.Cast<Test>().ToList();
+            if (selectedTests.Count == 0)
+            {
+                orderTestsErrorLabel.Text = "Please select at least one test.";
+                return;
+            }
+
+            if (ConfirmOrder() != DialogResult.Yes)
+                return;
+
+            int visitId = Convert.ToInt32(
+                orderTestsVisitGrid.SelectedRows[0].Cells[nameof(orderTestsAppointmentIdColumn)].Value,
+                CultureInfo.InvariantCulture);
+
+            try
+            {
+                _appointmentController.AddTestsToVisit(visitId, selectedTests);
+
+                orderTestsUnorderedTestsCheckedListBox.Tag = null;
+                for (int index = 0; index < orderTestsUnorderedTestsCheckedListBox.Items.Count; index++)
+                {
+                    orderTestsUnorderedTestsCheckedListBox.SetItemChecked(index, false);
+                }
+
+                orderTestsPatientSearchControl_PatientSelected(null, EventArgs.Empty);
+                MessageBox.Show("Tests ordered successfully.", "Order Tests", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (ArgumentException ex)
+            {
+                orderTestsErrorLabel.Text = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                orderTestsErrorLabel.Text = "The tests could not be ordered: " + ex.Message;
+            }
+        }
         private Patient? _testResultsPatient;
 
         private VisitSummary? TestResultsSelectedVisit =>
@@ -714,7 +709,6 @@ namespace HealthcareSystemProjectCS3230.view
             ShowTestResultsSelectedTest();
         }
 
-        // Stops the grids from auto-selecting the first row
         private void testResultsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             testResultsVisitGrid.ClearSelection();
@@ -747,7 +741,6 @@ namespace HealthcareSystemProjectCS3230.view
 
             if (test.HasNormalRange)
             {
-                // Abnormal is calculated from the range, so the nurse can't change it
                 testResultsAbnormalCheckBox.Enabled = false;
                 UpdateTestResultsAbnormalPreview();
             }
@@ -775,7 +768,6 @@ namespace HealthcareSystemProjectCS3230.view
             UpdateTestResultsAbnormalPreview();
         }
 
-        // For tests with a range, checks the Abnormal box as the nurse types a number
         private void UpdateTestResultsAbnormalPreview()
         {
             var test = TestResultsSelectedTest;
@@ -787,7 +779,6 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (ArgumentException)
             {
-                // Not a number yet; leave unchecked until it is
                 testResultsAbnormalCheckBox.Checked = false;
             }
         }
@@ -916,7 +907,6 @@ namespace HealthcareSystemProjectCS3230.view
                 $"Final diagnosis: {visit.FinalDiagnosis ?? "(not entered yet)"}";
         }
 
-        // Shows abnormal test results in red so they stand out
         private void viewVisitsTestsGrid_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0 || e.CellStyle == null) return;
@@ -927,7 +917,6 @@ namespace HealthcareSystemProjectCS3230.view
             }
         }
 
-        // Stops the grids from auto-selecting the first row
         private void viewVisitsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             viewVisitsVisitGrid.ClearSelection();
@@ -936,6 +925,108 @@ namespace HealthcareSystemProjectCS3230.view
         private void viewVisitsTestsGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
             viewVisitsTestsGrid.ClearSelection();
+        }
+
+        private void orderTestsAppointmentGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            orderTestsUnorderedTestsCheckedListBox.DataSource = null;
+            orderTestsAlreadyOrderedTestsCheckedListBox.DataSource = null;
+
+            if (orderTestsVisitGrid.SelectedRows.Count == 0 ||
+                orderTestsVisitGrid.SelectedRows[0]
+                    .Cells[nameof(orderTestsAppointmentIdColumn)].Value == null)
+            {
+                return;
+            }
+
+            int visitId = Convert.ToInt32(
+                orderTestsVisitGrid.SelectedRows[0]
+                    .Cells[nameof(orderTestsAppointmentIdColumn)].Value,
+                CultureInfo.InvariantCulture);
+
+            var visitEntry = orderTestsTabVisitsAndTests
+                .FirstOrDefault(entry => entry.Key.AppointmentId == visitId);
+
+            if (visitEntry.Key == null)
+            {
+                return;
+            }
+
+            var allTests = _appointmentController.GetTests();
+
+            var orderedTestCodes = visitEntry.Value
+                .Select(test => test.TestCode)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            orderTestsUnorderedTestsCheckedListBox.DataSource =
+                allTests.Where(test => !orderedTestCodes.Contains(test.TestCode)).ToList();
+
+            orderTestsAlreadyOrderedTestsCheckedListBox.DataSource =
+                allTests.Where(test => orderedTestCodes.Contains(test.TestCode)).ToList();
+        }
+
+        private void visitCheckupAppointmentDataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            ClearVisitCheckupFields();
+            EnableVisitCheckupFields(true, true);
+            ClearVisitAndOrderTestError();
+
+            if (visitCheckupAppointmentDataGridView.SelectedRows.Count == 0 ||
+                visitCheckupAppointmentDataGridView.SelectedRows[0]
+                    .Cells[nameof(appointmentIdColumn)].Value == null)
+            {
+                return;
+            }
+
+            try
+            {
+                int appointmentId = Convert.ToInt32(
+                    visitCheckupAppointmentDataGridView.SelectedRows[0]
+                        .Cells[nameof(appointmentIdColumn)].Value,
+                    CultureInfo.InvariantCulture);
+
+                Visit? visit = _appointmentController.GetVisitById(appointmentId);
+                if (visit == null)
+                {
+                    // A visit has not yet been made for the selected appointment (new entry)
+                    return;
+                }
+
+                systolicTextBox.Text = visit.SystolicBp.ToString(CultureInfo.CurrentCulture);
+                diastolicTextBox.Text = visit.DiastolicBp.ToString(CultureInfo.CurrentCulture);
+                pulseTextBox.Text = visit.Pulse.ToString(CultureInfo.CurrentCulture);
+                bodyTemperatureTextBox.Text = visit.BodyTemperature.ToString(CultureInfo.CurrentCulture);
+                heightTextBox.Text = visit.Height.ToString(CultureInfo.CurrentCulture);
+                weightTextBox.Text = visit.Weight.ToString(CultureInfo.CurrentCulture);
+                symptomsTextBox.Text = visit.Symptoms;
+                initialDiagnosisTextBox.Text = visit.InitialDiagnosis ?? string.Empty;
+                visitCheckupFinalDiagnosisTextBox.Text = visit.FinalDiagnosis ?? string.Empty;
+
+                bool isFinalized = !string.IsNullOrWhiteSpace(visit.FinalDiagnosis);
+                bool canBeFinalized = this._appointmentController.DoAllTestsInVisitHaveAResult(visit.AppointmentId);
+                StringBuilder warningMessage = new StringBuilder("");
+                
+                EnableVisitCheckupFields(!isFinalized, canBeFinalized);
+
+                if (isFinalized)
+                {
+                    warningMessage.Append("This visit has a final diagnosis and cannot be edited.");
+                }
+                else if(!canBeFinalized)
+                {
+                    warningMessage.Append("Some tests for this visit do not have results yet: A final diagnosis cannot be entered.");
+                }
+
+
+                if (warningMessage.ToString().Length > 0)
+                {
+                    SetVisitAndOrderTextWarning(warningMessage.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                SetVisitAndOrderTextWarning("The visit could not be loaded: " + ex.Message);
+            }
         }
     }
 }

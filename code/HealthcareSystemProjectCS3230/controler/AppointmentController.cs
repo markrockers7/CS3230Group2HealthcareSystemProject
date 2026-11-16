@@ -151,6 +151,7 @@ public class AppointmentController
         decimal weight,
         string symptoms,
         string? initialDiagnosis,
+        string? finalDiagnosis,
         IReadOnlyCollection<Test> selectedTests)
     {
         if (appointmentId <= 0) throw new ArgumentException("Please select a valid appointment.");
@@ -175,7 +176,25 @@ public class AppointmentController
             weight,
             symptoms.Trim(),
             initialDiagnosis,
+            finalDiagnosis,
             selectedTests);
+    }
+
+    /*
+     * Adds selected tests to an existing visit.
+     * Database access and the transaction remain in the DAL.
+     */
+    public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
+    {
+        if (appointmentId <= 0) throw new ArgumentException("Please select a valid visit.");
+
+        if (selectedTests == null || selectedTests.Count == 0)
+            throw new ArgumentException("Please select at least one test.");
+
+        if (selectedTests.Any(test => string.IsNullOrWhiteSpace(test.TestCode)))
+            throw new ArgumentException("The selected tests are invalid.");
+
+        testDAL.AddTestsToVisit(appointmentId, selectedTests);
     }
 
     /*
@@ -270,46 +289,35 @@ public class AppointmentController
             }
     }
 
-    /*
-     * Validates the input data for booking or updating an appointment
-     * Throws an exception if any of the input data is invalid
-     * @param patientId The ID of the patient
-     */
-    public List<AppointmentView> GetAppointmentsByPatientId(int patientId)
+    public List<AppointmentView> GetAllPatientAppointments(int patientId)
     {
         var appointments = appointmentsDAL.GetAppointmentsByPatientId(patientId);
         if (appointments == null || appointments.Count == 0)
         {
             throw new ArgumentException("No appointments found for the given patient ID.");
         }
-
         var appointmentViews = new List<AppointmentView>();
         var doctorNames = GetDoctorsWithNames();
-        var scheduledVisits = testDAL.GetVisitsByPatientId(patientId);
         foreach (var appt in appointments)
         {
-                if (appt.DateTime.Date < DateTime.Now.Date)
-                {
-                    continue; // Skip past appointments
-                }
-                if (scheduledVisits.Any(v => v.AppointmentId == appt.AppointmentId))
-                {
-                    continue; // Skip appointments with scheduled visits
-                }
-
-                var appointmentView = new AppointmentView
-                {
-                    AppointmentId = appt.AppointmentId,
-                    PatientId = appt.PatientId,
-                    DoctorId = appt.DoctorId,
-                    DateTime = appt.DateTime,
-                    Reason = appt.Reason,
-                    DoctorName = doctorNames.FirstOrDefault(d => d.DoctorId == appt.DoctorId)?.FullName ?? "Unknown"
-                };
-                appointmentViews.Add(appointmentView);
+            var appointmentView = new AppointmentView
+            {
+                AppointmentId = appt.AppointmentId,
+                PatientId = appt.PatientId,
+                DoctorId = appt.DoctorId,
+                DateTime = appt.DateTime,
+                Reason = appt.Reason,
+                DoctorName = doctorNames.FirstOrDefault(d => d.DoctorId == appt.DoctorId)?.FullName ?? "Unknown"
+            };
+            appointmentViews.Add(appointmentView);
         }
-
         return appointmentViews;
+    }
+
+    public bool DoAllTestsInVisitHaveAResult(int appointmentId)
+    {
+        var allTests = testDAL.GetVisitTestResults(appointmentId);
+        return allTests.All(test => !string.IsNullOrWhiteSpace(test.Result));
     }
 
     private void EnsureSlotIsFree(int doctorId, DateTime appointmentDateTime, int? excludeAppointmentId = null)
@@ -346,44 +354,6 @@ public class AppointmentController
     }
 
     /*
-     * Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
-     * @param patientId The ID of the patient
-     * @return List of Visit objects that meet the criteria
-     */
-    public List<Visit> GetVisitsWithCompleteOrNoTestsForPatient(int patientId)
-    {
-        return testDAL.GetVisitsWithCompleteOrNoVisitTests(patientId);
-    }
-
-    /*
-     * Gets the name of the doctor associated with a visit.
-     * @param visitId the ID of the visit
-     * @return the name of the doctor associated with the visit
-     */
-    public string GetDoctorNameFromVisit(int visitId)
-    {
-        var doctors = GetDoctorsWithNames();
-        var appointment = GetAppointmentById(visitId);
-        if (appointment == null)
-        {
-            throw new ArgumentException("Appointment not found.");
-        }
-        var scheduledDoctor = doctors.FirstOrDefault(doctor => doctor.DoctorId == appointment.DoctorId);
-        return scheduledDoctor == null ? throw new ArgumentException("Doctor not found.") : scheduledDoctor.FullName;
-    }
-
-    /*
-     * Updates the Final Diagnosis for a visit.
-     * @param visitId The ID of the visit to update
-     * @param finalDiagnosis The new final diagnosis
-     * @returns true if the update was successful, false otherwise
-     */
-    public bool UpdateFinalDiagnosis(string finalDiagnosis, int visitId)
-    {
-        return appointmentsDAL.UpdateVisitFinalDiagnosis(finalDiagnosis, visitId);
-    }
-
-    /*
  * Gets all of a patient's visits, with or without ordered tests.
  * @param patientId The ID of the patient
  * @return List of VisitSummary objects, newest first
@@ -391,6 +361,11 @@ public class AppointmentController
     public List<VisitSummary> GetAllVisitsForPatient(int patientId)
     {
         return testDAL.GetVisitSummariesForPatient(patientId, onlyWithTests: false);
+    }
+
+    public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
+    {
+        return testDAL.GetAllVisitsAndTheirTestsForPatient(patientId);
     }
 
     /*
