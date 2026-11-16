@@ -19,5 +19,12 @@ namespace HealthcareSystemProjectCS3230.view
         {
             Close();
         }
+
+        private void generateButton_Click(object sender, EventArgs e)
+        {
+            var startDate = dateTimePicker1.Value;
+            var endDate = dateTimePicker2.Value;
+
+        }
     }
 }

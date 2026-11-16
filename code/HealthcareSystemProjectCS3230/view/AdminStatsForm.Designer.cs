@@ -147,6 +147,7 @@
             generateButton.TabIndex = 6;
             generateButton.Text = "Generate Report";
             generateButton.UseVisualStyleBackColor = true;
+            generateButton.Click += generateButton_Click;
             // 
             // exitButton
             // 
