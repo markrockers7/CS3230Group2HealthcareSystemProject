@@ -3,6 +3,7 @@ using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 using System.Globalization;
 using System.ComponentModel;
+using System.Text;
 
 namespace HealthcareSystemProjectCS3230.view
 {
@@ -200,7 +201,7 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentTimeComboBox.Enabled = enabled && appointmentTimeComboBox.Items.Count > 0;
         }
 
-        private void EnableVisitCheckupFields(bool enabled)
+        private void EnableVisitCheckupFields(bool enabled, bool canFinalize)
         {
             systolicTextBox.Enabled = enabled;
             diastolicTextBox.Enabled = enabled;
@@ -210,7 +211,7 @@ namespace HealthcareSystemProjectCS3230.view
             weightTextBox.Enabled = enabled;
             symptomsTextBox.Enabled = enabled;
             initialDiagnosisTextBox.Enabled = enabled;
-            visitCheckupFinalDiagnosisTextBox.Enabled = enabled;
+            visitCheckupFinalDiagnosisTextBox.Enabled = enabled && canFinalize;
             submitVisitButton.Enabled = enabled;
         }
 
@@ -967,7 +968,7 @@ namespace HealthcareSystemProjectCS3230.view
         private void visitCheckupAppointmentDataGridView_SelectionChanged(object sender, EventArgs e)
         {
             ClearVisitCheckupFields();
-            EnableVisitCheckupFields(true);
+            EnableVisitCheckupFields(true, true);
             ClearVisitAndOrderTestError();
 
             if (visitCheckupAppointmentDataGridView.SelectedRows.Count == 0 ||
@@ -1002,12 +1003,24 @@ namespace HealthcareSystemProjectCS3230.view
                 visitCheckupFinalDiagnosisTextBox.Text = visit.FinalDiagnosis ?? string.Empty;
 
                 bool isFinalized = !string.IsNullOrWhiteSpace(visit.FinalDiagnosis);
-                EnableVisitCheckupFields(!isFinalized);
+                bool canBeFinalized = this._appointmentController.DoAllTestsInVisitHaveAResult(visit.AppointmentId);
+                StringBuilder warningMessage = new StringBuilder("");
+                
+                EnableVisitCheckupFields(!isFinalized, canBeFinalized);
 
                 if (isFinalized)
                 {
-                    SetVisitAndOrderTextWarning(
-                        "This visit has a final diagnosis and cannot be edited.");
+                    warningMessage.Append("This visit has a final diagnosis and cannot be edited.");
+                }
+                else if(!canBeFinalized)
+                {
+                    warningMessage.Append("Some tests for this visit do not have results yet: A final diagnosis cannot be entered.");
+                }
+
+
+                if (warningMessage.ToString().Length > 0)
+                {
+                    SetVisitAndOrderTextWarning(warningMessage.ToString());
                 }
             }
             catch (Exception ex)
