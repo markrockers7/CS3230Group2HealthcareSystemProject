@@ -33,17 +33,10 @@
             label2 = new Label();
             dateTimePicker2 = new DateTimePicker();
             label3 = new Label();
-            dataGridView1 = new DataGridView();
-            testCode = new DataGridViewTextBoxColumn();
-            testName = new DataGridViewTextBoxColumn();
-            timesPerformed = new DataGridViewTextBoxColumn();
-            numOfAllTest = new DataGridViewTextBoxColumn();
-            testPercentage = new DataGridViewTextBoxColumn();
-            normalResults = new DataGridViewTextBoxColumn();
-            abnormalResults = new DataGridViewTextBoxColumn();
+            statsGridView = new DataGridView();
             generateButton = new Button();
             exitButton = new Button();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)statsGridView).BeginInit();
             SuspendLayout();
             // 
             // dateTimePicker1
@@ -74,7 +67,7 @@
             // 
             // dateTimePicker2
             // 
-            dateTimePicker2.Location = new Point(566, 78);
+            dateTimePicker2.Location = new Point(576, 78);
             dateTimePicker2.Name = "dateTimePicker2";
             dateTimePicker2.Size = new Size(200, 23);
             dateTimePicker2.TabIndex = 3;
@@ -82,62 +75,20 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(636, 60);
+            label3.Location = new Point(659, 60);
             label3.Name = "label3";
             label3.Size = new Size(57, 15);
             label3.TabIndex = 4;
             label3.Text = "End Date:";
             // 
-            // dataGridView1
+            // statsGridView
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { testCode, testName, timesPerformed, numOfAllTest, testPercentage, normalResults, abnormalResults });
-            dataGridView1.Location = new Point(25, 107);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(741, 302);
-            dataGridView1.TabIndex = 5;
-            // 
-            // testCode
-            // 
-            testCode.HeaderText = "Test Code";
-            testCode.Name = "testCode";
-            testCode.ReadOnly = true;
-            // 
-            // testName
-            // 
-            testName.HeaderText = "Test Name";
-            testName.Name = "testName";
-            testName.ReadOnly = true;
-            // 
-            // timesPerformed
-            // 
-            timesPerformed.HeaderText = "Times Performed";
-            timesPerformed.Name = "timesPerformed";
-            timesPerformed.ReadOnly = true;
-            // 
-            // numOfAllTest
-            // 
-            numOfAllTest.HeaderText = "Total Tests Performed";
-            numOfAllTest.Name = "numOfAllTest";
-            numOfAllTest.ReadOnly = true;
-            // 
-            // testPercentage
-            // 
-            testPercentage.HeaderText = "Test Percentage";
-            testPercentage.Name = "testPercentage";
-            testPercentage.ReadOnly = true;
-            // 
-            // normalResults
-            // 
-            normalResults.HeaderText = "Normal Results";
-            normalResults.Name = "normalResults";
-            normalResults.ReadOnly = true;
-            // 
-            // abnormalResults
-            // 
-            abnormalResults.HeaderText = "Abnormal Results";
-            abnormalResults.Name = "abnormalResults";
-            abnormalResults.ReadOnly = true;
+            statsGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            statsGridView.DataMember = "Statistic";
+            statsGridView.Location = new Point(25, 107);
+            statsGridView.Name = "statsGridView";
+            statsGridView.Size = new Size(751, 302);
+            statsGridView.TabIndex = 5;
             // 
             // generateButton
             // 
@@ -166,7 +117,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(exitButton);
             Controls.Add(generateButton);
-            Controls.Add(dataGridView1);
+            Controls.Add(statsGridView);
             Controls.Add(label3);
             Controls.Add(dateTimePicker2);
             Controls.Add(label2);
@@ -174,7 +125,7 @@
             Controls.Add(dateTimePicker1);
             Name = "AdminStatsForm";
             Text = "AdminStatsForm";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)statsGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -186,14 +137,7 @@
         private Label label2;
         private DateTimePicker dateTimePicker2;
         private Label label3;
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn testCode;
-        private DataGridViewTextBoxColumn testName;
-        private DataGridViewTextBoxColumn timesPerformed;
-        private DataGridViewTextBoxColumn numOfAllTest;
-        private DataGridViewTextBoxColumn testPercentage;
-        private DataGridViewTextBoxColumn normalResults;
-        private DataGridViewTextBoxColumn abnormalResults;
+        private DataGridView statsGridView;
         private Button generateButton;
         private Button exitButton;
     }
