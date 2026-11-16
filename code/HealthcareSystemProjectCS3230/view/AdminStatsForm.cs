@@ -12,6 +12,9 @@ namespace HealthcareSystemProjectCS3230.view
     public partial class AdminStatsForm : Form
     {
         private readonly StatisticsController statisticsController = new StatisticsController();
+        /// <summary>
+        /// Form constructor for AdminStatsForm. Initializes the form and its components.
+        /// </summary>
         public AdminStatsForm()
         {
             InitializeComponent();
