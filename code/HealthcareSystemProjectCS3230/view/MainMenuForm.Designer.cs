@@ -116,6 +116,7 @@
             statisticsButton.TabIndex = 8;
             statisticsButton.Text = "Test Statistics";
             statisticsButton.UseVisualStyleBackColor = true;
+            statisticsButton.Click += statisticsButton_Click;
             // 
             // MainMenuForm
             // 

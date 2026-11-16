@@ -74,13 +74,13 @@ namespace HealthcareSystemProjectCS3230.view
 
             var appointmentForm = new AppointmentForm();
             appointmentForm.setLoginSession(_loginSession);
-                appointmentForm.ShowDialog();
+            appointmentForm.ShowDialog();
 
 
             Show();
         }
 
-       
+
 
         private void registerPatientButton_Click(object sender, EventArgs e)
         {
@@ -124,6 +124,16 @@ namespace HealthcareSystemProjectCS3230.view
         private void LogoutButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void statisticsButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            var adminStatsForm = new AdminStatsForm();
+            adminStatsForm.ShowDialog();
+
+            Show();
         }
     }
 }
