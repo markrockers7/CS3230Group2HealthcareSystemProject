@@ -58,5 +58,10 @@ namespace HealthcareSystemProjectCS3230.view
             usernameTextBox.Clear();
             passwordTextBox.Clear();
         }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
