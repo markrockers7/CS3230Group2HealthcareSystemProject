@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using MySql.Data.MySqlClient;
 using HealthcareSystemProjectCS3230.model;
 
@@ -203,53 +204,64 @@ namespace HealthcareSystemProjectCS3230.DAL
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
-            using var transaction = connection.BeginTransaction();
             try
             {
-                // Insert Address
-                const string insertAddress =
-                    "INSERT INTO Address (street, city, zipcode, state) VALUES (@street, @city, @zipcode, @state)";
-                using var cmdAddr = new MySqlCommand(insertAddress, connection, transaction);
-                cmdAddr.Parameters.Add("@street", MySqlDbType.VarChar).Value = p.Address.Street;
-                cmdAddr.Parameters.Add("@city", MySqlDbType.VarChar).Value = p.Address.City;
-                cmdAddr.Parameters.Add("@zipcode", MySqlDbType.String).Value = p.Address.Zipcode;
-                cmdAddr.Parameters.Add("@state", MySqlDbType.String).Value = p.Address.State;
-                cmdAddr.ExecuteNonQuery();
+                using var command = new MySqlCommand("AddPatient", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add("@p_street", MySqlDbType.VarChar).Value = p.Address.Street;
+                command.Parameters.Add("@p_city", MySqlDbType.VarChar).Value = p.Address.City;
+                command.Parameters.Add("@p_zipcode", MySqlDbType.String).Value = p.Address.Zipcode;
+                command.Parameters.Add("@p_state", MySqlDbType.String).Value = p.Address.State;
+                command.Parameters.Add("@p_first_name", MySqlDbType.VarChar).Value = p.FirstName;
+                command.Parameters.Add("@p_last_name", MySqlDbType.VarChar).Value = p.LastName;
+                command.Parameters.Add("@p_birthdate", MySqlDbType.Date).Value = p.Birthdate;
+                command.Parameters.Add("@p_phone_number", MySqlDbType.String).Value = p.PhoneNumber;
+                command.Parameters.Add("@p_gender", MySqlDbType.String).Value = p.Gender;
+                command.Parameters.Add("@p_is_active", MySqlDbType.Bit).Value = p.IsActive ? 1 : 0;
+                command.ExecuteNonQuery();
+                //// Insert Address
+                //const string insertAddress =
+                //    "INSERT INTO Address (street, city, zipcode, state) VALUES (@street, @city, @zipcode, @state)";
+                //using var cmdAddr = new MySqlCommand(insertAddress, connection, transaction);
+                //cmdAddr.Parameters.Add("@street", MySqlDbType.VarChar).Value = p.Address.Street;
+                //cmdAddr.Parameters.Add("@city", MySqlDbType.VarChar).Value = p.Address.City;
+                //cmdAddr.Parameters.Add("@zipcode", MySqlDbType.String).Value = p.Address.Zipcode;
+                //cmdAddr.Parameters.Add("@state", MySqlDbType.String).Value = p.Address.State;
+                //cmdAddr.ExecuteNonQuery();
 
-                // get last address id
-                using var cmdLast = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction);
-                var addressId = Convert.ToInt32(cmdLast.ExecuteScalar());
+                //// get last address id
+                //using var cmdLast = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction);
+                //var addressId = Convert.ToInt32(cmdLast.ExecuteScalar());
 
-                // Insert Person
-                const string insertPerson =
-                    "INSERT INTO Person (first_name, last_name, birthdate, phone_number, address_id, gender) " +
-                    "VALUES (@first, @last, @birthdate, @phone, @addressId, @gender)";
-                using var cmdPer = new MySqlCommand(insertPerson, connection, transaction);
-                cmdPer.Parameters.Add("@first", MySqlDbType.VarChar).Value = p.FirstName;
-                cmdPer.Parameters.Add("@last", MySqlDbType.VarChar).Value = p.LastName;
-                cmdPer.Parameters.Add("@birthdate", MySqlDbType.Date).Value = p.Birthdate;
-                cmdPer.Parameters.Add("@phone", MySqlDbType.String).Value = p.PhoneNumber;
-                cmdPer.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
-                cmdPer.Parameters.Add("@gender", MySqlDbType.String).Value = p.Gender;
-                cmdPer.ExecuteNonQuery();
+                //// Insert Person
+                //const string insertPerson =
+                //    "INSERT INTO Person (first_name, last_name, birthdate, phone_number, address_id, gender) " +
+                //    "VALUES (@first, @last, @birthdate, @phone, @addressId, @gender)";
+                //using var cmdPer = new MySqlCommand(insertPerson, connection, transaction);
+                //cmdPer.Parameters.Add("@first", MySqlDbType.VarChar).Value = p.FirstName;
+                //cmdPer.Parameters.Add("@last", MySqlDbType.VarChar).Value = p.LastName;
+                //cmdPer.Parameters.Add("@birthdate", MySqlDbType.Date).Value = p.Birthdate;
+                //cmdPer.Parameters.Add("@phone", MySqlDbType.String).Value = p.PhoneNumber;
+                //cmdPer.Parameters.Add("@addressId", MySqlDbType.Int32).Value = addressId;
+                //cmdPer.Parameters.Add("@gender", MySqlDbType.String).Value = p.Gender;
+                //cmdPer.ExecuteNonQuery();
 
-                using var cmdLastPer = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction);
-                var personId = Convert.ToInt32(cmdLastPer.ExecuteScalar());
+                //using var cmdLastPer = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction);
+                //var personId = Convert.ToInt32(cmdLastPer.ExecuteScalar());
 
-                // Insert Patient
-                const string insertPatient =
-                    "INSERT INTO Patient (isActive, person_id) VALUES (@isActive, @personId)";
-                using var cmdPat = new MySqlCommand(insertPatient, connection, transaction);
-                cmdPat.Parameters.Add("@isActive", MySqlDbType.Bit).Value = p.IsActive ? 1 : 0;
-                cmdPat.Parameters.Add("@personId", MySqlDbType.Int32).Value = personId;
-                cmdPat.ExecuteNonQuery();
+                //// Insert Patient
+                //const string insertPatient =
+                //    "INSERT INTO Patient (isActive, person_id) VALUES (@isActive, @personId)";
+                //using var cmdPat = new MySqlCommand(insertPatient, connection, transaction);
+                //cmdPat.Parameters.Add("@isActive", MySqlDbType.Bit).Value = p.IsActive ? 1 : 0;
+                //cmdPat.Parameters.Add("@personId", MySqlDbType.Int32).Value = personId;
+                //cmdPat.ExecuteNonQuery();
 
-                transaction.Commit();
+                //transaction.Commit();
                 return true;
             }
             catch
             {
-                try { transaction.Rollback(); } catch { }
                 return false;
             }
         }

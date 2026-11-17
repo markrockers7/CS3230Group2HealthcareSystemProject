@@ -136,10 +136,8 @@ namespace HealthcareSystemProjectCS3230.DAL
             var appointments = new List<Appointment>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
-            const string query =
-                "SELECT appointment_id, doctor_id, patient_id, appointment_datetime, reason " +
-                "FROM Appointment WHERE patient_id = @patientId";
-            using var command = new MySqlCommand(query, connection);
+            using var command = new MySqlCommand("GetAppointmentsByPatientId", connection);
+            command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add("@patientId", MySqlDbType.Int32).Value = patientId;
             using var reader = command.ExecuteReader();
             while (reader.Read())
@@ -156,25 +154,6 @@ namespace HealthcareSystemProjectCS3230.DAL
             return appointments;
         }
 
-        /*
-         * Updates the final diagnosis for a visit.
-         *
-         * @param finalDiagnosis The final diagnosis to update.
-         * @return True if the update was successful, false otherwise.
-         */
-        public bool UpdateVisitFinalDiagnosis(string finalDiagnosis, int visitId)
-        {
-            using var connection = new MySqlConnection(Connection.ConnectionString);
-            connection.Open();
-            const string query =
-                "UPDATE Visit " +
-                "SET final_diagnosis = @finalDiagnosis " +
-                "WHERE appointment_id = @visitId";
-            using var command = new MySqlCommand(query, connection);
-            command.Parameters.Add("@finalDiagnosis", MySqlDbType.VarChar).Value = finalDiagnosis;
-            command.Parameters.Add("@visitId", MySqlDbType.Int32).Value = visitId;
-            return command.ExecuteNonQuery() > 0;
-        }
         /*
          * Retrieves a list of visits for a specific patient.
          *
