@@ -1,4 +1,7 @@
-﻿namespace HealthcareSystemProjectCS3230.view
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace HealthcareSystemProjectCS3230.view
 {
     partial class AppointmentForm
     {
@@ -20,6 +23,24 @@
 
         private void InitializeComponent()
         {
+            appointmentPatientErrorLabel = new Label();
+            appointmentDoctorErrorLabel = new Label();
+            appointmentDateErrorLabel = new Label();
+            appointmentTimeErrorLabel = new Label();
+            appointmentReasonErrorLabel = new Label();
+            visitAppointmentErrorLabel = new Label();
+            systolicErrorLabel = new Label();
+            diastolicErrorLabel = new Label();
+            pulseErrorLabel = new Label();
+            bodyTemperatureErrorLabel = new Label();
+            heightErrorLabel = new Label();
+            weightErrorLabel = new Label();
+            symptomsErrorLabel = new Label();
+            orderTestsVisitErrorLabel = new Label();
+            orderTestsSelectionErrorLabel = new Label();
+            testResultsVisitErrorLabel = new Label();
+            testResultsTestErrorLabel = new Label();
+            testResultsValueErrorLabel = new Label();
             loggedInLabel = new Label();
             titleLabel = new Label();
             createAppointmentPatientSearchControl = new PatientSearchControl();
@@ -176,7 +197,7 @@
             // patientDobLabel
             // 
             patientDobLabel.AutoSize = true;
-            patientDobLabel.Location = new Point(6, 391);
+            patientDobLabel.Location = new Point(6, 409);
             patientDobLabel.Name = "patientDobLabel";
             patientDobLabel.Size = new Size(76, 15);
             patientDobLabel.TabIndex = 4;
@@ -184,7 +205,7 @@
             // 
             // patientDobTextBox
             // 
-            patientDobTextBox.Location = new Point(116, 388);
+            patientDobTextBox.Location = new Point(116, 406);
             patientDobTextBox.Name = "patientDobTextBox";
             patientDobTextBox.ReadOnly = true;
             patientDobTextBox.Size = new Size(300, 23);
@@ -195,7 +216,7 @@
             // 
             inactivePatientLabel.AutoSize = true;
             inactivePatientLabel.ForeColor = Color.Firebrick;
-            inactivePatientLabel.Location = new Point(116, 416);
+            inactivePatientLabel.Location = new Point(116, 434);
             inactivePatientLabel.Name = "inactivePatientLabel";
             inactivePatientLabel.Size = new Size(0, 15);
             inactivePatientLabel.TabIndex = 6;
@@ -203,7 +224,7 @@
             // doctorLabel
             // 
             doctorLabel.AutoSize = true;
-            doctorLabel.Location = new Point(6, 446);
+            doctorLabel.Location = new Point(6, 466);
             doctorLabel.Name = "doctorLabel";
             doctorLabel.Size = new Size(46, 15);
             doctorLabel.TabIndex = 3;
@@ -212,7 +233,7 @@
             // doctorComboBox
             // 
             doctorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            doctorComboBox.Location = new Point(116, 443);
+            doctorComboBox.Location = new Point(116, 463);
             doctorComboBox.Name = "doctorComboBox";
             doctorComboBox.Size = new Size(300, 23);
             doctorComboBox.TabIndex = 1;
@@ -221,7 +242,7 @@
             // dateLabel
             // 
             dateLabel.AutoSize = true;
-            dateLabel.Location = new Point(6, 486);
+            dateLabel.Location = new Point(6, 520);
             dateLabel.Name = "dateLabel";
             dateLabel.Size = new Size(34, 15);
             dateLabel.TabIndex = 7;
@@ -230,7 +251,7 @@
             // appointmentDatePicker
             // 
             appointmentDatePicker.Format = DateTimePickerFormat.Short;
-            appointmentDatePicker.Location = new Point(116, 483);
+            appointmentDatePicker.Location = new Point(116, 517);
             appointmentDatePicker.Name = "appointmentDatePicker";
             appointmentDatePicker.Size = new Size(300, 23);
             appointmentDatePicker.TabIndex = 2;
@@ -239,7 +260,7 @@
             // timeSlotLabel
             // 
             timeSlotLabel.AutoSize = true;
-            timeSlotLabel.Location = new Point(6, 526);
+            timeSlotLabel.Location = new Point(6, 574);
             timeSlotLabel.Name = "timeSlotLabel";
             timeSlotLabel.Size = new Size(59, 15);
             timeSlotLabel.TabIndex = 8;
@@ -249,7 +270,7 @@
             // 
             appointmentTimeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             appointmentTimeComboBox.FormattingEnabled = true;
-            appointmentTimeComboBox.Location = new Point(116, 523);
+            appointmentTimeComboBox.Location = new Point(116, 571);
             appointmentTimeComboBox.Name = "appointmentTimeComboBox";
             appointmentTimeComboBox.Size = new Size(300, 23);
             appointmentTimeComboBox.TabIndex = 3;
@@ -258,7 +279,7 @@
             // 
             availabilityStatusLabel.AutoSize = true;
             availabilityStatusLabel.ForeColor = Color.Firebrick;
-            availabilityStatusLabel.Location = new Point(116, 549);
+            availabilityStatusLabel.Location = new Point(116, 625);
             availabilityStatusLabel.Name = "availabilityStatusLabel";
             availabilityStatusLabel.Size = new Size(0, 15);
             availabilityStatusLabel.TabIndex = 9;
@@ -266,7 +287,7 @@
             // reasonLabel
             // 
             reasonLabel.AutoSize = true;
-            reasonLabel.Location = new Point(6, 581);
+            reasonLabel.Location = new Point(6, 660);
             reasonLabel.Name = "reasonLabel";
             reasonLabel.Size = new Size(48, 15);
             reasonLabel.TabIndex = 5;
@@ -274,7 +295,7 @@
             // 
             // reasonTextBox
             // 
-            reasonTextBox.Location = new Point(116, 578);
+            reasonTextBox.Location = new Point(116, 657);
             reasonTextBox.MaxLength = 255;
             reasonTextBox.Multiline = true;
             reasonTextBox.Name = "reasonTextBox";
@@ -286,15 +307,15 @@
             // 
             errorLabel.AutoSize = true;
             errorLabel.ForeColor = Color.Firebrick;
-            errorLabel.Location = new Point(430, 680);
-            errorLabel.MaximumSize = new Size(350, 0);
+            errorLabel.Location = new Point(16, 830);
+            errorLabel.MaximumSize = new Size(740, 0);
             errorLabel.Name = "errorLabel";
             errorLabel.Size = new Size(0, 15);
             errorLabel.TabIndex = 10;
             // 
             // bookButton
             // 
-            bookButton.Location = new Point(236, 673);
+            bookButton.Location = new Point(236, 790);
             bookButton.Name = "bookButton";
             bookButton.Size = new Size(85, 30);
             bookButton.TabIndex = 5;
@@ -304,7 +325,7 @@
             // 
             // cancelButton
             // 
-            cancelButton.Location = new Point(331, 673);
+            cancelButton.Location = new Point(331, 790);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(85, 30);
             cancelButton.TabIndex = 6;
@@ -392,7 +413,7 @@
             // 
             // visitCheckupFinalDiagnosisTextBox
             // 
-            visitCheckupFinalDiagnosisTextBox.Location = new Point(105, 782);
+            visitCheckupFinalDiagnosisTextBox.Location = new Point(110, 953);
             visitCheckupFinalDiagnosisTextBox.Multiline = true;
             visitCheckupFinalDiagnosisTextBox.Name = "visitCheckupFinalDiagnosisTextBox";
             visitCheckupFinalDiagnosisTextBox.ScrollBars = ScrollBars.Vertical;
@@ -402,7 +423,7 @@
             // visitCheckupFinalDiagnosisLabel
             // 
             visitCheckupFinalDiagnosisLabel.AutoSize = true;
-            visitCheckupFinalDiagnosisLabel.Location = new Point(16, 800);
+            visitCheckupFinalDiagnosisLabel.Location = new Point(16, 956);
             visitCheckupFinalDiagnosisLabel.Name = "visitCheckupFinalDiagnosisLabel";
             visitCheckupFinalDiagnosisLabel.Size = new Size(88, 15);
             visitCheckupFinalDiagnosisLabel.TabIndex = 16;
@@ -507,7 +528,7 @@
             // 
             visitDetailsLabel.AutoSize = true;
             visitDetailsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            visitDetailsLabel.Location = new Point(16, 540);
+            visitDetailsLabel.Location = new Point(16, 558);
             visitDetailsLabel.Name = "visitDetailsLabel";
             visitDetailsLabel.Size = new Size(181, 21);
             visitDetailsLabel.TabIndex = 7;
@@ -516,7 +537,7 @@
             // systolicLabel
             // 
             systolicLabel.AutoSize = true;
-            systolicLabel.Location = new Point(16, 574);
+            systolicLabel.Location = new Point(16, 592);
             systolicLabel.Name = "systolicLabel";
             systolicLabel.Size = new Size(104, 15);
             systolicLabel.TabIndex = 8;
@@ -524,15 +545,15 @@
             // 
             // systolicTextBox
             // 
-            systolicTextBox.Location = new Point(126, 570);
+            systolicTextBox.Location = new Point(16, 610);
             systolicTextBox.Name = "systolicTextBox";
-            systolicTextBox.Size = new Size(59, 23);
+            systolicTextBox.Size = new Size(165, 23);
             systolicTextBox.TabIndex = 7;
             // 
             // diastolicLabel
             // 
             diastolicLabel.AutoSize = true;
-            diastolicLabel.Location = new Point(205, 574);
+            diastolicLabel.Location = new Point(205, 592);
             diastolicLabel.Name = "diastolicLabel";
             diastolicLabel.Size = new Size(109, 15);
             diastolicLabel.TabIndex = 9;
@@ -540,15 +561,15 @@
             // 
             // diastolicTextBox
             // 
-            diastolicTextBox.Location = new Point(320, 570);
+            diastolicTextBox.Location = new Point(205, 610);
             diastolicTextBox.Name = "diastolicTextBox";
-            diastolicTextBox.Size = new Size(58, 23);
+            diastolicTextBox.Size = new Size(165, 23);
             diastolicTextBox.TabIndex = 8;
             // 
             // pulseLabel
             // 
             pulseLabel.AutoSize = true;
-            pulseLabel.Location = new Point(400, 574);
+            pulseLabel.Location = new Point(400, 592);
             pulseLabel.Name = "pulseLabel";
             pulseLabel.Size = new Size(74, 15);
             pulseLabel.TabIndex = 10;
@@ -556,15 +577,15 @@
             // 
             // pulseTextBox
             // 
-            pulseTextBox.Location = new Point(475, 570);
+            pulseTextBox.Location = new Point(400, 610);
             pulseTextBox.Name = "pulseTextBox";
-            pulseTextBox.Size = new Size(48, 23);
+            pulseTextBox.Size = new Size(120, 23);
             pulseTextBox.TabIndex = 9;
             // 
             // bodyTemperatureLabel
             // 
             bodyTemperatureLabel.AutoSize = true;
-            bodyTemperatureLabel.Location = new Point(540, 574);
+            bodyTemperatureLabel.Location = new Point(540, 592);
             bodyTemperatureLabel.Name = "bodyTemperatureLabel";
             bodyTemperatureLabel.Size = new Size(84, 15);
             bodyTemperatureLabel.TabIndex = 11;
@@ -572,15 +593,15 @@
             // 
             // bodyTemperatureTextBox
             // 
-            bodyTemperatureTextBox.Location = new Point(635, 570);
+            bodyTemperatureTextBox.Location = new Point(540, 610);
             bodyTemperatureTextBox.Name = "bodyTemperatureTextBox";
-            bodyTemperatureTextBox.Size = new Size(100, 23);
+            bodyTemperatureTextBox.Size = new Size(195, 23);
             bodyTemperatureTextBox.TabIndex = 10;
             // 
             // heightLabel
             // 
             heightLabel.AutoSize = true;
-            heightLabel.Location = new Point(16, 609);
+            heightLabel.Location = new Point(16, 697);
             heightLabel.Name = "heightLabel";
             heightLabel.Size = new Size(67, 15);
             heightLabel.TabIndex = 12;
@@ -588,15 +609,15 @@
             // 
             // heightTextBox
             // 
-            heightTextBox.Location = new Point(105, 605);
+            heightTextBox.Location = new Point(16, 715);
             heightTextBox.Name = "heightTextBox";
-            heightTextBox.Size = new Size(80, 23);
+            heightTextBox.Size = new Size(165, 23);
             heightTextBox.TabIndex = 11;
             // 
             // weightLabel
             // 
             weightLabel.AutoSize = true;
-            weightLabel.Location = new Point(205, 609);
+            weightLabel.Location = new Point(205, 697);
             weightLabel.Name = "weightLabel";
             weightLabel.Size = new Size(77, 15);
             weightLabel.TabIndex = 13;
@@ -604,15 +625,15 @@
             // 
             // weightTextBox
             // 
-            weightTextBox.Location = new Point(298, 605);
+            weightTextBox.Location = new Point(205, 715);
             weightTextBox.Name = "weightTextBox";
-            weightTextBox.Size = new Size(80, 23);
+            weightTextBox.Size = new Size(165, 23);
             weightTextBox.TabIndex = 12;
             // 
             // symptomsLabel
             // 
             symptomsLabel.AutoSize = true;
-            symptomsLabel.Location = new Point(16, 647);
+            symptomsLabel.Location = new Point(16, 800);
             symptomsLabel.Name = "symptomsLabel";
             symptomsLabel.Size = new Size(67, 15);
             symptomsLabel.TabIndex = 14;
@@ -620,7 +641,7 @@
             // 
             // symptomsTextBox
             // 
-            symptomsTextBox.Location = new Point(105, 643);
+            symptomsTextBox.Location = new Point(110, 797);
             symptomsTextBox.Multiline = true;
             symptomsTextBox.Name = "symptomsTextBox";
             symptomsTextBox.ScrollBars = ScrollBars.Vertical;
@@ -630,7 +651,7 @@
             // initialDiagnosisLabel
             // 
             initialDiagnosisLabel.AutoSize = true;
-            initialDiagnosisLabel.Location = new Point(16, 721);
+            initialDiagnosisLabel.Location = new Point(16, 888);
             initialDiagnosisLabel.Name = "initialDiagnosisLabel";
             initialDiagnosisLabel.Size = new Size(92, 15);
             initialDiagnosisLabel.TabIndex = 15;
@@ -638,7 +659,7 @@
             // 
             // initialDiagnosisTextBox
             // 
-            initialDiagnosisTextBox.Location = new Point(105, 709);
+            initialDiagnosisTextBox.Location = new Point(110, 885);
             initialDiagnosisTextBox.Multiline = true;
             initialDiagnosisTextBox.Name = "initialDiagnosisTextBox";
             initialDiagnosisTextBox.ScrollBars = ScrollBars.Vertical;
@@ -647,7 +668,7 @@
             // 
             // submitVisitButton
             // 
-            submitVisitButton.Location = new Point(593, 843);
+            submitVisitButton.Location = new Point(620, 1020);
             submitVisitButton.Name = "submitVisitButton";
             submitVisitButton.Size = new Size(115, 32);
             submitVisitButton.TabIndex = 15;
@@ -782,7 +803,7 @@
             // 
             orderTestsErrorLabel.AutoEllipsis = true;
             orderTestsErrorLabel.ForeColor = Color.Red;
-            orderTestsErrorLabel.Location = new Point(16, 630);
+            orderTestsErrorLabel.Location = new Point(16, 650);
             orderTestsErrorLabel.Name = "orderTestsErrorLabel";
             orderTestsErrorLabel.Size = new Size(749, 30);
             orderTestsErrorLabel.TabIndex = 5;
@@ -790,7 +811,7 @@
             // 
             // orderTestsSubmitButton
             // 
-            orderTestsSubmitButton.Location = new Point(620, 580);
+            orderTestsSubmitButton.Location = new Point(620, 600);
             orderTestsSubmitButton.Name = "orderTestsSubmitButton";
             orderTestsSubmitButton.Size = new Size(145, 32);
             orderTestsSubmitButton.TabIndex = 6;
@@ -911,7 +932,7 @@
             // 
             testResultsPatientInfoLabel.AutoSize = true;
             testResultsPatientInfoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            testResultsPatientInfoLabel.Location = new Point(16, 550);
+            testResultsPatientInfoLabel.Location = new Point(16, 573);
             testResultsPatientInfoLabel.Name = "testResultsPatientInfoLabel";
             testResultsPatientInfoLabel.Size = new Size(0, 15);
             testResultsPatientInfoLabel.TabIndex = 7;
@@ -919,7 +940,7 @@
             // testResultsSelectedTestLabel
             // 
             testResultsSelectedTestLabel.AutoSize = true;
-            testResultsSelectedTestLabel.Location = new Point(16, 577);
+            testResultsSelectedTestLabel.Location = new Point(16, 598);
             testResultsSelectedTestLabel.MaximumSize = new Size(750, 0);
             testResultsSelectedTestLabel.Name = "testResultsSelectedTestLabel";
             testResultsSelectedTestLabel.Size = new Size(0, 15);
@@ -928,7 +949,7 @@
             // testResultsDatePerformedLabel
             // 
             testResultsDatePerformedLabel.AutoSize = true;
-            testResultsDatePerformedLabel.Location = new Point(16, 608);
+            testResultsDatePerformedLabel.Location = new Point(16, 654);
             testResultsDatePerformedLabel.Name = "testResultsDatePerformedLabel";
             testResultsDatePerformedLabel.Size = new Size(122, 15);
             testResultsDatePerformedLabel.TabIndex = 9;
@@ -938,7 +959,7 @@
             // 
             testResultsDatePerformedPicker.CustomFormat = "MM/dd/yyyy hh:mm tt";
             testResultsDatePerformedPicker.Format = DateTimePickerFormat.Custom;
-            testResultsDatePerformedPicker.Location = new Point(150, 605);
+            testResultsDatePerformedPicker.Location = new Point(150, 651);
             testResultsDatePerformedPicker.Name = "testResultsDatePerformedPicker";
             testResultsDatePerformedPicker.Size = new Size(220, 23);
             testResultsDatePerformedPicker.TabIndex = 10;
@@ -946,7 +967,7 @@
             // testResultsResultLabel
             // 
             testResultsResultLabel.AutoSize = true;
-            testResultsResultLabel.Location = new Point(16, 643);
+            testResultsResultLabel.Location = new Point(16, 699);
             testResultsResultLabel.Name = "testResultsResultLabel";
             testResultsResultLabel.Size = new Size(42, 15);
             testResultsResultLabel.TabIndex = 11;
@@ -954,7 +975,7 @@
             // 
             // testResultsResultTextBox
             // 
-            testResultsResultTextBox.Location = new Point(150, 640);
+            testResultsResultTextBox.Location = new Point(150, 696);
             testResultsResultTextBox.MaxLength = 100;
             testResultsResultTextBox.Name = "testResultsResultTextBox";
             testResultsResultTextBox.Size = new Size(220, 23);
@@ -964,7 +985,7 @@
             // testResultsAbnormalCheckBox
             // 
             testResultsAbnormalCheckBox.AutoSize = true;
-            testResultsAbnormalCheckBox.Location = new Point(390, 642);
+            testResultsAbnormalCheckBox.Location = new Point(390, 698);
             testResultsAbnormalCheckBox.Name = "testResultsAbnormalCheckBox";
             testResultsAbnormalCheckBox.Size = new Size(79, 19);
             testResultsAbnormalCheckBox.TabIndex = 13;
@@ -973,7 +994,7 @@
             // 
             // testResultsSaveButton
             // 
-            testResultsSaveButton.Location = new Point(650, 670);
+            testResultsSaveButton.Location = new Point(650, 810);
             testResultsSaveButton.Name = "testResultsSaveButton";
             testResultsSaveButton.Size = new Size(115, 32);
             testResultsSaveButton.TabIndex = 14;
@@ -1106,6 +1127,193 @@
             viewVisitsTestsGrid.CellFormatting += viewVisitsTestsGrid_CellFormatting;
             viewVisitsTestsGrid.DataBindingComplete += viewVisitsTestsGrid_DataBindingComplete;
             // 
+            // appointmentPatientErrorLabel: field-level validation message
+            appointmentPatientErrorLabel.AutoSize = true;
+            appointmentPatientErrorLabel.ForeColor = Color.Red;
+            appointmentPatientErrorLabel.Location = new Point(116, 379);
+            appointmentPatientErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentPatientErrorLabel.Name = "appointmentPatientErrorLabel";
+            appointmentPatientErrorLabel.Size = new Size(0, 15);
+            appointmentPatientErrorLabel.TabIndex = 100;
+            appointmentPatientErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentPatientErrorLabel);
+            // appointmentDoctorErrorLabel: field-level validation message
+            appointmentDoctorErrorLabel.AutoSize = true;
+            appointmentDoctorErrorLabel.ForeColor = Color.Red;
+            appointmentDoctorErrorLabel.Location = new Point(116, 489);
+            appointmentDoctorErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentDoctorErrorLabel.Name = "appointmentDoctorErrorLabel";
+            appointmentDoctorErrorLabel.Size = new Size(0, 15);
+            appointmentDoctorErrorLabel.TabIndex = 101;
+            appointmentDoctorErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentDoctorErrorLabel);
+            // appointmentDateErrorLabel: field-level validation message
+            appointmentDateErrorLabel.AutoSize = true;
+            appointmentDateErrorLabel.ForeColor = Color.Red;
+            appointmentDateErrorLabel.Location = new Point(116, 543);
+            appointmentDateErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentDateErrorLabel.Name = "appointmentDateErrorLabel";
+            appointmentDateErrorLabel.Size = new Size(0, 15);
+            appointmentDateErrorLabel.TabIndex = 102;
+            appointmentDateErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentDateErrorLabel);
+            // appointmentTimeErrorLabel: field-level validation message
+            appointmentTimeErrorLabel.AutoSize = true;
+            appointmentTimeErrorLabel.ForeColor = Color.Red;
+            appointmentTimeErrorLabel.Location = new Point(116, 597);
+            appointmentTimeErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentTimeErrorLabel.Name = "appointmentTimeErrorLabel";
+            appointmentTimeErrorLabel.Size = new Size(0, 15);
+            appointmentTimeErrorLabel.TabIndex = 103;
+            appointmentTimeErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentTimeErrorLabel);
+            // appointmentReasonErrorLabel: field-level validation message
+            appointmentReasonErrorLabel.AutoSize = true;
+            appointmentReasonErrorLabel.ForeColor = Color.Red;
+            appointmentReasonErrorLabel.Location = new Point(116, 741);
+            appointmentReasonErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentReasonErrorLabel.Name = "appointmentReasonErrorLabel";
+            appointmentReasonErrorLabel.Size = new Size(0, 15);
+            appointmentReasonErrorLabel.TabIndex = 104;
+            appointmentReasonErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentReasonErrorLabel);
+            // visitAppointmentErrorLabel: field-level validation message
+            visitAppointmentErrorLabel.AutoSize = true;
+            visitAppointmentErrorLabel.ForeColor = Color.Red;
+            visitAppointmentErrorLabel.Location = new Point(16, 529);
+            visitAppointmentErrorLabel.MaximumSize = new Size(740, 0);
+            visitAppointmentErrorLabel.Name = "visitAppointmentErrorLabel";
+            visitAppointmentErrorLabel.Size = new Size(0, 15);
+            visitAppointmentErrorLabel.TabIndex = 105;
+            visitAppointmentErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(visitAppointmentErrorLabel);
+            // systolicErrorLabel: field-level validation message
+            systolicErrorLabel.AutoSize = true;
+            systolicErrorLabel.ForeColor = Color.Red;
+            systolicErrorLabel.Location = new Point(16, 636);
+            systolicErrorLabel.MaximumSize = new Size(175, 0);
+            systolicErrorLabel.Name = "systolicErrorLabel";
+            systolicErrorLabel.Size = new Size(0, 15);
+            systolicErrorLabel.TabIndex = 106;
+            systolicErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(systolicErrorLabel);
+            // diastolicErrorLabel: field-level validation message
+            diastolicErrorLabel.AutoSize = true;
+            diastolicErrorLabel.ForeColor = Color.Red;
+            diastolicErrorLabel.Location = new Point(205, 636);
+            diastolicErrorLabel.MaximumSize = new Size(175, 0);
+            diastolicErrorLabel.Name = "diastolicErrorLabel";
+            diastolicErrorLabel.Size = new Size(0, 15);
+            diastolicErrorLabel.TabIndex = 107;
+            diastolicErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(diastolicErrorLabel);
+            // pulseErrorLabel: field-level validation message
+            pulseErrorLabel.AutoSize = true;
+            pulseErrorLabel.ForeColor = Color.Red;
+            pulseErrorLabel.Location = new Point(400, 636);
+            pulseErrorLabel.MaximumSize = new Size(125, 0);
+            pulseErrorLabel.Name = "pulseErrorLabel";
+            pulseErrorLabel.Size = new Size(0, 15);
+            pulseErrorLabel.TabIndex = 108;
+            pulseErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(pulseErrorLabel);
+            // bodyTemperatureErrorLabel: field-level validation message
+            bodyTemperatureErrorLabel.AutoSize = true;
+            bodyTemperatureErrorLabel.ForeColor = Color.Red;
+            bodyTemperatureErrorLabel.Location = new Point(540, 636);
+            bodyTemperatureErrorLabel.MaximumSize = new Size(195, 0);
+            bodyTemperatureErrorLabel.Name = "bodyTemperatureErrorLabel";
+            bodyTemperatureErrorLabel.Size = new Size(0, 15);
+            bodyTemperatureErrorLabel.TabIndex = 109;
+            bodyTemperatureErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(bodyTemperatureErrorLabel);
+            // heightErrorLabel: field-level validation message
+            heightErrorLabel.AutoSize = true;
+            heightErrorLabel.ForeColor = Color.Red;
+            heightErrorLabel.Location = new Point(16, 741);
+            heightErrorLabel.MaximumSize = new Size(175, 0);
+            heightErrorLabel.Name = "heightErrorLabel";
+            heightErrorLabel.Size = new Size(0, 15);
+            heightErrorLabel.TabIndex = 110;
+            heightErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(heightErrorLabel);
+            // weightErrorLabel: field-level validation message
+            weightErrorLabel.AutoSize = true;
+            weightErrorLabel.ForeColor = Color.Red;
+            weightErrorLabel.Location = new Point(205, 741);
+            weightErrorLabel.MaximumSize = new Size(175, 0);
+            weightErrorLabel.Name = "weightErrorLabel";
+            weightErrorLabel.Size = new Size(0, 15);
+            weightErrorLabel.TabIndex = 111;
+            weightErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(weightErrorLabel);
+            // symptomsErrorLabel: field-level validation message
+            symptomsErrorLabel.AutoSize = true;
+            symptomsErrorLabel.ForeColor = Color.Red;
+            symptomsErrorLabel.Location = new Point(110, 848);
+            symptomsErrorLabel.MaximumSize = new Size(630, 0);
+            symptomsErrorLabel.Name = "symptomsErrorLabel";
+            symptomsErrorLabel.Size = new Size(0, 15);
+            symptomsErrorLabel.TabIndex = 117;
+            symptomsErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(symptomsErrorLabel);
+            // orderTestsVisitErrorLabel: field-level validation message
+            orderTestsVisitErrorLabel.AutoSize = true;
+            orderTestsVisitErrorLabel.ForeColor = Color.Red;
+            orderTestsVisitErrorLabel.Location = new Point(16, 405);
+            orderTestsVisitErrorLabel.MaximumSize = new Size(749, 0);
+            orderTestsVisitErrorLabel.Name = "orderTestsVisitErrorLabel";
+            orderTestsVisitErrorLabel.Size = new Size(0, 15);
+            orderTestsVisitErrorLabel.TabIndex = 112;
+            orderTestsVisitErrorLabel.Text = string.Empty;
+            orderTestsTabPage.Controls.Add(orderTestsVisitErrorLabel);
+            // orderTestsSelectionErrorLabel: field-level validation message
+            orderTestsSelectionErrorLabel.AutoSize = true;
+            orderTestsSelectionErrorLabel.ForeColor = Color.Red;
+            orderTestsSelectionErrorLabel.Location = new Point(40, 567);
+            orderTestsSelectionErrorLabel.MaximumSize = new Size(329, 0);
+            orderTestsSelectionErrorLabel.Name = "orderTestsSelectionErrorLabel";
+            orderTestsSelectionErrorLabel.Size = new Size(0, 15);
+            orderTestsSelectionErrorLabel.TabIndex = 113;
+            orderTestsSelectionErrorLabel.Text = string.Empty;
+            orderTestsTabPage.Controls.Add(orderTestsSelectionErrorLabel);
+            // testResultsVisitErrorLabel: field-level validation message
+            testResultsVisitErrorLabel.AutoSize = true;
+            testResultsVisitErrorLabel.ForeColor = Color.Red;
+            testResultsVisitErrorLabel.Location = new Point(16, 543);
+            testResultsVisitErrorLabel.MaximumSize = new Size(360, 0);
+            testResultsVisitErrorLabel.Name = "testResultsVisitErrorLabel";
+            testResultsVisitErrorLabel.Size = new Size(0, 15);
+            testResultsVisitErrorLabel.TabIndex = 114;
+            testResultsVisitErrorLabel.Text = string.Empty;
+            testResultsTabPage.Controls.Add(testResultsVisitErrorLabel);
+            // testResultsTestErrorLabel: field-level validation message
+            testResultsTestErrorLabel.AutoSize = true;
+            testResultsTestErrorLabel.ForeColor = Color.Red;
+            testResultsTestErrorLabel.Location = new Point(390, 543);
+            testResultsTestErrorLabel.MaximumSize = new Size(375, 0);
+            testResultsTestErrorLabel.Name = "testResultsTestErrorLabel";
+            testResultsTestErrorLabel.Size = new Size(0, 15);
+            testResultsTestErrorLabel.TabIndex = 115;
+            testResultsTestErrorLabel.Text = string.Empty;
+            testResultsTabPage.Controls.Add(testResultsTestErrorLabel);
+            // testResultsValueErrorLabel: field-level validation message
+            testResultsValueErrorLabel.AutoSize = true;
+            testResultsValueErrorLabel.ForeColor = Color.Red;
+            testResultsValueErrorLabel.Location = new Point(150, 723);
+            testResultsValueErrorLabel.MaximumSize = new Size(600, 0);
+            testResultsValueErrorLabel.Name = "testResultsValueErrorLabel";
+            testResultsValueErrorLabel.Size = new Size(0, 15);
+            testResultsValueErrorLabel.TabIndex = 116;
+            testResultsValueErrorLabel.Text = string.Empty;
+            testResultsTabPage.Controls.Add(testResultsValueErrorLabel);
+            // Additional error rows stay reachable on smaller windows.
+            createAppointmentTabPage.AutoScroll = true;
+            createAppointmentTabPage.AutoScrollMinSize = new Size(0, 880);
+            orderTestTabPage.AutoScrollMinSize = new Size(0, 1080);
+            testResultsTabPage.AutoScroll = true;
+            testResultsTabPage.AutoScrollMinSize = new Size(0, 860);
+
             // AppointmentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1251,5 +1459,25 @@
         private Label visitCheckupFinalDiagnosisLabel;
         private Label label5;
         private CheckedListBox orderTestsAlreadyOrderedTestsCheckedListBox;
+        // Individual field-level validation messages.
+        private Label appointmentPatientErrorLabel;
+        private Label appointmentDoctorErrorLabel;
+        private Label appointmentDateErrorLabel;
+        private Label appointmentTimeErrorLabel;
+        private Label appointmentReasonErrorLabel;
+        private Label visitAppointmentErrorLabel;
+        private Label systolicErrorLabel;
+        private Label diastolicErrorLabel;
+        private Label pulseErrorLabel;
+        private Label bodyTemperatureErrorLabel;
+        private Label heightErrorLabel;
+        private Label weightErrorLabel;
+        private Label symptomsErrorLabel;
+        private Label orderTestsVisitErrorLabel;
+        private Label orderTestsSelectionErrorLabel;
+        private Label testResultsVisitErrorLabel;
+        private Label testResultsTestErrorLabel;
+        private Label testResultsValueErrorLabel;
+
     }
 }
