@@ -53,7 +53,7 @@ public class TestDAL
     /// <param name="initialDiagnosis">The initial diagnosis.</param>
     /// <param name="selectedTests">The selected tests.</param>
     public void SaveVisitAndTests(int appointmentId, int systolic, int diastolic, int pulse,
-        decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis,
+        decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis, string? finalDiagnosis,
         IReadOnlyCollection<Test> selectedTests)
     {
         using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -64,8 +64,18 @@ public class TestDAL
         try
         {
             const string visitSql =
-                "INSERT INTO Visit(appointment_id, systolic_bp, diastolic_bp, pulse,body_temperature, height, weight, symptoms, initial_diagnosis)" +
-                " VALUES(@appointmentId, @systolic, @diastolic, @pulse, @bodyTemperature, @height, @weight, @symptoms, @initialDiagnosis)";
+                "INSERT INTO Visit(appointment_id, systolic_bp, diastolic_bp, pulse,body_temperature, height, weight, symptoms, initial_diagnosis, final_diagnosis)" +
+                " VALUES(@appointmentId, @systolic, @diastolic, @pulse, @bodyTemperature, @height, @weight, @symptoms, @initialDiagnosis, @finalDiagnosis)" +
+                " ON DUPLICATE KEY UPDATE" +
+                " systolic_bp = VALUES(systolic_bp)," +
+                " diastolic_bp = VALUES(diastolic_bp)," +
+                " pulse = VALUES(pulse)," +
+                " body_temperature = VALUES(body_temperature)," +
+                " height = VALUES(height)," +
+                " weight = VALUES(weight)," +
+                " symptoms = VALUES(symptoms)," +
+                " initial_diagnosis = VALUES(initial_diagnosis)," +
+                " final_diagnosis = VALUES(final_diagnosis)";
 
             using (var visitCommand = new MySqlCommand(visitSql, connection, transaction))
             {
@@ -80,12 +90,17 @@ public class TestDAL
                 visitCommand.Parameters.AddWithValue(
                     "@initialDiagnosis",
                     string.IsNullOrWhiteSpace(initialDiagnosis) ? DBNull.Value : initialDiagnosis.Trim());
+                visitCommand.Parameters.AddWithValue(
+                    "@finalDiagnosis",
+                    string.IsNullOrWhiteSpace(finalDiagnosis) ? DBNull.Value : finalDiagnosis.Trim());
                 visitCommand.ExecuteNonQuery();
             }
 
             const string visitTestSql =
                 "INSERT INTO VisitTest(appointment_id, test_code, date_performed, result, isAbnormal)" +
-                " VALUES(@appointmentId, @testCode, @datePerformed, NULL, NULL)";
+                " VALUES(@appointmentId, @testCode, @datePerformed, NULL, NULL)" +
+                " ON DUPLICATE KEY UPDATE" +
+                " test_code = VALUES(test_code)";
 
             foreach (var test in selectedTests)
             {
@@ -149,10 +164,7 @@ public class TestDAL
         connection.Open();
         var command = new MySqlCommand("SELECT v.* " +
                                        "FROM visit v JOIN appointment a ON v.appointment_id = a.appointment_id " +
-                                       "WHERE a.patient_id = @PatientId AND v.final_diagnosis IS NULL AND NOT EXISTS " +
-                                       "(SELECT 1 " +
-                                       "FROM visittest t " +
-                                       "WHERE t.appointment_id = a.appointment_id AND t.result IS NULL)", connection);
+                                       "WHERE a.patient_id = @PatientId AND v.final_diagnosis IS NULL", connection);
         command.Parameters.AddWithValue("@PatientId", patientId);
         var reader = command.ExecuteReader();
         while (reader.Read())

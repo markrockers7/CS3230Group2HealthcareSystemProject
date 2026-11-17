@@ -132,10 +132,8 @@ namespace HealthcareSystemProjectCS3230.DAL
             var appointments = new List<Appointment>();
             using var connection = new MySqlConnection(Connection.ConnectionString);
             connection.Open();
-            const string query =
-                "SELECT appointment_id, doctor_id, patient_id, appointment_datetime, reason " +
-                "FROM Appointment WHERE patient_id = @patientId";
-            using var command = new MySqlCommand(query, connection);
+            using var command = new MySqlCommand("GetAppointmentsByPatientId", connection);
+            command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add("@patientId", MySqlDbType.Int32).Value = patientId;
             using var reader = command.ExecuteReader();
             while (reader.Read())

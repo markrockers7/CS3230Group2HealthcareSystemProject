@@ -162,6 +162,7 @@ public class AppointmentController
         decimal weight,
         string symptoms,
         string? initialDiagnosis,
+        string? finalDiagnosis,
         IReadOnlyCollection<Test> selectedTests)
     {
         if (appointmentId <= 0) throw new ArgumentException("Please select a valid appointment.");
@@ -186,6 +187,7 @@ public class AppointmentController
             weight,
             symptoms.Trim(),
             initialDiagnosis,
+            finalDiagnosis,
             selectedTests);
     }
 
@@ -291,34 +293,34 @@ public class AppointmentController
         {
             throw new ArgumentException("No appointments found for the given patient ID.");
         }
-
         var appointmentViews = new List<AppointmentView>();
         var doctorNames = GetDoctorsWithNames();
-        var scheduledVisits = testDAL.GetVisitsByPatientId(patientId);
         foreach (var appt in appointments)
         {
-                if (appt.DateTime.Date < DateTime.Now.Date)
-                {
-                    continue; // Skip past appointments
-                }
-                if (scheduledVisits.Any(v => v.AppointmentId == appt.AppointmentId))
-                {
-                    continue; // Skip appointments with scheduled visits
-                }
-
-                var appointmentView = new AppointmentView
-                {
-                    AppointmentId = appt.AppointmentId,
-                    PatientId = appt.PatientId,
-                    DoctorId = appt.DoctorId,
-                    DateTime = appt.DateTime,
-                    Reason = appt.Reason,
-                    DoctorName = doctorNames.FirstOrDefault(d => d.DoctorId == appt.DoctorId)?.FullName ?? "Unknown"
-                };
-                appointmentViews.Add(appointmentView);
+            var appointmentView = new AppointmentView
+            {
+                AppointmentId = appt.AppointmentId,
+                PatientId = appt.PatientId,
+                DoctorId = appt.DoctorId,
+                DateTime = appt.DateTime,
+                Reason = appt.Reason,
+                DoctorName = doctorNames.FirstOrDefault(d => d.DoctorId == appt.DoctorId)?.FullName ?? "Unknown"
+            };
+            appointmentViews.Add(appointmentView);
         }
-
         return appointmentViews;
+    }
+
+    /// <summary>
+    /// Determines whether every ordered test in a visit has a nonblank result.
+    /// If the visit has no ordered tests, this returns true because no test lacks a result.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the appointment associated with the visit.</param>
+    /// <returns>True if every retrieved test has a nonblank result; otherwise false.</returns>
+    public bool DoAllTestsInVisitHaveAResult(int appointmentId)
+    {
+        var allTests = testDAL.GetVisitTestResults(appointmentId);
+        return allTests.All(test => !string.IsNullOrWhiteSpace(test.Result));
     }
 
     private void EnsureSlotIsFree(int doctorId, DateTime appointmentDateTime, int? excludeAppointmentId = null)
@@ -389,18 +391,20 @@ public class AppointmentController
     /// <returns>true if the update was successful, false otherwise</returns>
     public bool UpdateFinalDiagnosis(string finalDiagnosis, int visitId)
     {
-        return appointmentsDAL.UpdateVisitFinalDiagnosis(finalDiagnosis, visitId);
+        return testDAL.GetVisitSummariesForPatient(patientId, onlyWithTests: false);
     }
 
-    /// <summary>
-    /// Gets all of a patient's visits, with or without ordered tests.
-    /// </summary>
-    /// <param name="patientId">The ID of the patient</param>
-    /// <returns>A list of VisitSummary objects, newest first</returns>
-
-    public List<VisitSummary> GetAllVisitsForPatient(int patientId)
+     /// <summary>
+     /// Gets every visit for a patient and its associated tests.
+     /// </summary>
+     /// <param name="patientId">The ID of the patient.</param>
+     /// <returns>
+     /// A dictionary mapping each visit to its test results. Visits without ordered tests have
+     /// an empty list, and visits are represented by their <see cref="VisitSummary"/>.
+     /// </returns>
+    public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
     {
-        return testDAL.GetVisitSummariesForPatient(patientId, onlyWithTests: false);
+        return testDAL.GetAllVisitsAndTheirTestsForPatient(patientId);
     }
 
     /// <summary>
