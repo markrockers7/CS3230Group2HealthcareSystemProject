@@ -12,15 +12,14 @@ namespace HealthcareSystemProjectCS3230.model
         public DateTime DateTime { get; set; }
         public string Reason { get; set; }
 
-        /*
-         * Initializes an instance of the Appointment class with the provided parameters.
-         *
-         * @param appointmentId The unique identifier for the appointment.
-         * @param doctorId The unique identifier for the doctor associated with the appointment.
-         * @param patientId The unique identifier for the patient associated with the appointment.
-         * @param dateTime The date and time of the appointment.
-         * @param reason The reason for the appointment.
-         */
+        /// <summary>
+        /// Initializes an instance of the Appointment class with the provided parameters.
+        /// </summary>
+        /// <param name="appointmentId">The unique identifier for the appointment.</param>
+        /// <param name="doctorId">The unique identifier for the doctor associated with the appointment.</param>
+        /// <param name="patientId">The unique identifier for the patient associated with the appointment.</param>
+        /// <param name="dateTime">The date and time of the appointment.</param>
+        /// <param name="reason">The reason for the appointment.</param>
         public Appointment(int appointmentId, int doctorId, int patientId, DateTime dateTime, string reason)
         {
             AppointmentId = appointmentId;

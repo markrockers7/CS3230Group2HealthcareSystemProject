@@ -11,14 +11,13 @@ namespace HealthcareSystemProjectCS3230.controler
         private NurseDAL nurseDAL = new NurseDAL();
         private PersonDAL personDAL = new PersonDAL();
 
-        /*
-         * Adds a new nurse to the database after validating the input.
-         * Throws ArgumentException if validation fails.
-         * Throws Exception if the nurse could not be added to the database.
-         * 
-         * @param nurse The Nurse object to be added.
-         * @param password The password for the nurse's account.
-         */
+        /// <summary>
+        /// Adds a new nurse to the database after validating the input.
+        /// </summary>
+        /// <param name="nurse">The Nurse object to be added.</param>
+        /// <param name="password">The password for the nurse's account.</param>
+        /// <exception cref="ArgumentException">Thrown when the input data is invalid.</exception>
+        /// <exception cref="Exception">Thrown when the nurse could not be added to the database.</exception>
         public void AddNurse(Nurse nurse, string password)
         {
             if (password.Length > 50 || string.IsNullOrWhiteSpace(password))
@@ -31,23 +30,22 @@ namespace HealthcareSystemProjectCS3230.controler
                 throw new Exception("Nurse could not be added");
             }
         }
-        /*
-         * Retrieves a Person object by their ID.
-         * 
-         * @param personId The ID of the person to retrieve.
-         * @return The Person object corresponding to the given ID.
-         */
+        
+        /// <summary>
+        /// Retrieves a Person object by their ID.
+        /// </summary>
+        /// <param name="personId">The ID of the person to retrieve.</param>
+        /// <returns>The Person object corresponding to the given ID.</returns>
         public Person GetPersonByID(int personId)
         {
             return personDAL.GetPersonByID(personId);
         }
-        /*
-         * Validates the properties of a Nurse object.
-         * Throws ArgumentException if any validation fails.
-         * 
-         * @param nurse The Nurse object to validate.
-         * @return true if validation passes; otherwise, throws an exception.
-         */
+        /// <summary>
+        /// Validates the properties of a Nurse object
+        /// </summary>
+        /// <param name="nurse">The Nurse object to validate.</param>
+        /// <exception cref="ArgumentException">Thrown when the input data is invalid.</exception>
+        /// <returns>true if validation passes; otherwise, throws an exception.</returns>
         private bool validateNurse(Nurse nurse)
         {
             if (nurse.Username.Length > 50) throw new ArgumentException("Username must be 50 or less characters");
@@ -63,30 +61,29 @@ namespace HealthcareSystemProjectCS3230.controler
             return true;
         }
 
-        /*
-         * Retrieves a list of all nurses from the database.
-         *
-         * @return A list of Nurse objects representing all nurses in the database.
-         */
+        /// <summary>
+        /// Retrieves a list of all nurses from the database.
+        /// </summary>
+        /// <returns>A list of Nurse objects representing all nurses in the database.</returns>
         public List<Nurse> GetAllNurses()
         {
             return nurseDAL.GetAllNurses();
         }
 
-        /*
-         * Retrieves a nurse from the database by their ID.
-         * @param id The ID of the nurse to retrieve.
-         * @return The Nurse object corresponding to the given ID.
-         */
+        /// <summary>
+        /// Retrieves a nurse from the database by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the nurse to retrieve.</param>
+        /// <returns>The Nurse object corresponding to the given ID.</returns>
         public Nurse GetNurseByID(int id)
         {
             return nurseDAL.GetNurseByID(id);
         }
 
-        /*
-         * Updates an existing nurse in the database.
-         * @param nurse The Nurse object containing updated information.
-         */
+        /// <summary>
+        /// Updates an existing nurse in the database.
+        /// </summary>
+        /// <param name="nurse">The Nurse object containing updated information.</param>
         public void UpdateNurse(Nurse nurse)
         {
             validateNurse(nurse);
