@@ -1,4 +1,9 @@
-﻿using HealthcareSystemProjectCS3230.controler;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using HealthcareSystemProjectCS3230.controler;
 using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 using System.Globalization;
@@ -154,6 +159,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void patientSearchControl_PatientSelected(object? sender, EventArgs e)
         {
+            ClearAppointmentFieldErrors();
             Patient? patient = createAppointmentPatientSearchControl.SelectedPatient;
             errorLabel.Text = string.Empty;
 
@@ -185,6 +191,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ClearSelectedPatient()
         {
+            ClearAppointmentFieldErrors();
             _selectedPatientId = null;
             patientNameTextBox.Clear();
             patientDobTextBox.Clear();
@@ -217,6 +224,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ClearVisitCheckupFields()
         {
+            ClearVisitFieldErrors();
             systolicTextBox.Clear();
             diastolicTextBox.Clear();
             pulseTextBox.Clear();
@@ -296,48 +304,36 @@ namespace HealthcareSystemProjectCS3230.view
             return doctorComboBox.SelectedValue is int selectedDoctorId && (doctorId = selectedDoctorId) > 0;
         }
 
-        private DateTime GetSelectedAppointmentDateTime()
-        {
-            if (appointmentTimeComboBox.SelectedItem is not TimeSpan selectedTime)
-            {
-                throw new ArgumentException("Please select an available time slot.");
-            }
-
-            return appointmentDatePicker.Value.Date.Add(selectedTime);
-        }
 
         private void bookButton_Click(object sender, EventArgs e)
         {
-            errorLabel.Text = string.Empty;
+            // Keep the existing read-only edit protection.
+            if (_isReadOnlyEdit)
+                return;
 
             try
             {
-                if (!_selectedPatientId.HasValue)
+                // Validate every applicable field before calling the controller.
+                if (!ValidateAppointmentInput(
+                    out int patientId, out int doctorId, out DateTime when))
                 {
-                    throw new ArgumentException("Please search for and select an active patient.");
+                    return;
                 }
-
-                int patientId = _selectedPatientId.Value;
-
-                if (!TryGetSelectedDoctorId(out int doctorId))
-                {
-                    throw new ArgumentException("Please select a doctor.");
-                }
-
-                DateTime when = GetSelectedAppointmentDateTime();
 
                 if (_isEditMode && _appointmentId.HasValue)
                 {
-                    _appointmentController.UpdateAppointment(_appointmentId.Value, patientId, doctorId, when, reasonTextBox.Text);
+                    _appointmentController.UpdateAppointment(
+                        _appointmentId.Value, patientId, doctorId, when,
+                        reasonTextBox.Text);
                     MessageBox.Show("Appointment updated.");
                 }
                 else
                 {
-                    _appointmentController.BookAppointment(patientId, doctorId, when, reasonTextBox.Text);
+                    _appointmentController.BookAppointment(
+                        patientId, doctorId, when, reasonTextBox.Text);
                     MessageBox.Show("Appointment booked.");
                     ResetCreateAppointmentTab();
                 }
-
             }
             catch (ArgumentException ex)
             {
@@ -357,6 +353,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ResetCreateAppointmentTab()
         {
+            ClearAppointmentFieldErrors();
             createAppointmentPatientSearchControl.Clear();
             ClearSelectedPatient();
             reasonTextBox.Clear();
@@ -424,6 +421,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ClearVisitAndOrderTestError()
         {
+            ClearVisitFieldErrors();
             visitAndOrderTestErrorLabel.Text = "";
         }
 
@@ -454,25 +452,6 @@ namespace HealthcareSystemProjectCS3230.view
             }
         }
 
-        private static int ParseRequiredInteger(TextBox input, string fieldName)
-        {
-            if (!int.TryParse(input.Text, NumberStyles.Integer, CultureInfo.CurrentCulture, out int value) || value <= 0)
-            {
-                throw new ArgumentException($"Enter a valid {fieldName} greater than zero.");
-            }
-
-            return value;
-        }
-
-        private static decimal ParseRequiredDecimal(TextBox input, string fieldName)
-        {
-            if (!decimal.TryParse(input.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal value) || value <= 0)
-            {
-                throw new ArgumentException($"Enter a valid {fieldName} greater than zero.");
-            }
-
-            return value;
-        }
 
         private void submitVisitButton_Click(object sender, EventArgs e)
         {
@@ -498,22 +477,18 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ScheduleVisitAndOrders(List<Test> selectedTests)
         {
-            if (visitCheckupAppointmentDataGridView.SelectedRows.Count == 0 ||
-                visitCheckupAppointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value == null)
+            // Each check runs, even when an earlier field is invalid.
+            if (!ValidateVisitInput(
+                out int selectedAppointmentId,
+                out int systolic,
+                out int diastolic,
+                out int pulse,
+                out decimal bodyTemperature,
+                out decimal height,
+                out decimal weight))
             {
-                throw new ArgumentException("Please select an appointment.");
+                return;
             }
-
-            var selectedAppointmentId = Convert.ToInt32(
-                visitCheckupAppointmentDataGridView.SelectedRows[0].Cells[nameof(appointmentIdColumn)].Value,
-                CultureInfo.InvariantCulture);
-
-            var systolic = ParseRequiredInteger(systolicTextBox, "systolic pressure");
-            var diastolic = ParseRequiredInteger(diastolicTextBox, "diastolic pressure");
-            var pulse = ParseRequiredInteger(pulseTextBox, "pulse");
-            var bodyTemperature = ParseRequiredDecimal(bodyTemperatureTextBox, "body temperature");
-            var height = ParseRequiredDecimal(heightTextBox, "height");
-            var weight = ParseRequiredDecimal(weightTextBox, "weight");
 
             _appointmentController.SaveVisitAndTests(
                 selectedAppointmentId,
@@ -525,27 +500,21 @@ namespace HealthcareSystemProjectCS3230.view
                 weight,
                 symptomsTextBox.Text,
                 initialDiagnosisTextBox.Text,
-                this.visitCheckupFinalDiagnosisTextBox.Text,
+                visitCheckupFinalDiagnosisTextBox.Text,
                 selectedTests);
 
             MessageBox.Show("Checkup submitted.");
-            systolicTextBox.Clear();
-            diastolicTextBox.Clear();
-            pulseTextBox.Clear();
-            bodyTemperatureTextBox.Clear();
-            heightTextBox.Clear();
-            weightTextBox.Clear();
-            symptomsTextBox.Clear();
-            initialDiagnosisTextBox.Clear();
+            ClearVisitCheckupFields();
+            ClearVisitAndOrderTestError();
             visitCheckupAppointmentDataGridView.Rows.Clear();
             visitCheckupPatientSearchControl.Clear();
-
         }
 
         private Patient? _orderTestsPatient;
 
         private void orderTestsPatientSearchControl_PatientSelected(object? sender, EventArgs e)
         {
+            ClearOrderTestsFieldErrors();
             _orderTestsPatient = orderTestsPatientSearchControl.SelectedPatient;
             orderTestsErrorLabel.Text = string.Empty;
             orderTestsVisitGrid.Rows.Clear();
@@ -578,41 +547,32 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void orderTestsSubmitButton_Click(object? sender, EventArgs e)
         {
-            orderTestsErrorLabel.Text = string.Empty;
-
-            if (orderTestsVisitGrid.SelectedRows.Count == 0 ||
-                orderTestsVisitGrid.SelectedRows[0].Cells[nameof(orderTestsAppointmentIdColumn)].Value == null)
-            {
-                orderTestsErrorLabel.Text = "Please select a visit.";
-                return;
-            }
-
-            var selectedTests = orderTestsUnorderedTestsCheckedListBox.CheckedItems.Cast<Test>().ToList();
-            if (selectedTests.Count == 0)
-            {
-                orderTestsErrorLabel.Text = "Please select at least one test.";
-                return;
-            }
-
-            if (ConfirmOrder() != DialogResult.Yes)
-                return;
-
-            int visitId = Convert.ToInt32(
-                orderTestsVisitGrid.SelectedRows[0].Cells[nameof(orderTestsAppointmentIdColumn)].Value,
-                CultureInfo.InvariantCulture);
-
             try
             {
+                // Visit selection and test selection are checked together.
+                if (!ValidateOrderTestsInput(
+                    out int visitId, out List<Test> selectedTests))
+                {
+                    return;
+                }
+
+                if (ConfirmOrder() != DialogResult.Yes)
+                    return;
+
                 _appointmentController.AddTestsToVisit(visitId, selectedTests);
 
                 orderTestsUnorderedTestsCheckedListBox.Tag = null;
-                for (int index = 0; index < orderTestsUnorderedTestsCheckedListBox.Items.Count; index++)
+                for (int index = 0;
+                    index < orderTestsUnorderedTestsCheckedListBox.Items.Count;
+                    index++)
                 {
                     orderTestsUnorderedTestsCheckedListBox.SetItemChecked(index, false);
                 }
 
                 orderTestsPatientSearchControl_PatientSelected(null, EventArgs.Empty);
-                MessageBox.Show("Tests ordered successfully.", "Order Tests", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "Tests ordered successfully.", "Order Tests",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (ArgumentException ex)
             {
@@ -620,7 +580,8 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (Exception ex)
             {
-                orderTestsErrorLabel.Text = "The tests could not be ordered: " + ex.Message;
+                orderTestsErrorLabel.Text =
+                    "The tests could not be ordered: " + ex.Message;
             }
         }
         private Patient? _testResultsPatient;
@@ -633,6 +594,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ConfigureTestResultsForm()
         {
+            testResultsValueErrorLabel.SizeChanged += TestResultsValueErrorLabel_SizeChanged;
             testResultsErrorLabel.Text = string.Empty;
             testResultsPatientInfoLabel.Text = string.Empty;
             ClearTestResultsSelectedTest();
@@ -711,16 +673,27 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void testResultsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
+            foreach (DataGridViewColumn col in testResultsVisitGrid.Columns)
+            {
+                col.MinimumWidth = 200;
+            }
+
             testResultsVisitGrid.ClearSelection();
         }
 
         private void testResultsTestsGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
+            foreach (DataGridViewColumn col in testResultsTestsGrid.Columns)
+            {
+                col.MinimumWidth = 200;
+            }
+
             testResultsTestsGrid.ClearSelection();
         }
 
         private void ShowTestResultsSelectedTest()
         {
+            ClearTestResultsFieldErrors();
             var visit = TestResultsSelectedVisit;
             var test = TestResultsSelectedTest;
 
@@ -753,6 +726,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void ClearTestResultsSelectedTest()
         {
+            ClearTestResultsFieldErrors();
             testResultsSelectedTestLabel.Text = "Select a visit and a test to enter its result.";
             testResultsDatePerformedPicker.Value = DateTime.Now;
             testResultsResultTextBox.Clear();
@@ -785,19 +759,18 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void testResultsSaveButton_Click(object? sender, EventArgs e)
         {
-            testResultsErrorLabel.Text = string.Empty;
-
             var visit = TestResultsSelectedVisit;
             var test = TestResultsSelectedTest;
 
-            if (visit == null || test == null)
-            {
-                testResultsErrorLabel.Text = "Please select a visit and a test.";
-                return;
-            }
-
             try
             {
+                // The validator finishes all its checks before returning.
+                if (!ValidateTestResultsInput(visit, test) ||
+                    visit == null || test == null)
+                {
+                    return;
+                }
+
                 _appointmentController.SaveTestResult(
                     visit,
                     test,
@@ -814,7 +787,8 @@ namespace HealthcareSystemProjectCS3230.view
             }
             catch (Exception ex)
             {
-                testResultsErrorLabel.Text = "The result could not be saved: " + ex.Message;
+                testResultsErrorLabel.Text =
+                    "The result could not be saved: " + ex.Message;
             }
         }
 
@@ -929,6 +903,7 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void orderTestsAppointmentGrid_SelectionChanged(object sender, EventArgs e)
         {
+            ClearOrderTestsFieldErrors();
             orderTestsUnorderedTestsCheckedListBox.DataSource = null;
             orderTestsAlreadyOrderedTestsCheckedListBox.DataSource = null;
 
@@ -1005,14 +980,14 @@ namespace HealthcareSystemProjectCS3230.view
                 bool isFinalized = !string.IsNullOrWhiteSpace(visit.FinalDiagnosis);
                 bool canBeFinalized = this._appointmentController.DoAllTestsInVisitHaveAResult(visit.AppointmentId);
                 StringBuilder warningMessage = new StringBuilder("");
-                
+
                 EnableVisitCheckupFields(!isFinalized, canBeFinalized);
 
                 if (isFinalized)
                 {
                     warningMessage.Append("This visit has a final diagnosis and cannot be edited.");
                 }
-                else if(!canBeFinalized)
+                else if (!canBeFinalized)
                 {
                     warningMessage.Append("Some tests for this visit do not have results yet: A final diagnosis cannot be entered.");
                 }
@@ -1028,5 +1003,333 @@ namespace HealthcareSystemProjectCS3230.view
                 SetVisitAndOrderTextWarning("The visit could not be loaded: " + ex.Message);
             }
         }
+
+
+        private void TestResultsValueErrorLabel_SizeChanged(object? sender, EventArgs e)
+        {
+            testResultsSaveButton.Top = Math.Max(
+                testResultsAbnormalCheckBox.Bottom,
+                testResultsValueErrorLabel.Bottom) + 16;
+        }
+
+        #region Field validation
+
+        private static void ClearLabelTexts(params Label[] labels)
+        {
+            foreach (Label label in labels)
+                label.Text = string.Empty;
+        }
+
+        private void ClearAppointmentFieldErrors()
+        {
+            ClearLabelTexts(
+                appointmentPatientErrorLabel,
+                appointmentDoctorErrorLabel,
+                appointmentDateErrorLabel,
+                appointmentTimeErrorLabel,
+                appointmentReasonErrorLabel);
+        }
+
+        private void ClearVisitFieldErrors()
+        {
+            ClearLabelTexts(
+                visitAppointmentErrorLabel,
+                systolicErrorLabel,
+                diastolicErrorLabel,
+                pulseErrorLabel,
+                bodyTemperatureErrorLabel,
+                heightErrorLabel,
+                weightErrorLabel,
+                symptomsErrorLabel);
+        }
+
+        private void ClearOrderTestsFieldErrors()
+        {
+            ClearLabelTexts(orderTestsVisitErrorLabel, orderTestsSelectionErrorLabel);
+        }
+
+        private void ClearTestResultsFieldErrors()
+        {
+            ClearLabelTexts(
+                testResultsVisitErrorLabel,
+                testResultsTestErrorLabel,
+                testResultsValueErrorLabel);
+        }
+
+        private bool ValidateAppointmentInput(
+            out int patientId, out int doctorId, out DateTime when)
+        {
+            ClearAppointmentFieldErrors();
+            errorLabel.Text = string.Empty;
+
+            bool isValid = true;
+            patientId = _selectedPatientId.GetValueOrDefault();
+            when = default;
+
+            // Use the same timestamp for every date/time check in this submission.
+            DateTime now = DateTime.Now;
+            DateTime selectedDate = appointmentDatePicker.Value.Date;
+
+            if (!_selectedPatientId.HasValue)
+            {
+                appointmentPatientErrorLabel.Text =
+                    "Please search for and select an active patient.";
+                isValid = false;
+            }
+
+            if (!TryGetSelectedDoctorId(out doctorId))
+            {
+                appointmentDoctorErrorLabel.Text = "Please select a doctor.";
+                isValid = false;
+            }
+
+            // Preserve the create-mode restriction and the existing edit protections.
+            if (!_isEditMode && selectedDate < now.Date)
+            {
+                appointmentDateErrorLabel.Text =
+                    "Appointments cannot be booked in the past.";
+                isValid = false;
+            }
+
+            if (appointmentTimeComboBox.SelectedItem is TimeSpan selectedTime)
+            {
+                when = selectedDate.Add(selectedTime);
+
+                // Today's date is allowed, but an earlier time today is not.
+                // Past dates already have an error beside the date picker.
+                if (!_isEditMode && selectedDate == now.Date && when < now)
+                {
+                    appointmentTimeErrorLabel.Text =
+                        "Appointments cannot be booked in the past.";
+                    isValid = false;
+                }
+            }
+            else
+            {
+                appointmentTimeErrorLabel.Text =
+                    "Please select an available time slot.";
+                isValid = false;
+            }
+
+            // Always check Reason, even when the date/time or another field is invalid.
+            if (string.IsNullOrWhiteSpace(reasonTextBox.Text))
+            {
+                appointmentReasonErrorLabel.Text = "Please put a reason.";
+                isValid = false;
+            }
+            else if (reasonTextBox.Text.Length > reasonTextBox.MaxLength)
+            {
+                appointmentReasonErrorLabel.Text =
+                    $"Reason must be {reasonTextBox.MaxLength} characters or fewer.";
+                isValid = false;
+            }
+
+            // Return only after all applicable fields have been checked.
+            return isValid;
+        }
+
+        private static bool TryGetSelectedGridId(
+            DataGridView grid, string columnName, out int selectedId)
+        {
+            selectedId = 0;
+
+            if (grid.SelectedRows.Count == 0)
+                return false;
+
+            object? rawValue = grid.SelectedRows[0].Cells[columnName].Value;
+            if (rawValue == null || rawValue == DBNull.Value)
+                return false;
+
+            return int.TryParse(
+                Convert.ToString(rawValue, CultureInfo.InvariantCulture),
+                NumberStyles.Integer,
+                CultureInfo.InvariantCulture,
+                out selectedId);
+        }
+
+        private static bool ValidatePositiveInteger(
+            TextBox input, Label validationLabel, string fieldName, out int value)
+        {
+            // Preserve the original parsing culture and greater-than-zero rule.
+            bool valid = int.TryParse(
+                input.Text, NumberStyles.Integer,
+                CultureInfo.CurrentCulture, out value) && value > 0;
+
+            validationLabel.Text = valid
+                ? string.Empty
+                : $"Enter a valid {fieldName} greater than zero.";
+
+            return valid;
+        }
+
+        private static bool ValidatePositiveDecimal(
+            TextBox input, Label validationLabel, string fieldName, out decimal value)
+        {
+            bool valid = decimal.TryParse(
+                input.Text, NumberStyles.Number,
+                CultureInfo.CurrentCulture, out value) && value > 0;
+
+            validationLabel.Text = valid
+                ? string.Empty
+                : $"Enter a valid {fieldName} greater than zero.";
+
+            return valid;
+        }
+
+        private bool ValidateVisitInput(
+            out int appointmentId,
+            out int systolic,
+            out int diastolic,
+            out int pulse,
+            out decimal bodyTemperature,
+            out decimal height,
+            out decimal weight)
+        {
+            ClearVisitAndOrderTestError();
+            bool isValid = true;
+
+            if (!TryGetSelectedGridId(
+                visitCheckupAppointmentDataGridView,
+                nameof(appointmentIdColumn), out appointmentId))
+            {
+                visitAppointmentErrorLabel.Text = "Please select an appointment.";
+                isValid = false;
+            }
+
+            // Separate if statements deliberately evaluate ALL fields.
+            if (!ValidatePositiveInteger(
+                systolicTextBox, systolicErrorLabel,
+                "systolic pressure", out systolic))
+            {
+                isValid = false;
+            }
+
+            if (!ValidatePositiveInteger(
+                diastolicTextBox, diastolicErrorLabel,
+                "diastolic pressure", out diastolic))
+            {
+                isValid = false;
+            }
+
+            if (!ValidatePositiveInteger(
+                pulseTextBox, pulseErrorLabel, "pulse", out pulse))
+            {
+                isValid = false;
+            }
+
+            if (!ValidatePositiveDecimal(
+                bodyTemperatureTextBox, bodyTemperatureErrorLabel,
+                "body temperature", out bodyTemperature))
+            {
+                isValid = false;
+            }
+
+            if (!ValidatePositiveDecimal(
+                heightTextBox, heightErrorLabel, "height", out height))
+            {
+                isValid = false;
+            }
+
+            if (!ValidatePositiveDecimal(
+                weightTextBox, weightErrorLabel, "weight", out weight))
+            {
+                isValid = false;
+            }
+
+            // Check Symptoms even when one or more vitals are invalid.
+            if (string.IsNullOrWhiteSpace(symptomsTextBox.Text))
+            {
+                symptomsErrorLabel.Text = "Please put the patient's symptoms.";
+                isValid = false;
+            }
+
+            // Keep the existing diagnosis rules in the controller.
+            return isValid;
+        }
+
+        private bool ValidateOrderTestsInput(
+            out int visitId, out List<Test> selectedTests)
+        {
+            ClearOrderTestsFieldErrors();
+            orderTestsErrorLabel.Text = string.Empty;
+            bool isValid = true;
+
+            if (!TryGetSelectedGridId(
+                orderTestsVisitGrid, nameof(orderTestsAppointmentIdColumn),
+                out visitId))
+            {
+                orderTestsVisitErrorLabel.Text = "Please select a visit.";
+                isValid = false;
+            }
+
+            selectedTests = orderTestsUnorderedTestsCheckedListBox
+                .CheckedItems.Cast<Test>().ToList();
+
+            if (selectedTests.Count == 0)
+            {
+                orderTestsSelectionErrorLabel.Text =
+                    "Please select at least one test.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        private bool ValidateTestResultsInput(
+            VisitSummary? visit, VisitTestResult? test)
+        {
+            ClearTestResultsFieldErrors();
+            testResultsErrorLabel.Text = string.Empty;
+            bool isValid = true;
+
+            if (visit == null)
+            {
+                testResultsVisitErrorLabel.Text = "Please select a visit.";
+                isValid = false;
+            }
+            else if (visit.IsLocked)
+            {
+                testResultsErrorLabel.Text =
+                    "This visit has a final diagnosis, so its test results are read-only.";
+                isValid = false;
+            }
+
+            if (test == null)
+            {
+                testResultsTestErrorLabel.Text = "Please select a test.";
+                isValid = false;
+            }
+
+            if (testResultsResultTextBox.Text.Length > testResultsResultTextBox.MaxLength)
+            {
+                testResultsValueErrorLabel.Text =
+                    $"Result must be {testResultsResultTextBox.MaxLength} characters or fewer.";
+                isValid = false;
+            }
+
+            // Reuse the existing result parsing/normal-range logic. Do not
+            // invent clinical limits or a new format for non-numeric tests.
+            if (test != null && test.HasNormalRange &&
+                string.IsNullOrEmpty(testResultsValueErrorLabel.Text))
+            {
+                try
+                {
+                    _ = _appointmentController.DetermineIsAbnormal(
+                        test, testResultsResultTextBox.Text, false);
+                }
+                catch (ArgumentException ex)
+                {
+                    testResultsValueErrorLabel.Text = ex.Message;
+                    isValid = false;
+                }
+            }
+
+            // Date-performed and other controller-only rules stay in
+            // SaveTestResult. Unexpected errors still use the general label.
+            return isValid;
+        }
+
+        #endregion
+
     }
 }
