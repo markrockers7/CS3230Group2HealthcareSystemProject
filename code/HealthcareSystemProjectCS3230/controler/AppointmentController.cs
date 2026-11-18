@@ -6,10 +6,10 @@ namespace HealthcareSystemProjectCS3230.controler;
 
 public class AppointmentController
 {
-        private AppointmentsDAL appointmentsDAL = new AppointmentsDAL();
-        private DoctorDAL doctorDAL = new DoctorDAL();
-        private PersonDAL personDAL = new PersonDAL();
-        private TestDAL testDAL = new TestDAL();
+    private AppointmentsDAL appointmentsDAL = new AppointmentsDAL();
+    private DoctorDAL doctorDAL = new DoctorDAL();
+    private PersonDAL personDAL = new PersonDAL();
+    private TestDAL testDAL = new TestDAL();
 
     /// <summary>
     /// Retrieves a list of all doctors in the system.
@@ -70,7 +70,6 @@ public class AppointmentController
     /// </summary>
     /// <param name="appointmentId">The ID of the visit (appointment)</param>
     /// <returns>List of VisitTestResult objects</returns>
-
     public List<VisitTestResult> GetVisitTestResults(int appointmentId)
     {
         return testDAL.GetVisitTestResults(appointmentId);
@@ -123,7 +122,7 @@ public class AppointmentController
             throw new ArgumentException("Please enter the test result.");
         }
 
-       
+
 
         if (datePerformed.Date < visit.AppointmentDateTime.Date)
         {
@@ -140,18 +139,24 @@ public class AppointmentController
     }
 
     /// <summary>
-    /// Saves the visit and any selected tests. Database access remains in the DAL.
+    /// Validates and saves a visit and its selected tests. An existing visit is updated.
+    /// A null or whitespace final diagnosis is stored as no final diagnosis.
     /// </summary>
-    /// <param name="appointmentId">The ID of the appointment</param>
-    /// <param name="systolic">The systolic blood pressure</param>
-    /// <param name="diastolic">The diastolic blood pressure</param>
-    /// <param name="pulse">The pulse rate</param>
-    /// <param name="bodyTemperature">The body temperature</param>
-    /// <param name="height">The height</param>
-    /// <param name="weight">The weight</param>
-    /// <param name="symptoms">The symptoms</param>
-    /// <param name="initialDiagnosis">The initial diagnosis</param>
-    /// <param name="selectedTests">The selected tests</param>
+    /// <param name="appointmentId">The ID of the appointment associated with the visit.</param>
+    /// <param name="systolic">The systolic blood pressure; must be greater than zero.</param>
+    /// <param name="diastolic">The diastolic blood pressure; must be greater than zero.</param>
+    /// <param name="pulse">The pulse rate; must be greater than zero.</param>
+    /// <param name="bodyTemperature">The body temperature; must be greater than zero.</param>
+    /// <param name="height">The patient's height; must be greater than zero.</param>
+    /// <param name="weight">The patient's weight; must be greater than zero.</param>
+    /// <param name="symptoms">The patient's symptoms; must not be blank.</param>
+    /// <param name="initialDiagnosis">The initial diagnosis.</param>
+    /// <param name="finalDiagnosis">The final diagnosis, or null or whitespace to clear it.</param>
+    /// <param name="selectedTests">The tests to order for the visit.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the appointment or numeric values are invalid or symptoms are blank.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="selectedTests"/> is null.</exception>
     public void SaveVisitAndTests(
         int appointmentId,
         int systolic,
@@ -192,6 +197,28 @@ public class AppointmentController
     }
 
     /// <summary>
+    /// Validates and adds selected tests to an existing visit without replacing tests already ordered.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the existing visit (appointment).</param>
+    /// <param name="selectedTests">The tests to add.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the appointment ID is invalid, no tests are selected, a test code is blank,
+    /// the visit does not exist, or the visit already has a final diagnosis.
+    /// </exception>
+    public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
+    {
+        if (appointmentId <= 0) throw new ArgumentException("Please select a valid visit.");
+
+        if (selectedTests == null || selectedTests.Count == 0)
+            throw new ArgumentException("Please select at least one test.");
+
+        if (selectedTests.Any(test => string.IsNullOrWhiteSpace(test.TestCode)))
+            throw new ArgumentException("The selected tests are invalid.");
+
+        testDAL.AddTestsToVisit(appointmentId, selectedTests);
+    }
+
+    /// <summary>
     /// Retrieves a specific appointment by its ID.
     /// </summary>
     /// <param name="appointmentId">The ID of the appointment to retrieve</param>
@@ -210,10 +237,10 @@ public class AppointmentController
     {
         return DateTime.Today < appointmentDateTime.Date;
     }
-        public List<AppointmentSummary> GetAppointmentsForPatient(int patientId)
-        {
-            return appointmentsDAL.GetAppointmentsForPatient(patientId, DateTime.Today);
-        }
+    public List<AppointmentSummary> GetAppointmentsForPatient(int patientId)
+    {
+        return appointmentsDAL.GetAppointmentsForPatient(patientId, DateTime.Today);
+    }
 
     /// <summary>
     /// Retrieves a list of available appointment slots for a specific doctor on a specific date.
@@ -224,10 +251,10 @@ public class AppointmentController
     /// <returns>List of available TimeSpan slots</returns>
     public List<TimeSpan> GetAvailableSlots(int doctorId, DateTime date, int? excludeAppointmentId = null)
     {
-            List<TimeSpan> allSlots = AppointmentSlotRules.GetDailySlots();
-            HashSet<TimeSpan> bookedSlots = appointmentsDAL
-            .GetBookedSlotsForDoctorDate(doctorId, date, excludeAppointmentId)
-            .ToHashSet();
+        List<TimeSpan> allSlots = AppointmentSlotRules.GetDailySlots();
+        HashSet<TimeSpan> bookedSlots = appointmentsDAL
+        .GetBookedSlotsForDoctorDate(doctorId, date, excludeAppointmentId)
+        .ToHashSet();
 
         return allSlots.Where(slot => !bookedSlots.Contains(slot)).ToList();
     }
@@ -238,12 +265,14 @@ public class AppointmentController
     /// <param name="doctorId">The ID of the doctor</param>
     /// <param name="appointmentDateTime">The date and time of the appointment</param>
     /// <param name="reason">The reason for the appointment</param>
+    /// <exception cref="ArgumentException">Thrown when the input is invalid or the slot is already taken.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the appointment could not be saved.</exception>
     public void BookAppointment(int patientId, int doctorId, DateTime appointmentDateTime, string reason)
     {
         ValidateAppointment(patientId, appointmentDateTime, reason);
         EnsureSlotIsFree(doctorId, appointmentDateTime);
 
-            bool saved = appointmentsDAL.AddAppointment(patientId, appointmentDateTime, doctorId, reason.Trim());
+        bool saved = appointmentsDAL.AddAppointment(patientId, appointmentDateTime, doctorId, reason.Trim());
         if (!saved)
         {
             throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");
@@ -257,36 +286,39 @@ public class AppointmentController
     /// <param name="doctorId">The new doctor ID</param>
     /// <param name="appointmentDateTime">The new date and time of the appointment</param>
     /// <param name="reason">The new reason for the appointment</param>
+    /// <exception cref="ArgumentException">Thrown when the appointment can't be found or edited, the input is invalid, or the slot is already taken.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the appointment could not be saved.</exception>
     public void UpdateAppointment(int appointmentId, int patientId, int doctorId, DateTime appointmentDateTime, string reason)
     {
-            Appointment? currentAppointment = appointmentsDAL.GetAppointmentById(appointmentId);
-            if (currentAppointment == null)
-            {
-                throw new ArgumentException("The appointment could not be found.");
-            }
+        Appointment? currentAppointment = appointmentsDAL.GetAppointmentById(appointmentId);
+        if (currentAppointment == null)
+        {
+            throw new ArgumentException("The appointment could not be found.");
+        }
 
-            if (!CanEditAppointment(currentAppointment.DateTime))
-            {
-                throw new ArgumentException("This appointment can no longer be edited.");
-            }
+        if (!CanEditAppointment(currentAppointment.DateTime))
+        {
+            throw new ArgumentException("This appointment can no longer be edited.");
+        }
 
-            ValidateAppointment(patientId, appointmentDateTime, reason);
-            EnsureSlotIsFree(doctorId, appointmentDateTime, appointmentId);
+        ValidateAppointment(patientId, appointmentDateTime, reason);
+        EnsureSlotIsFree(doctorId, appointmentDateTime, appointmentId);
 
-            bool saved = appointmentsDAL.UpdateAppointment(appointmentId, patientId, appointmentDateTime, doctorId, reason.Trim());
-            if (!saved)
-            {
-                throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");
-            }
+        bool saved = appointmentsDAL.UpdateAppointment(appointmentId, patientId, appointmentDateTime, doctorId, reason.Trim());
+        if (!saved)
+        {
+            throw new InvalidOperationException("The appointment could not be saved. The time may have just been booked. Please choose another time.");
+        }
     }
 
     /// <summary>
-    /// Gets a list of appointment views for a specific patient, excluding past appointments and those with scheduled visits.
+    /// Retrieves all appointments for a patient and includes each doctor's display name.
+    /// If a doctor cannot be matched, the returned view uses "Unknown" as the doctor's name.
     /// </summary>
-    /// <param name="patientId">The ID of the patient</param>
-    /// <exception cref="ArgumentException">Thrown when no appointments are found for the given patient ID.</exception>
-    /// <returns>A list of appointment views for the specified patient</returns>
-    public List<AppointmentView> GetAppointmentsByPatientId(int patientId)
+    /// <param name="patientId">The ID of the patient.</param>
+    /// <returns>A list of appointment views representing the patient's appointments.</returns>
+    /// <exception cref="ArgumentException">Thrown if no appointments are found for the patient.</exception>
+    public List<AppointmentView> GetAllPatientAppointments(int patientId)
     {
         var appointments = appointmentsDAL.GetAppointmentsByPatientId(patientId);
         if (appointments == null || appointments.Count == 0)
@@ -334,74 +366,46 @@ public class AppointmentController
 
     private static void ValidateAppointment(int patientId, DateTime appointmentDateTime, string reason)
     {
-            if (patientId <= 0)
-            {
-                throw new ArgumentException("Please enter a valid patient ID.");
-            }
+        if (patientId <= 0)
+        {
+            throw new ArgumentException("Please enter a valid patient ID.");
+        }
 
-            if (string.IsNullOrWhiteSpace(reason))
-            {
-                throw new ArgumentException("Please enter a reason for the visit.");
-            }
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            throw new ArgumentException("Please enter a reason for the visit.");
+        }
 
-            if (appointmentDateTime < DateTime.Now)
-            {
-                throw new ArgumentException("Appointments can't be booked in the past.");
-            }
+        if (appointmentDateTime < DateTime.Now)
+        {
+            throw new ArgumentException("Appointments can't be booked in the past.");
+        }
 
-            if (!AppointmentSlotRules.IsValidSlotDateTime(appointmentDateTime))
-            {
-                throw new ArgumentException(
-                    "Appointment times must be in 15-minute slots between 8:00 AM and 4:45 PM.");
-            }
+        if (!AppointmentSlotRules.IsValidSlotDateTime(appointmentDateTime))
+        {
+            throw new ArgumentException(
+                "Appointment times must be in 15-minute slots between 8:00 AM and 4:45 PM.");
+        }
     }
 
     /// <summary>
-    /// Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+    /// Gets all of a patient's visits, with or without ordered tests.
     /// </summary>
     /// <param name="patientId">The ID of the patient</param>
-    /// <returns>A list of Visit objects that meet the criteria</returns>
-    public List<Visit> GetVisitsWithCompleteOrNoTestsForPatient(int patientId)
-    {
-        return testDAL.GetVisitsWithCompleteOrNoVisitTests(patientId);
-    }
-
-    /// <summary>
-    /// Gets the name of the doctor associated with a visit.
-    /// </summary>
-    /// <param name="visitId">The ID of the visit</param>
-    /// <returns>The name of the doctor associated with the visit</returns>
-    public string GetDoctorNameFromVisit(int visitId)
-    {
-        var doctors = GetDoctorsWithNames();
-        var appointment = GetAppointmentById(visitId);
-        if (appointment == null)
-        {
-            throw new ArgumentException("Appointment not found.");
-        }
-        var scheduledDoctor = doctors.FirstOrDefault(doctor => doctor.DoctorId == appointment.DoctorId);
-        return scheduledDoctor == null ? throw new ArgumentException("Doctor not found.") : scheduledDoctor.FullName;
-    }
-
-    /// <summary>
-    /// Updates the Final Diagnosis for a visit.
-    /// </summary>
-    /// <param name="visitId">The ID of the visit to update</param>
-    /// <param name="finalDiagnosis">The new final diagnosis</param>
-    /// <returns>true if the update was successful, false otherwise</returns>
-    public bool UpdateFinalDiagnosis(string finalDiagnosis, int visitId)
+    /// <returns>A list of VisitSummary objects, newest first</returns>
+    public List<VisitSummary> GetAllVisitsForPatient(int patientId)
     {
         return testDAL.GetVisitSummariesForPatient(patientId, onlyWithTests: false);
     }
 
-     /// <summary>
-     /// Gets every visit for a patient and its associated tests.
-     /// </summary>
-     /// <param name="patientId">The ID of the patient.</param>
-     /// <returns>
-     /// A dictionary mapping each visit to its test results. Visits without ordered tests have
-     /// an empty list, and visits are represented by their <see cref="VisitSummary"/>.
-     /// </returns>
+    /// <summary>
+    /// Gets every visit for a patient and its associated tests.
+    /// </summary>
+    /// <param name="patientId">The ID of the patient.</param>
+    /// <returns>
+    /// A dictionary mapping each visit to its test results. Visits without ordered tests have
+    /// an empty list, and visits are represented by their <see cref="VisitSummary"/>.
+    /// </returns>
     public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
     {
         return testDAL.GetAllVisitsAndTheirTestsForPatient(patientId);

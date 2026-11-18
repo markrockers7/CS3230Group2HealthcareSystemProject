@@ -40,18 +40,22 @@ public class TestDAL
     }
 
     /// <summary>
-    /// Saves a visit and its associated tests to the database.
+    /// Saves a visit and its associated tests to the database. Updates an existing visit
+    /// when the appointment already has a visit record and does not replace tests that
+    /// have already been ordered for the visit.
+    /// All visit and test changes are committed together or rolled back if a database error occurs.
     /// </summary>
     /// <param name="appointmentId">The ID of the appointment associated with the visit.</param>
     /// <param name="systolic">The systolic blood pressure.</param>
     /// <param name="diastolic">The diastolic blood pressure.</param>
     /// <param name="pulse">The pulse rate.</param>
     /// <param name="bodyTemperature">The body temperature.</param>
-    /// <param name="height">The height.</param>
-    /// <param name="weight">The weight.</param>
-    /// <param name="symptoms">The symptoms.</param>
+    /// <param name="height">The patient's height.</param>
+    /// <param name="weight">The patient's weight.</param>
+    /// <param name="symptoms">The patient's symptoms.</param>
     /// <param name="initialDiagnosis">The initial diagnosis.</param>
-    /// <param name="selectedTests">The selected tests.</param>
+    /// <param name="finalDiagnosis">The final diagnosis, or null or whitespace to clear it.</param>
+    /// <param name="selectedTests">The tests to order for the visit.</param>
     public void SaveVisitAndTests(int appointmentId, int systolic, int diastolic, int pulse,
         decimal bodyTemperature, decimal height, decimal weight, string symptoms, string? initialDiagnosis, string? finalDiagnosis,
         IReadOnlyCollection<Test> selectedTests)
@@ -121,6 +125,51 @@ public class TestDAL
     }
 
     /// <summary>
+    /// Adds tests to an existing visit without changing tests already ordered for it.
+    /// Uses a database transaction and rolls back all additions if an error occurs.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the existing visit (appointment).</param>
+    /// <param name="selectedTests">The tests to add.</param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the visit does not exist or already has a final diagnosis.
+    /// </exception>
+    public void AddTestsToVisit(int appointmentId, IReadOnlyCollection<Test> selectedTests)
+    {
+        using var connection = new MySqlConnection(Connection.ConnectionString);
+        connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+        try
+        {
+            foreach (var test in selectedTests)
+            {
+                using var testCommand = new MySqlCommand("AddTestToVisit", connection, transaction)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                testCommand.Parameters.Add("p_appointment_id", MySqlDbType.Int32).Value = appointmentId;
+                testCommand.Parameters.Add("p_test_code", MySqlDbType.VarChar).Value = test.TestCode;
+                testCommand.Parameters.Add("p_date_performed", MySqlDbType.DateTime).Value = DateTime.Now;
+                testCommand.ExecuteNonQuery();
+            }
+
+            transaction.Commit();
+        }
+        catch (MySqlException ex) when (
+            ex.Message.Contains("The selected visit could not be found.", StringComparison.Ordinal) ||
+            ex.Message.Contains("This visit has a final diagnosis", StringComparison.Ordinal))
+        {
+            transaction.Rollback();
+            throw new ArgumentException(ex.Message, ex);
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    /// <summary>
     /// Gets all of the available Visits from the database for a specific patient.
     /// </summary>
     /// <param name="patientId">The ID of the patient to get visits for.</param>
@@ -153,11 +202,11 @@ public class TestDAL
     }
 
     /// <summary>
-    /// Gets all the visits that either have no tests or all of the tests are completed for a specific patient.
+    /// Gets all visits for a patient that do not already have a final diagnosis.
     /// </summary>
     /// <param name="patientId">The ID of the patient</param>
-    /// <returns>List of Visit objects that meet the criteria</returns>
-    public List<Visit> GetVisitsWithCompleteOrNoVisitTests(int patientId)
+    /// <returns>List of Visit objects with a null final diagnosis; visits may have ordered tests with or without results</returns>
+    public List<Visit> GetVisitsWithNoFinalDiagnosis(int patientId)
     {
         var visits = new List<Visit>();
         using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -187,10 +236,11 @@ public class TestDAL
     /// <summary>
     /// Gets a patient's visits with the visit date, doctor's name, and diagnoses.
     /// </summary>
-    /// <param name="patientId">The ID of the patient</param>
-    /// <param name="onlyWithTests">If true, only returns visits that have at least one ordered test</param>
-    /// <returns>List of VisitSummary objects, newest first</returns>
-
+    /// <param name="patientId">The ID of the patient.</param>
+    /// <param name="onlyWithTests">
+    /// If true, only visits with at least one ordered test are returned; otherwise all visits are returned.
+    /// </param>
+    /// <returns>A list of visit summaries in newest-first order.</returns>
     public List<VisitSummary> GetVisitSummariesForPatient(int patientId, bool onlyWithTests = true)
     {
         var visits = new List<VisitSummary>();
@@ -231,6 +281,28 @@ public class TestDAL
         }
 
         return visits;
+    }
+
+    /// <summary>
+    /// Gets every visit for a patient and the ordered tests associated with each visit.
+    /// </summary>
+    /// <param name="patientId">The ID of the patient.</param>
+    /// <returns>
+    /// A dictionary whose keys are the patient's visits and whose values are the corresponding
+    /// test results. Visits without ordered tests have an empty list.
+    /// </returns>
+    public Dictionary<VisitSummary, List<VisitTestResult>> GetAllVisitsAndTheirTestsForPatient(int patientId)
+    {
+        var visitDictionary = new Dictionary<VisitSummary, List<VisitTestResult>>();
+        var visitSummaries = GetVisitSummariesForPatient(patientId, onlyWithTests: false);
+
+        foreach (var visit in visitSummaries)
+        {
+            var testResults = GetVisitTestResults(visit.AppointmentId);
+            visitDictionary[visit] = testResults;
+        }
+
+        return visitDictionary;
     }
 
     /// <summary>
