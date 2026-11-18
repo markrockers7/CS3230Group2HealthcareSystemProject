@@ -4,56 +4,57 @@ using System.Text;
 
 namespace HealthcareSystemProjectCS3230.model
 {
-    /// <summary>
-    /// Represents the results of a visit to a healthcare provider, including details such as the appointment ID, blood pressure, pulse, body temperature, height, weight, symptoms, and diagnoses.
-    /// </summary>
+    /** Represents the results of a visit to a healthcare provider, including details such as the appointment ID, blood pressure, pulse, body temperature, height, weight, symptoms, and diagnoses.
+     */
     public class VisitTestResult
     {
-        /// <summary>
-        /// Gets or sets the appointment ID of the visit.
-        /// </summary>
+        /*
+         * The appointment ID of the visit.
+         */
         public int AppointmentId { get; set; }
-        /// <summary>
-        /// Gets or sets the test code.
-        /// </summary>
+        /*
+         * The upper bound of the visit's blood pressure.
+         */
         public string TestCode { get; set; } = string.Empty;
-        /// <summary>
-        /// Gets or sets the test name.
-        /// </summary>
+        /*
+         * The lower bound of the visit's blood pressure.
+         */
         public string TestName { get; set; } = string.Empty;
-        /// <summary>
-        /// Gets or sets the lower bound of the test result.
-        /// </summary>
+        /*
+         * The pulse of the patient.
+         */
         public decimal? LowValue { get; set; }
-        /// <summary>
-        /// Gets or sets the upper bound of the test result.
-        /// </summary>
+        /*
+         * The body temperature of the patient.
+         */
         public decimal? HighValue { get; set; }
-        /// <summary>
-        /// Gets or sets the unit of the test result.
-        /// </summary>
+        /*
+         * The Height of the patient.
+         */
         public string? Unit { get; set; }
-        /// <summary>
-        /// Gets or sets the date the test was performed.
-        /// </summary>
+        /*
+         * The Weight of the patient.
+         */
         public DateTime? DatePerformed { get; set; }
-        /// <summary>
-        /// Gets or sets the result of the test.
-        /// </summary>
+        /*
+         * The symptoms of the patient.
+         */
         public string? Result { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether the test result is abnormal.
-        /// </summary>
+        /*
+         * The inital diagnosis of the patient.
+         */
         public bool? IsAbnormal { get; set; }
-        /// <summary>
-        /// Gets a value indicating whether the test has a normal range.
-        /// </summary>
+        /*
+         * The final diagnosis of the patient.
+         */
+
         public bool HasNormalRange => LowValue.HasValue || HighValue.HasValue;
 
-        /// <summary>
-        /// Gets a string representation of the normal range for the test result.
-        /// </summary>
-        /// <returns>A string representation of the normal range for the test result.</returns>
+        /*
+         * Returns a string representation of the VisitTestResult object.
+         *
+         * @return A string representation of the VisitTestResult object.
+         */
         public string NormalRange
         {
             get
@@ -70,15 +71,17 @@ namespace HealthcareSystemProjectCS3230.model
                 return "Negative";
             }
         }
-        /// <summary>
-        /// Gets a string representation of the test result.
-        /// </summary>
-        /// <returns>A string representation of the test result.</returns>
+        /*
+         * Returns a string representation of the VisitTestResult object.
+         *
+         * @return A string representation of the VisitTestResult object.
+         */
         public string ResultText => string.IsNullOrWhiteSpace(Result) ? "Pending" : Result!;
-        /// <summary>
-        /// Gets a string representation of the abnormality status of the test result.
-        /// </summary>
-        /// <returns>A string representation of the abnormality status of the test result.</returns>
+        /*
+         * Returns a string representation of the VisitTestResult object.
+         *
+         * @return A string representation of the VisitTestResult object.
+         */
         public string AbnormalText => IsAbnormal switch
         {
             true => "Yes",

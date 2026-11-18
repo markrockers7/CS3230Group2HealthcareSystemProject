@@ -2,46 +2,44 @@
 
 public class Visit
 {
-    /// <summary>
-    /// The appointment ID of the visit.
-    /// </summary>
+    /*
+     * The appointment ID of the visit.
+     */
     public int AppointmentId { get; set; }
-
-    /// <summary>
-    /// The upper bound of the visit's blood pressure.
-    /// </summary>
+    /*
+     * The upper bound of the visit's blood pressure.
+     */
     public int SystolicBp { get; set; }
-
-    /// <summary>
-    /// The lower bound of the visit's blood pressure.
-    /// </summary>
+    /*
+     * The lower bound of the visit's blood pressure.
+     */
     public int DiastolicBp{ get; set; }
-    /// <summary>
-    /// The pulse of the patient.
-    /// </summary>
+    /*
+     * The pulse of the patient.
+     */
     public int Pulse { get; set; }
-    /// <summary>
-    /// The body temperature of the patient.
-    /// </summary>
+    /*
+     * The body temperature of the patient.
+     */
     public double BodyTemperature { get; set; }
-    /// <summary>
-    /// The Height of the patient.
-    /// </summary>
+    /*
+     * The Height of the patient.
+     */
     public double Height { get; set; }
-    /// <summary>
-    /// The Weight of the patient.
-    /// </summary>
+    /*
+     * The Weight of the patient.
+     */
     public double Weight { get; set; }
-    /// <summary>
-    /// The symptoms of the patient.
-    /// </summary>
+    /*
+     * The symptoms of the patient.
+     */
     public string Symptoms { get; set; }
-    /// <summary>
-    /// The initial diagnosis of the patient.
-    /// </summary>
+    /*
+     * The inital diagnosis of the patient.
+     */
     public string? InitialDiagnosis { get; set; }
-    /// <summary>
-    /// The final diagnosis of the patient.
-    /// </summary>
+    /*
+     * The final diagnosis of the patient.
+     */
     public string? FinalDiagnosis { get; set; }
 }
