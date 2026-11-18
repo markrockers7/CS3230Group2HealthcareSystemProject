@@ -1,4 +1,4 @@
-﻿using HealthcareSystemProjectCS3230.model;
+using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -6,10 +6,10 @@ namespace HealthcareSystemProjectCS3230.DAL;
 
 public class TestDAL
 {
-    /*
-     * Gets all of the available tests from the database.
-     * @return List of Test objects representing the available tests
-     */
+    /// <summary>
+    /// Gets all of the available tests from the database.
+    /// </summary>
+    /// <returns>List of Test objects representing the available tests</returns>
     public List<Test> GetTests()
     {
         var tests = new List<Test>();
@@ -169,11 +169,11 @@ public class TestDAL
         }
     }
 
-    /*
-     * Gets all of the available Visits from the database for a specific patient.
-     * @param patientId The ID of the patient to get visits for.
-     * @return A list of Visit objects for the specified patient.
-     */
+    /// <summary>
+    /// Gets all of the available Visits from the database for a specific patient.
+    /// </summary>
+    /// <param name="patientId">The ID of the patient to get visits for.</param>
+    /// <returns>A list of Visit objects for the specified patient.</returns>
     public List<Visit> GetVisitsByPatientId(int patientId)
     {
         var visits = new List<Visit>();
@@ -201,12 +201,11 @@ public class TestDAL
         return visits;
     }
 
-    /*
-     * Gets all visits for a patient that do not already have a final diagnosis.
-     * @param patientId The ID of the patient
-     * @return List of Visit objects with a null final diagnosis; visits may have ordered
-     *         tests with or without results
-     */
+    /// <summary>
+    /// Gets all visits for a patient that do not already have a final diagnosis.
+    /// </summary>
+    /// <param name="patientId">The ID of the patient</param>
+    /// <returns>List of Visit objects with a null final diagnosis; visits may have ordered tests with or without results</returns>
     public List<Visit> GetVisitsWithNoFinalDiagnosis(int patientId)
     {
         var visits = new List<Visit>();
@@ -306,11 +305,11 @@ public class TestDAL
         return visitDictionary;
     }
 
-    /*
-     * Gets the tests ordered for a visit, with each test's name, normal range, and any result entered so far.
-     * @param appointmentId The ID of the visit (appointment)
-     * @return List of VisitTestResult objects
-     */
+    /// <summary>
+    /// Gets the tests ordered for a visit, with each test's name, normal range, and any result entered so far.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the visit (appointment)</param>
+    /// <returns>List of VisitTestResult objects</returns>
     public List<VisitTestResult> GetVisitTestResults(int appointmentId)
     {
         var results = new List<VisitTestResult>();
@@ -348,16 +347,16 @@ public class TestDAL
         return results;
     }
 
-    /*
-     * Saves the result of one ordered test.
-     * Only updates the test if its visit has no final diagnosis yet, so finalized visits can't be changed.
-     * @param appointmentId The ID of the visit (appointment)
-     * @param testCode The code of the test
-     * @param datePerformed When the test was performed
-     * @param result The test result (a number or a description)
-     * @param isAbnormal Whether the result is abnormal
-     * @return true if the result was saved, false if the test wasn't found or the visit is finalized
-     */
+    /// <summary>
+    /// Saves the result of one ordered test.
+    /// Only updates the test if its visit has no final diagnosis yet, so finalized visits can't be changed.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the visit (appointment)</param>
+    /// <param name="testCode">The code of the test</param>
+    /// <param name="datePerformed">When the test was performed</param>
+    /// <param name="result">The test result (a number or a description)</param>
+    /// <param name="isAbnormal">Whether the result is abnormal</param>
+    /// <returns>true if the result was saved, false if the test wasn't found or the visit is finalized</returns>
     public bool SaveTestResult(int appointmentId, string testCode, DateTime datePerformed, string result, bool isAbnormal)
     {
         using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -381,11 +380,11 @@ public class TestDAL
         return command.ExecuteNonQuery() > 0;
     }
 
-    /*
- * Gets one visit's checkup details and diagnoses.
- * @param appointmentId The ID of the visit (appointment)
- * @return The Visit, or null if it doesn't exist
- */
+    /// <summary>
+    /// Gets one visit's checkup details and diagnoses.
+    /// </summary>
+    /// <param name="appointmentId">The ID of the visit (appointment)</param>
+    /// <returns>The Visit, or null if it doesn't exist</returns>
     public Visit? GetVisitById(int appointmentId)
     {
         using var connection = new MySqlConnection(Connection.ConnectionString);
