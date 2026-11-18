@@ -2,29 +2,25 @@
 
 public class Test
 {
-    /// <summary>
-    /// Represents the code for a medical test.
-    /// </summary>
+    /*
+     * Represents the code for a medical test.
+     */
     public string TestCode { get; set; }
-
-    /// <summary>
-    /// Represents the name of a medical test.
-    /// </summary>
+    /*
+     * Represents the name of a medical test.
+     */
     public string Name { get; set; }
-
-    /// <summary>
-    /// Represents the lower limit of the normal range for a medical test.
-    /// </summary>
+    /*
+     * Represents the lower limit of the normal range for a medical test.
+     */
     public double? LowValue { get; set; }
-
-    /// <summary>
-    /// Represents the upper limit of the normal range for a medical test.
-    /// </summary>
+    /*
+     * Represents the upper limit of the normal range for a medical test.
+     */
     public double? HighValue { get; set; }
-
-    /// <summary>
-    /// Represents the unit of measurement for a medical test.
-    /// </summary>
+    /*
+     * Represents the unit of measurement for a medical test.
+     */
     public string? UnitOfMeasurement { get; set; }
     public override string ToString() => Name;
 }

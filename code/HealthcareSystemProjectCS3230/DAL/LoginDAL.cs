@@ -1,7 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using HealthcareSystemProjectCS3230.model;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace HealthcareSystemProjectCS3230.DAL
 {
@@ -23,7 +21,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             const string query = "SELECT username, type FROM account WHERE username = @username AND password = @password";
             using var command = new MySqlCommand(query, connection);
             command.Parameters.Add("@username", MySqlDbType.VarString).Value = username;
-            command.Parameters.Add("@password", MySqlDbType.VarString).Value = GetHashedPassword(password);
+            command.Parameters.Add("@password", MySqlDbType.VarString).Value = password;
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
@@ -47,7 +45,7 @@ namespace HealthcareSystemProjectCS3230.DAL
             const string query = "SELECT a.username, type, first_name, last_name, n.id FROM account a JOIN nurse n ON a.username = n.username JOIN person p ON n.person_id = p.person_id WHERE a.username = @username AND a.password = @password";
             using var command = new MySqlCommand(query, connection);
             command.Parameters.Add("@username", MySqlDbType.VarString).Value = username;
-            command.Parameters.Add("@password", MySqlDbType.VarString).Value = GetHashedPassword(password);
+            command.Parameters.Add("@password", MySqlDbType.VarString).Value = password;
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
@@ -77,7 +75,7 @@ namespace HealthcareSystemProjectCS3230.DAL
                 "SELECT ac.username, type, first_name, last_name, ad.id FROM account ac JOIN administrator ad ON ac.username = ad.username JOIN person p ON ad.person_id = p.person_id WHERE ac.username = @username AND ac.password = @password";
             using var command = new MySqlCommand(query, connection);
             command.Parameters.Add("@username", MySqlDbType.VarString).Value = username;
-            command.Parameters.Add("@password", MySqlDbType.VarString).Value = GetHashedPassword(password);
+            command.Parameters.Add("@password", MySqlDbType.VarString).Value = password;
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
@@ -92,13 +90,13 @@ namespace HealthcareSystemProjectCS3230.DAL
 
             return null;
         }
-        /// <summary>
-        /// Adds a new account to the database with the specified username, password, and account type.
-        /// </summary>
-        /// <param name="username">The username for the new account.</param>
-        /// <param name="password">The password for the new account.</param>
-        /// <param name="accountType">The type of the account (e.g., "nurse", "administrator").</param>
-        /// <returns>True if the account was successfully added; otherwise, false.</returns>
+        /*
+         * Adds a new account to the database with the specified username, password, and account type.
+         * @param username The username for the new account.
+         * @param password The password for the new account.
+         * @param accountType The type of the account (e.g., "nurse", "administrator").
+         * @returns True if the account was successfully added; otherwise, false.
+         */
         public bool AddAccount(string username, string password, string accountType)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);
@@ -106,20 +104,10 @@ namespace HealthcareSystemProjectCS3230.DAL
             const string query = "INSERT INTO account (username, password, type) VALUES (@username, @password, @type)";
             using var command = new MySqlCommand(query, connection);
             command.Parameters.Add("@username", MySqlDbType.VarString).Value = username;
-            command.Parameters.Add("@password", MySqlDbType.VarString).Value = GetHashedPassword(password);
+            command.Parameters.Add("@password", MySqlDbType.VarString).Value = password;
             command.Parameters.Add("@type", MySqlDbType.VarString).Value = accountType;
             int rowsAffected = command.ExecuteNonQuery();
             return rowsAffected > 0;
-        }
-        /// <summary>
-        /// Gets the hashed version of the provided password.
-        /// </summary>
-        /// <param name="password">The password to hash.</param>
-        /// <returns>The hashed password.</returns>
-        public static string GetHashedPassword(string password)
-        {
-            var hashedPassword = SHA256.HashData(Encoding.UTF8.GetBytes(password));
-            return Convert.ToHexString(hashedPassword);
         }
     }
 }
