@@ -821,6 +821,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             // testResultsTabPage
             // 
+            testResultsTabPage.AutoScroll = true;
             testResultsTabPage.Controls.Add(testResultsTitleLabel);
             testResultsTabPage.Controls.Add(testResultsPatientSearchControl);
             testResultsTabPage.Controls.Add(testResultsErrorLabel);
@@ -888,15 +889,16 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             testResultsVisitGrid.AllowUserToAddRows = false;
             testResultsVisitGrid.AllowUserToDeleteRows = false;
-            testResultsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            testResultsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             testResultsVisitGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             testResultsVisitGrid.Location = new Point(16, 390);
             testResultsVisitGrid.MultiSelect = false;
             testResultsVisitGrid.Name = "testResultsVisitGrid";
             testResultsVisitGrid.ReadOnly = true;
             testResultsVisitGrid.RowHeadersVisible = false;
+            testResultsVisitGrid.ScrollBars = ScrollBars.Both;
             testResultsVisitGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            testResultsVisitGrid.Size = new Size(360, 150);
+            testResultsVisitGrid.Size = new Size(749, 120);
             testResultsVisitGrid.TabIndex = 4;
             testResultsVisitGrid.DataBindingComplete += testResultsVisitGrid_DataBindingComplete;
             testResultsVisitGrid.SelectionChanged += testResultsVisitGrid_SelectionChanged;
@@ -905,7 +907,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             testResultsOrderedTestsLabel.AutoSize = true;
             testResultsOrderedTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            testResultsOrderedTestsLabel.Location = new Point(390, 366);
+            testResultsOrderedTestsLabel.Location = new Point(16, 525);
             testResultsOrderedTestsLabel.Name = "testResultsOrderedTestsLabel";
             testResultsOrderedTestsLabel.Size = new Size(113, 21);
             testResultsOrderedTestsLabel.TabIndex = 5;
@@ -915,15 +917,16 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             testResultsTestsGrid.AllowUserToAddRows = false;
             testResultsTestsGrid.AllowUserToDeleteRows = false;
-            testResultsTestsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            testResultsTestsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             testResultsTestsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            testResultsTestsGrid.Location = new Point(390, 390);
+            testResultsTestsGrid.Location = new Point(16, 549);
             testResultsTestsGrid.MultiSelect = false;
             testResultsTestsGrid.Name = "testResultsTestsGrid";
             testResultsTestsGrid.ReadOnly = true;
             testResultsTestsGrid.RowHeadersVisible = false;
+            testResultsTestsGrid.ScrollBars = ScrollBars.Both;
             testResultsTestsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            testResultsTestsGrid.Size = new Size(375, 150);
+            testResultsTestsGrid.Size = new Size(749, 120);
             testResultsTestsGrid.TabIndex = 6;
             testResultsTestsGrid.DataBindingComplete += testResultsTestsGrid_DataBindingComplete;
             testResultsTestsGrid.SelectionChanged += testResultsTestsGrid_SelectionChanged;
@@ -932,7 +935,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             testResultsPatientInfoLabel.AutoSize = true;
             testResultsPatientInfoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            testResultsPatientInfoLabel.Location = new Point(16, 573);
+            testResultsPatientInfoLabel.Location = new Point(16, 684);
             testResultsPatientInfoLabel.Name = "testResultsPatientInfoLabel";
             testResultsPatientInfoLabel.Size = new Size(0, 15);
             testResultsPatientInfoLabel.TabIndex = 7;
@@ -940,7 +943,7 @@ namespace HealthcareSystemProjectCS3230.view
             // testResultsSelectedTestLabel
             // 
             testResultsSelectedTestLabel.AutoSize = true;
-            testResultsSelectedTestLabel.Location = new Point(16, 598);
+            testResultsSelectedTestLabel.Location = new Point(16, 709);
             testResultsSelectedTestLabel.MaximumSize = new Size(750, 0);
             testResultsSelectedTestLabel.Name = "testResultsSelectedTestLabel";
             testResultsSelectedTestLabel.Size = new Size(0, 15);
@@ -949,7 +952,7 @@ namespace HealthcareSystemProjectCS3230.view
             // testResultsDatePerformedLabel
             // 
             testResultsDatePerformedLabel.AutoSize = true;
-            testResultsDatePerformedLabel.Location = new Point(16, 654);
+            testResultsDatePerformedLabel.Location = new Point(16, 765);
             testResultsDatePerformedLabel.Name = "testResultsDatePerformedLabel";
             testResultsDatePerformedLabel.Size = new Size(122, 15);
             testResultsDatePerformedLabel.TabIndex = 9;
@@ -959,7 +962,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             testResultsDatePerformedPicker.CustomFormat = "MM/dd/yyyy hh:mm tt";
             testResultsDatePerformedPicker.Format = DateTimePickerFormat.Custom;
-            testResultsDatePerformedPicker.Location = new Point(150, 651);
+            testResultsDatePerformedPicker.Location = new Point(150, 762);
             testResultsDatePerformedPicker.Name = "testResultsDatePerformedPicker";
             testResultsDatePerformedPicker.Size = new Size(220, 23);
             testResultsDatePerformedPicker.TabIndex = 10;
@@ -967,7 +970,7 @@ namespace HealthcareSystemProjectCS3230.view
             // testResultsResultLabel
             // 
             testResultsResultLabel.AutoSize = true;
-            testResultsResultLabel.Location = new Point(16, 699);
+            testResultsResultLabel.Location = new Point(16, 810);
             testResultsResultLabel.Name = "testResultsResultLabel";
             testResultsResultLabel.Size = new Size(42, 15);
             testResultsResultLabel.TabIndex = 11;
@@ -975,7 +978,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             // testResultsResultTextBox
             // 
-            testResultsResultTextBox.Location = new Point(150, 696);
+            testResultsResultTextBox.Location = new Point(150, 807);
             testResultsResultTextBox.MaxLength = 100;
             testResultsResultTextBox.Name = "testResultsResultTextBox";
             testResultsResultTextBox.Size = new Size(220, 23);
@@ -985,7 +988,7 @@ namespace HealthcareSystemProjectCS3230.view
             // testResultsAbnormalCheckBox
             // 
             testResultsAbnormalCheckBox.AutoSize = true;
-            testResultsAbnormalCheckBox.Location = new Point(390, 698);
+            testResultsAbnormalCheckBox.Location = new Point(390, 809);
             testResultsAbnormalCheckBox.Name = "testResultsAbnormalCheckBox";
             testResultsAbnormalCheckBox.Size = new Size(79, 19);
             testResultsAbnormalCheckBox.TabIndex = 13;
@@ -994,7 +997,7 @@ namespace HealthcareSystemProjectCS3230.view
             // 
             // testResultsSaveButton
             // 
-            testResultsSaveButton.Location = new Point(650, 810);
+            testResultsSaveButton.Location = new Point(650, 921);
             testResultsSaveButton.Name = "testResultsSaveButton";
             testResultsSaveButton.Size = new Size(115, 32);
             testResultsSaveButton.TabIndex = 14;

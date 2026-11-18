@@ -673,11 +673,21 @@ namespace HealthcareSystemProjectCS3230.view
 
         private void testResultsVisitGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
+            foreach (DataGridViewColumn col in testResultsVisitGrid.Columns)
+            {
+                col.MinimumWidth = 200;
+            }
+
             testResultsVisitGrid.ClearSelection();
         }
 
         private void testResultsTestsGrid_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
         {
+            foreach (DataGridViewColumn col in testResultsTestsGrid.Columns)
+            {
+                col.MinimumWidth = 200;
+            }
+
             testResultsTestsGrid.ClearSelection();
         }
 
