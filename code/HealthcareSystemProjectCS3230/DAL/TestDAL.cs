@@ -295,6 +295,7 @@ public class TestDAL
         return command.ExecuteNonQuery() > 0;
     }
 
+
     /*
  * Gets one visit's checkup details and diagnoses.
  * @param appointmentId The ID of the visit (appointment)
