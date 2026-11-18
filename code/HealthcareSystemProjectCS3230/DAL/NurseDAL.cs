@@ -144,7 +144,7 @@ namespace HealthcareSystemProjectCS3230.DAL
                     "INSERT INTO Account (username, password, type) VALUES (@username, @password, 'nurse')";
                 using var cmdLogin = new MySqlCommand(insertLogin, connection, transaction);
                 cmdLogin.Parameters.Add("@username", MySqlDbType.VarChar).Value = nurse.Username;
-                cmdLogin.Parameters.Add("@password", MySqlDbType.VarChar).Value = password;
+                cmdLogin.Parameters.Add("@password", MySqlDbType.VarChar).Value = LoginDAL.GetHashedPassword(password);
                 cmdLogin.ExecuteNonQuery();
 
                 // Insert Nurse
