@@ -8,11 +8,11 @@ namespace HealthcareSystemProjectCS3230.DAL
 {
     public class PersonDAL
     {
-        /// <summary>
-        /// Retrieves a Person object from the database based on the provided personID.
-        /// </summary>
-        /// <param name="personID">The ID of the person to retrieve.</param>
-        /// <returns>null if no matching record is found.</returns>
+        /*
+         * Retrieves a Person object from the database based on the provided personID.
+         * @param personID The ID of the person to retrieve.
+         * @returns null if no matching record is found.
+         */
         public Person GetPersonByID(int personID)
         {
             using var connection = new MySqlConnection(Connection.ConnectionString);

@@ -1,4 +1,4 @@
-﻿using HealthcareSystemProjectCS3230.DAL;
+using HealthcareSystemProjectCS3230.DAL;
 using HealthcareSystemProjectCS3230.model;
 using System.Globalization;
 

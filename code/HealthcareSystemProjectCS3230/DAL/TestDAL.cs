@@ -1,4 +1,4 @@
-﻿using HealthcareSystemProjectCS3230.model;
+using HealthcareSystemProjectCS3230.model;
 using MySql.Data.MySqlClient;
 using System.Data;
 
