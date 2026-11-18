@@ -35,6 +35,8 @@ namespace HealthcareSystemProjectCS3230.view
             {
                 nurseManagerButton.Visible = true;
                 nurseManagerButton.Enabled = true;
+                statisticsButton.Visible = true;
+                statisticsButton.Enabled = true;
             }
         }
 
@@ -44,8 +46,14 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentButton.Enabled = false;
             editPatientButton.Enabled = false;
             findAppointmentButton.Enabled = false;
+            registerPatientButton.Visible = false;
+            appointmentButton.Visible = false;
+            editPatientButton.Visible = false;
+            findAppointmentButton.Visible = false;
             nurseManagerButton.Enabled = false;
             nurseManagerButton.Visible = false;
+            statisticsButton.Enabled = false;
+            statisticsButton.Visible = false;
         }
 
         private void EnableNurseButtons()
@@ -54,6 +62,10 @@ namespace HealthcareSystemProjectCS3230.view
             appointmentButton.Enabled = true;
             editPatientButton.Enabled = true;
             findAppointmentButton.Enabled = true;
+            registerPatientButton.Visible = true;
+            appointmentButton.Visible = true;
+            editPatientButton.Visible = true;
+            findAppointmentButton.Visible = true;
         }
 
         private void appointmentButton_Click(object sender, EventArgs e)
@@ -62,13 +74,13 @@ namespace HealthcareSystemProjectCS3230.view
 
             var appointmentForm = new AppointmentForm();
             appointmentForm.setLoginSession(_loginSession);
-                appointmentForm.ShowDialog();
+            appointmentForm.ShowDialog();
 
 
             Show();
         }
 
-       
+
 
         private void registerPatientButton_Click(object sender, EventArgs e)
         {
@@ -112,6 +124,16 @@ namespace HealthcareSystemProjectCS3230.view
         private void LogoutButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void statisticsButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            var adminStatsForm = new AdminStatsForm();
+            adminStatsForm.ShowDialog();
+
+            Show();
         }
     }
 }

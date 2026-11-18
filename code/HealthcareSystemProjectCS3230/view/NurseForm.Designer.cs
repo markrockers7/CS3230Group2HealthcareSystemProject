@@ -74,6 +74,7 @@ namespace HealthcareSystemProjectCS3230.view
             genderLabel = new Label();
             genderComboBox = new ComboBox();
             genderErrorLabel = new Label();
+            exitButton = new Button();
             SuspendLayout();
             // 
             // NurseListView
@@ -429,11 +430,22 @@ namespace HealthcareSystemProjectCS3230.view
             genderErrorLabel.Size = new Size(0, 15);
             genderErrorLabel.TabIndex = 42;
             // 
+            // exitButton
+            // 
+            exitButton.Location = new Point(699, 12);
+            exitButton.Name = "exitButton";
+            exitButton.Size = new Size(75, 23);
+            exitButton.TabIndex = 43;
+            exitButton.Text = "Exit";
+            exitButton.UseVisualStyleBackColor = true;
+            exitButton.Click += exitButton_Click;
+            // 
             // NurseForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(exitButton);
             Controls.Add(genderErrorLabel);
             Controls.Add(clearFormButton);
             Controls.Add(lnameErrorLabel);
@@ -526,5 +538,6 @@ namespace HealthcareSystemProjectCS3230.view
         private Label genderLabel;
         private ComboBox genderComboBox;
         private Label genderErrorLabel;
+        private Button exitButton;
     }
 }

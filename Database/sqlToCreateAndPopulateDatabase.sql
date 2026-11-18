@@ -359,3 +359,32 @@ INSERT INTO VisitTest (appointment_id, test_code, date_performed, result, isAbno
 (3, 'STREP', '2026-10-01 14:20:00', 'Positive', TRUE),
 (4, 'HGB',   '2026-10-05 11:30:00', '13.1',     FALSE),
 (4, 'K',     '2026-10-05 11:30:00', '4.5',      FALSE);
+
+DROP PROCEDURE IF EXISTS get_most_performed_tests_duringdates;
+
+DELIMITER $
+
+CREATE PROCEDURE get_most_performed_tests_duringdates(
+    IN p_startdate DATE,
+    IN p_enddate DATE
+)
+BEGIN
+    SELECT
+        vt.test_code,
+        t.name AS test_name,
+        COUNT(*) AS test_count,
+        (SELECT COUNT(*)
+         FROM VisitTest
+         WHERE DATE(date_performed) BETWEEN p_startdate AND p_enddate
+        ) AS total_all_tests,
+        SUM(CASE WHEN vt.isAbnormal = TRUE THEN 1 ELSE 0 END) AS abnormal_count,
+        SUM(CASE WHEN vt.isAbnormal = FALSE THEN 1 ELSE 0 END) AS normal_count
+    FROM VisitTest vt
+    JOIN Test t ON vt.test_code = t.test_code
+    WHERE DATE(vt.date_performed) BETWEEN p_startdate AND p_enddate
+    GROUP BY vt.test_code, t.name
+    HAVING COUNT(*) >= 2
+    ORDER BY test_count DESC, vt.test_code DESC;
+END $
+
+DELIMITER ;

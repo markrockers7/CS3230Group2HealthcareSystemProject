@@ -277,5 +277,10 @@ namespace HealthcareSystemProjectCS3230.view
         {
             this.clearForm();
         }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
