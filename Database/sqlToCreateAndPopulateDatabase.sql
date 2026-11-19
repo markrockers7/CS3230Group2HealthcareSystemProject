@@ -1,0 +1,390 @@
+use cs3230f26_g2;
+
+SET FOREIGN_KEY_CHECKS=0;
+
+DROP TABLE IF EXISTS `Address`;
+DROP TABLE IF EXISTS `Person`;
+DROP TABLE IF EXISTS `Account`;
+DROP TABLE IF EXISTS `Doctor`;
+DROP TABLE IF EXISTS `Nurse`;
+DROP TABLE IF EXISTS `Administrator`;
+DROP TABLE IF EXISTS `Patient`;
+DROP TABLE IF EXISTS `Specialty`;
+DROP TABLE IF EXISTS `DoctorSpecialties`;
+DROP TABLE IF EXISTS `Appointment`;
+DROP TABLE IF EXISTS `Visit`;
+DROP TABLE IF EXISTS `Test`;
+DROP TABLE IF EXISTS `VisitTest`;
+
+SET FOREIGN_KEY_CHECKS=1;
+
+CREATE TABLE Address (
+    address_id  INT AUTO_INCREMENT PRIMARY KEY,
+    street      VARCHAR(100) NOT NULL,
+    city        VARCHAR(50)  NOT NULL,
+    zipcode     CHAR(5)      NOT NULL,
+    state       CHAR(2)      NOT NULL
+);
+
+INSERT INTO Address (address_id, street, city, zipcode, state) VALUES
+(1,  '120 Maple Street',    'Carrollton',   '30117', 'GA'),
+(2,  '45 Oak Avenue',       'Carrollton',   '30116', 'GA'),
+(3,  '782 Pine Road',       'Villa Rica',   '30180', 'GA'),
+(4,  '19 Cedar Lane',       'Carrollton',   '30117', 'GA'),
+(5,  '300 Birch Drive',     'Bremen',       '30110', 'GA'),
+(6,  '56 Elm Court',        'Newnan',       '30263', 'GA'),
+(7,  '901 Walnut Way',      'Carrollton',   '30118', 'GA'),
+(8,  '14 Willow Street',    'Douglasville', '30134', 'GA'),
+(9,  '233 Peachtree Lane',  'Carrollton',   '30117', 'GA'),
+(10, '87 Magnolia Drive',   'Villa Rica',   '30180', 'GA'),
+(11, '410 Dogwood Circle',  'Temple',       '30179', 'GA'),
+(12, '65 Hickory Road',     'Bowdon',       '30108', 'GA'),
+(13, '22 Main Street',      'Carrollton',   '30117', 'GA'),
+(14, '510 Lakeview Drive',  'Carrollton',   '30116', 'GA');
+
+CREATE TABLE Person (
+    person_id     INT AUTO_INCREMENT PRIMARY KEY,
+    first_name    VARCHAR(50) NOT NULL,
+    last_name     VARCHAR(50) NOT NULL,
+    birthdate     DATE        NOT NULL,
+    phone_number  CHAR(10)    NOT NULL,
+    address_id    INT         NOT NULL,
+    gender	   CHAR(1) NOT NULL,
+    CONSTRAINT person_fk_address FOREIGN KEY (address_id) REFERENCES Address(address_id)
+);
+
+INSERT INTO Person (person_id, first_name, last_name, birthdate, phone_number, address_id, gender) VALUES
+(1,  'Sarah',   'Mitchell',  '1975-04-12', '7705550101', 1, 'F'),
+(2,  'James',   'Carter',    '1968-09-30', '7705550102', 2, 'M'),
+(3,  'Priya',   'Patel',     '1982-01-22', '7705550103', 3, 'F'),
+(4,  'Emily',   'Johnson',   '1990-06-15', '7705550104', 4, 'F'),
+(5,  'Marcus',  'Brown',     '1987-11-03', '6785550105', 5, 'M'),
+(6,  'Ashley',  'Davis',     '1994-02-28', '6785550106', 6, 'F'),
+(7,  'Robert',  'Wilson',    '1979-08-19', '7705550107', 7, 'M'),
+(8,  'Linda',   'Thompson',  '1958-03-07', '4045550108', 8, 'F'),
+(9,  'Michael', 'Garcia',    '1985-12-25', '7705550109', 9, 'M'),
+(10, 'Jessica', 'Martinez',  '1996-07-14', '6785550110', 10, 'F'),
+(11, 'David',   'Lee',       '2015-05-09', '7705550111', 11, 'M'),
+(12, 'Karen',   'White',     '1949-10-31', '7705550112', 12, 'F'),
+(13, 'Jane',    'Doe',       '1992-03-18', '7705550113', 13, 'F'),
+(14, 'John',    'Doe',       '1984-07-04', '7705550114', 14, 'M');
+
+CREATE TABLE Account (
+    username  VARCHAR(50)  PRIMARY KEY,
+    password  VARCHAR(255) NOT NULL,
+    type      VARCHAR(20)  NOT NULL
+);
+
+INSERT INTO Account (username, password, type) VALUES
+('ejohnson', '35608F3146571AA100227A3E68290979BA8A452179A080F888625106076E7DE2',   'nurse'), -- nurse123
+('mbrown',   '526E41A97978E8AC82DC08D40AF00322FA9F82B872A205EF0FA83ACF0CF56D6E',   'nurse'), -- nurse456
+('adavis',   '9C6F925B46D51C41C13703F2E69983319DCDC6CB6F2C94CB8A704AF598814218',   'nurse'), -- nurse789
+('janedoe',  '0C5A7B90985D4B4B436F41FB790EDAFF88E411D3E00E62BB25DE5CB214A54E7E', 'nurse'), -- janedoe123
+('rwilson',  '240BE518FABD2724DDB6F04EEB1DA5967448D7E831C08C8FA822809F74C720A9',   'administrator'), -- admin123
+('johndoe',  '22A89F6F93412ECAD98CEC961CEC37A2CA019D7205CD07812C358205AE3E4233', 'administrator'); -- johndoe123
+
+CREATE TABLE Doctor (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    person_id  INT NOT NULL,
+    CONSTRAINT doctor_fk_person FOREIGN KEY (person_id) REFERENCES Person(person_id),
+    CONSTRAINT uq_doctor_person_id UNIQUE (person_id)
+);
+
+INSERT INTO Doctor (id, person_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+CREATE TABLE Nurse (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    person_id  INT         NOT NULL,
+    username   VARCHAR(50) NOT NULL,
+    CONSTRAINT nurse_fk_person  FOREIGN KEY (person_id) REFERENCES Person(person_id),
+    CONSTRAINT nurse_fk_account FOREIGN KEY (username)  REFERENCES Account(username) ON UPDATE CASCADE,
+    CONSTRAINT uq_nurse_person_id UNIQUE (person_id),
+    CONSTRAINT uq_nurse_username  UNIQUE (username)
+);
+
+
+INSERT INTO Nurse (id, person_id, username) VALUES
+(1, 4,  'ejohnson'),
+(2, 5,  'mbrown'),
+(3, 6,  'adavis'),
+(4, 13, 'janedoe');
+
+CREATE TABLE Administrator (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    person_id  INT         NOT NULL,
+    username   VARCHAR(50) NOT NULL,
+    CONSTRAINT administrator_fk_person  FOREIGN KEY (person_id) REFERENCES Person(person_id),
+    CONSTRAINT administrator_fk_account FOREIGN KEY (username)  REFERENCES Account(username) ON UPDATE CASCADE,
+    CONSTRAINT uq_administrator_person_id UNIQUE (person_id),
+    CONSTRAINT uq_administrator_username  UNIQUE (username)
+);
+
+INSERT INTO Administrator (id, person_id, username) VALUES
+(1, 7,  'rwilson'),
+(2, 14, 'johndoe');
+
+CREATE TABLE Patient (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    isActive   BOOLEAN NOT NULL DEFAULT TRUE,
+    person_id  INT     NOT NULL,
+    CONSTRAINT patient_fk_person FOREIGN KEY (person_id) REFERENCES Person(person_id),
+    CONSTRAINT uq_patient_person_id UNIQUE (person_id)
+);
+
+INSERT INTO Patient (id, isActive, person_id) VALUES
+(1, TRUE,  8),
+(2, TRUE,  9),
+(3, TRUE,  10),
+(4, TRUE,  11),
+(5, FALSE, 12);
+
+CREATE TABLE Specialty (
+    specialty       VARCHAR(20) PRIMARY KEY,
+    specialty_name  VARCHAR(50) NOT NULL
+);
+
+INSERT INTO Specialty (specialty, specialty_name) VALUES
+('FAM',  'Family Medicine'),
+('IM',   'Internal Medicine'),
+('CARD', 'Cardiology'),
+('PED',  'Pediatrics'),
+('DERM', 'Dermatology');
+
+CREATE TABLE DoctorSpecialties (
+    doctor_id  INT         NOT NULL,
+    specialty  VARCHAR(20) NOT NULL,
+    PRIMARY KEY (doctor_id, specialty),
+    CONSTRAINT doctorspecialties_fk_doctor    FOREIGN KEY (doctor_id) REFERENCES Doctor(id) ON DELETE CASCADE,
+    CONSTRAINT doctorspecialties_fk_specialty FOREIGN KEY (specialty) REFERENCES Specialty(specialty)
+);
+
+INSERT INTO DoctorSpecialties (doctor_id, specialty) VALUES
+(1, 'FAM'),
+(1, 'IM'),
+(2, 'CARD'),
+(3, 'PED');
+
+CREATE TABLE Appointment (
+    appointment_id        INT AUTO_INCREMENT PRIMARY KEY,
+    doctor_id             INT          NOT NULL,
+    appointment_datetime  DATETIME     NOT NULL,
+    patient_id            INT          NOT NULL,
+    reason                VARCHAR(255) NOT NULL,
+    CONSTRAINT appointment_fk_doctor  FOREIGN KEY (doctor_id)  REFERENCES Doctor(id),
+    CONSTRAINT appointment_fk_patient FOREIGN KEY (patient_id) REFERENCES Patient(id)
+);
+
+
+DROP PROCEDURE IF EXISTS GetAppointmentsForPatient;
+DROP PROCEDURE IF EXISTS GetAppointmentsByPatientId;
+DROP PROCEDURE IF EXISTS InsertIntoAddress;
+DROP PROCEDURE IF EXISTS InsertIntoPerson;
+DROP PROCEDURE IF EXISTS InsertIntoPatient;
+DROP PROCEDURE IF EXISTS AddPatient;
+DROP PROCEDURE IF EXISTS AddTestToVisit;
+
+DELIMITER $
+
+CREATE PROCEDURE GetAppointmentsForPatient(IN p_patient_id INT,IN p_today DATE)
+BEGIN
+    SELECT
+        a.appointment_id,
+        a.appointment_datetime,
+        a.doctor_id,
+        CONCAT(p.first_name, ' ', p.last_name) AS doctor_name,
+        a.reason,
+        (DATE(a.appointment_datetime) > p_today) AS can_edit
+    FROM Appointment a
+    JOIN Doctor d ON d.id = a.doctor_id
+    JOIN Person p ON p.person_id = d.person_id
+    WHERE a.patient_id = p_patient_id
+    ORDER BY a.appointment_datetime DESC;
+END $
+
+CREATE PROCEDURE GetAppointmentsByPatientId(IN patientId INT)
+BEGIN
+	SELECT appointment_id, doctor_id, patient_id, appointment_datetime, reason
+    FROM Appointment a
+    WHERE a.patient_id = patientId;
+END $
+
+CREATE PROCEDURE InsertIntoAddress(p_street varchar(100), p_city varchar(50), p_zipcode char(5), p_state char(2))
+BEGIN
+	INSERT INTO address(street, city, zipcode, state) VALUES (p_street, p_city, p_zipcode, p_state);
+END $
+    
+CREATE PROCEDURE InsertIntoPerson(p_first_name varchar(50), p_last_name varchar(50), p_birthdate date, p_phone_number char(10), p_address_id INT, p_gender char(1))
+BEGIN
+	INSERT INTO person(first_name, last_name, birthdate, phone_number, address_id, gender) VALUES (p_first_name, p_last_name, p_birthdate, p_phone_number, p_address_id, p_gender);
+END $
+    
+CREATE PROCEDURE InsertIntoPatient(p_is_active tinyint, p_person_id INT)
+BEGIN
+	INSERT INTO patient(isActive, person_id) VALUES (p_is_active, p_person_id);
+END $
+    
+CREATE PROCEDURE AddPatient(
+p_street varchar(100), p_city varchar(50), p_zipcode char(5), p_state char(2),
+p_first_name varchar(50), p_last_name varchar(50), p_birthdate date, p_phone_number char(10), p_gender char(1),
+p_is_active tinyint
+)
+BEGIN
+DECLARE last_address_id INT;
+DECLARE last_person_id INT;
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+BEGIN
+	ROLLBACK;
+	RESIGNAL;
+END;
+	START TRANSACTION;
+    CALL InsertIntoAddress(p_street, p_city, p_zipcode, p_state);
+	SET last_address_id = LAST_INSERT_ID();
+    CALL InsertIntoPerson(p_first_name, p_last_name, p_birthdate, p_phone_number, last_address_id, p_gender);
+    SET last_person_id = LAST_INSERT_ID();
+    CALL InsertIntoPatient(p_is_active, last_person_id);
+    COMMIT;
+END $
+
+CREATE PROCEDURE AddTestToVisit(
+    IN p_appointment_id INT,
+    IN p_test_code VARCHAR(20),
+    IN p_date_performed DATETIME
+)
+BEGIN
+    DECLARE v_final_diagnosis VARCHAR(500);
+    DECLARE v_visit_not_found BOOLEAN DEFAULT FALSE;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND
+        SET v_visit_not_found = TRUE;
+
+SELECT final_diagnosis
+INTO v_final_diagnosis
+FROM Visit
+WHERE appointment_id = p_appointment_id;
+
+IF v_visit_not_found THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'The selected visit could not be found.';
+    ELSEIF v_final_diagnosis IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT =
+                'This visit has a final diagnosis, so additional tests can''t be ordered.';
+    ELSEIF NOT EXISTS (
+        SELECT 1
+        FROM VisitTest
+        WHERE appointment_id = p_appointment_id
+          AND test_code = p_test_code
+    ) THEN
+        INSERT INTO VisitTest
+            (appointment_id, test_code, date_performed, result, isAbnormal)
+        VALUES
+            (p_appointment_id, p_test_code, p_date_performed, NULL, NULL);
+END IF;
+END $
+
+DELIMITER ;
+
+
+INSERT INTO Appointment (appointment_id, doctor_id, appointment_datetime, patient_id, reason) VALUES
+(9,  1, '2026-11-20 09:00:00', 1, 'Cholesterol follow-up'),
+(10, 2, '2026-11-24 13:30:00', 2, 'Blood pressure follow-up'),
+(11, 3, '2026-12-03 10:15:00', 4, 'Well-child checkup');
+
+INSERT INTO Appointment (appointment_id, doctor_id, appointment_datetime, patient_id, reason) VALUES
+(1, 1, '2026-09-15 09:00:00', 1, 'Annual physical'),
+(2, 2, '2026-09-22 10:30:00', 2, 'Chest tightness during exercise'),
+(3, 3, '2026-10-01 14:00:00', 4, 'Sore throat and fever'),
+(4, 1, '2026-10-05 11:00:00', 3, 'Persistent headaches'),
+(5, 1, '2026-10-14 09:00:00', 2, 'Blood pressure check'),
+(6, 2, '2026-10-14 13:30:00', 1, 'Cardiology consultation'),
+(7, 3, '2026-10-16 10:00:00', 4, 'Follow-up visit'),
+(8, 1, '2026-10-20 15:00:00', 3, 'Lab results review');
+
+CREATE TABLE Visit (
+    appointment_id     INT          PRIMARY KEY,
+    systolic_bp        INT          NOT NULL,
+    diastolic_bp       INT          NOT NULL,
+    pulse              INT          NOT NULL,
+    body_temperature   DECIMAL(4,1) NOT NULL,
+    height             DECIMAL(5,2) NOT NULL,
+    weight             DECIMAL(5,2) NOT NULL,
+    symptoms           VARCHAR(500) NOT NULL,
+    initial_diagnosis  VARCHAR(500),
+    final_diagnosis    VARCHAR(500),
+    CONSTRAINT visit_fk_appointment FOREIGN KEY (appointment_id) REFERENCES Appointment(appointment_id)
+);
+
+INSERT INTO Visit (appointment_id, systolic_bp, diastolic_bp, pulse, body_temperature, height, weight, symptoms, initial_diagnosis, final_diagnosis) VALUES
+(1, 128, 82, 72, 98.6,  64.00, 172.50, 'No complaints; routine annual exam',              'Healthy adult',          'High cholesterol'),
+(2, 142, 91, 88, 98.4,  70.50, 210.00, 'Chest tightness during exercise',                 'Possible hypertension',  'Stage 2 hypertension'),
+(3, 108, 68, 96, 101.8, 56.00, 82.40,  'Sore throat, fever, difficulty swallowing',       'Suspected strep throat', 'Strep throat'),
+(4, 118, 76, 70, 98.7,  65.25, 140.00, 'Headaches for two weeks, worse in the afternoon', 'Tension headache',       NULL);
+
+CREATE TABLE Test (
+    test_code            VARCHAR(20)   PRIMARY KEY,
+    name                 VARCHAR(100)  NOT NULL,
+    low_value            DECIMAL(10,2),
+    high_value           DECIMAL(10,2),
+    unit_of_measurement  VARCHAR(20)
+);
+
+INSERT INTO Test (test_code, name, low_value, high_value, unit_of_measurement) VALUES
+('GLU',   'Glucose (fasting)', 70.00, 99.00,  'mg/dL'),
+('A1C',   'Hemoglobin A1C',    4.00,  5.60,   '%'),
+('CHOL',  'Total Cholesterol', 0.00,  199.00, 'mg/dL'),
+('HGB',   'Hemoglobin',        12.00, 17.50,  'g/dL'),
+('K',     'Potassium',         3.50,  5.00,   'mmol/L'),
+('STREP', 'Rapid Strep Test',  NULL,  NULL,   NULL);
+
+CREATE TABLE VisitTest (
+    appointment_id  INT         NOT NULL,
+    test_code       VARCHAR(20) NOT NULL,
+    date_performed  DATETIME,
+    result          VARCHAR(100),
+    isAbnormal      BOOLEAN,
+    PRIMARY KEY (appointment_id, test_code),
+    CONSTRAINT visittest_fk_visit FOREIGN KEY (appointment_id) REFERENCES Visit(appointment_id) ON DELETE CASCADE,
+    CONSTRAINT visittest_fk_test  FOREIGN KEY (test_code)      REFERENCES Test(test_code)
+);
+
+INSERT INTO VisitTest (appointment_id, test_code, date_performed, result, isAbnormal) VALUES
+(1, 'GLU',   '2026-09-15 09:30:00', '92',       FALSE),
+(1, 'CHOL',  '2026-09-15 09:30:00', '225',      TRUE),
+(1, 'A1C',   '2026-09-15 09:30:00', '5.4',      FALSE),
+(2, 'K',     '2026-09-22 11:00:00', '4.2',      FALSE),
+(2, 'CHOL',  '2026-09-22 11:00:00', '198',      FALSE),
+(3, 'STREP', '2026-10-01 14:20:00', 'Positive', TRUE),
+(4, 'HGB',   '2026-10-05 11:30:00', '13.1',     FALSE),
+(4, 'K',     '2026-10-05 11:30:00', '4.5',      FALSE);
+
+DROP PROCEDURE IF EXISTS get_most_performed_tests_duringdates;
+
+DELIMITER $
+
+CREATE PROCEDURE get_most_performed_tests_duringdates(
+    IN p_startdate DATE,
+    IN p_enddate DATE
+)
+BEGIN
+    SELECT
+        vt.test_code,
+        t.name AS test_name,
+        COUNT(*) AS test_count,
+        (SELECT COUNT(*)
+         FROM VisitTest
+         WHERE DATE(date_performed) BETWEEN p_startdate AND p_enddate
+        ) AS total_all_tests,
+        SUM(CASE WHEN vt.isAbnormal = TRUE THEN 1 ELSE 0 END) AS abnormal_count,
+        SUM(CASE WHEN vt.isAbnormal = FALSE THEN 1 ELSE 0 END) AS normal_count
+    FROM VisitTest vt
+    JOIN Test t ON vt.test_code = t.test_code
+    WHERE DATE(vt.date_performed) BETWEEN p_startdate AND p_enddate
+    GROUP BY vt.test_code, t.name
+    HAVING COUNT(*) >= 2
+    ORDER BY test_count DESC, vt.test_code DESC;
+END $
+
+DELIMITER ;

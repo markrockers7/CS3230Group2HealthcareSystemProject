@@ -1,0 +1,1486 @@
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace HealthcareSystemProjectCS3230.view
+{
+    partial class AppointmentForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        private void InitializeComponent()
+        {
+            appointmentPatientErrorLabel = new Label();
+            appointmentDoctorErrorLabel = new Label();
+            appointmentDateErrorLabel = new Label();
+            appointmentTimeErrorLabel = new Label();
+            appointmentReasonErrorLabel = new Label();
+            visitAppointmentErrorLabel = new Label();
+            systolicErrorLabel = new Label();
+            diastolicErrorLabel = new Label();
+            pulseErrorLabel = new Label();
+            bodyTemperatureErrorLabel = new Label();
+            heightErrorLabel = new Label();
+            weightErrorLabel = new Label();
+            symptomsErrorLabel = new Label();
+            orderTestsVisitErrorLabel = new Label();
+            orderTestsSelectionErrorLabel = new Label();
+            testResultsVisitErrorLabel = new Label();
+            testResultsTestErrorLabel = new Label();
+            testResultsValueErrorLabel = new Label();
+            loggedInLabel = new Label();
+            titleLabel = new Label();
+            createAppointmentPatientSearchControl = new PatientSearchControl();
+            patientNameLabel = new Label();
+            patientNameTextBox = new TextBox();
+            patientDobLabel = new Label();
+            patientDobTextBox = new TextBox();
+            inactivePatientLabel = new Label();
+            doctorLabel = new Label();
+            doctorComboBox = new ComboBox();
+            dateLabel = new Label();
+            appointmentDatePicker = new DateTimePicker();
+            timeSlotLabel = new Label();
+            appointmentTimeComboBox = new ComboBox();
+            availabilityStatusLabel = new Label();
+            reasonLabel = new Label();
+            reasonTextBox = new TextBox();
+            errorLabel = new Label();
+            bookButton = new Button();
+            cancelButton = new Button();
+            appointmentTabControl = new TabControl();
+            createAppointmentTabPage = new TabPage();
+            orderTestTabPage = new TabPage();
+            visitCheckupFinalDiagnosisTextBox = new TextBox();
+            visitCheckupFinalDiagnosisLabel = new Label();
+            visitAndOrderTestErrorLabel = new Label();
+            label2 = new Label();
+            visitCheckupAppointmentDataGridView = new DataGridView();
+            appointmentIdColumn = new DataGridViewTextBoxColumn();
+            doctorNameColumn = new DataGridViewTextBoxColumn();
+            timeColumn = new DataGridViewTextBoxColumn();
+            reasonColumn = new DataGridViewTextBoxColumn();
+            label1 = new Label();
+            visitCheckupPatientSearchControl = new PatientSearchControl();
+            visitDetailsLabel = new Label();
+            systolicLabel = new Label();
+            systolicTextBox = new TextBox();
+            diastolicLabel = new Label();
+            diastolicTextBox = new TextBox();
+            pulseLabel = new Label();
+            pulseTextBox = new TextBox();
+            bodyTemperatureLabel = new Label();
+            bodyTemperatureTextBox = new TextBox();
+            heightLabel = new Label();
+            heightTextBox = new TextBox();
+            weightLabel = new Label();
+            weightTextBox = new TextBox();
+            symptomsLabel = new Label();
+            symptomsTextBox = new TextBox();
+            initialDiagnosisLabel = new Label();
+            initialDiagnosisTextBox = new TextBox();
+            submitVisitButton = new Button();
+            orderTestsTabPage = new TabPage();
+            label5 = new Label();
+            orderTestsAlreadyOrderedTestsCheckedListBox = new CheckedListBox();
+            orderTestsTitleLabel = new Label();
+            orderTestsPatientSearchControl = new PatientSearchControl();
+            orderTestsSelectVisitLabel = new Label();
+            orderTestsVisitGrid = new DataGridView();
+            orderTestsAppointmentIdColumn = new DataGridViewTextBoxColumn();
+            orderTestsDoctorColumn = new DataGridViewTextBoxColumn();
+            orderTestsDateColumn = new DataGridViewTextBoxColumn();
+            availableTestsLabel = new Label();
+            orderTestsUnorderedTestsCheckedListBox = new CheckedListBox();
+            orderTestsErrorLabel = new Label();
+            orderTestsSubmitButton = new Button();
+            testResultsTabPage = new TabPage();
+            testResultsTitleLabel = new Label();
+            testResultsPatientSearchControl = new PatientSearchControl();
+            testResultsErrorLabel = new Label();
+            testResultsSelectVisitLabel = new Label();
+            testResultsVisitGrid = new DataGridView();
+            testResultsOrderedTestsLabel = new Label();
+            testResultsTestsGrid = new DataGridView();
+            testResultsPatientInfoLabel = new Label();
+            testResultsSelectedTestLabel = new Label();
+            testResultsDatePerformedLabel = new Label();
+            testResultsDatePerformedPicker = new DateTimePicker();
+            testResultsResultLabel = new Label();
+            testResultsResultTextBox = new TextBox();
+            testResultsAbnormalCheckBox = new CheckBox();
+            testResultsSaveButton = new Button();
+            viewVisitsTabPage = new TabPage();
+            viewVisitsTitleLabel = new Label();
+            viewVisitsPatientSearchControl = new PatientSearchControl();
+            viewVisitsErrorLabel = new Label();
+            viewVisitsSelectVisitLabel = new Label();
+            viewVisitsVisitGrid = new DataGridView();
+            viewVisitsDetailsLabel = new Label();
+            viewVisitsDetailsTextBox = new TextBox();
+            viewVisitsTestsLabel = new Label();
+            viewVisitsTestsGrid = new DataGridView();
+            appointmentTabControl.SuspendLayout();
+            createAppointmentTabPage.SuspendLayout();
+            orderTestTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)visitCheckupAppointmentDataGridView).BeginInit();
+            orderTestsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)orderTestsVisitGrid).BeginInit();
+            testResultsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)testResultsVisitGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)testResultsTestsGrid).BeginInit();
+            viewVisitsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)viewVisitsVisitGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)viewVisitsTestsGrid).BeginInit();
+            SuspendLayout();
+            // 
+            // loggedInLabel
+            // 
+            loggedInLabel.AutoSize = true;
+            loggedInLabel.ForeColor = SystemColors.GrayText;
+            loggedInLabel.Location = new Point(0, 0);
+            loggedInLabel.Name = "loggedInLabel";
+            loggedInLabel.Size = new Size(77, 15);
+            loggedInLabel.TabIndex = 0;
+            loggedInLabel.Text = "Logged in as:";
+            // 
+            // titleLabel
+            // 
+            titleLabel.AutoSize = true;
+            titleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            titleLabel.Location = new Point(6, 3);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(165, 21);
+            titleLabel.TabIndex = 1;
+            titleLabel.Text = "Create Appointment";
+            // 
+            // createAppointmentPatientSearchControl
+            // 
+            createAppointmentPatientSearchControl.Location = new Point(6, 38);
+            createAppointmentPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            createAppointmentPatientSearchControl.Name = "createAppointmentPatientSearchControl";
+            createAppointmentPatientSearchControl.Size = new Size(760, 300);
+            createAppointmentPatientSearchControl.TabIndex = 0;
+            createAppointmentPatientSearchControl.PatientSelected += patientSearchControl_PatientSelected;
+            // 
+            // patientNameLabel
+            // 
+            patientNameLabel.AutoSize = true;
+            patientNameLabel.Location = new Point(6, 356);
+            patientNameLabel.Name = "patientNameLabel";
+            patientNameLabel.Size = new Size(47, 15);
+            patientNameLabel.TabIndex = 2;
+            patientNameLabel.Text = "Patient:";
+            // 
+            // patientNameTextBox
+            // 
+            patientNameTextBox.Location = new Point(116, 353);
+            patientNameTextBox.Name = "patientNameTextBox";
+            patientNameTextBox.ReadOnly = true;
+            patientNameTextBox.Size = new Size(300, 23);
+            patientNameTextBox.TabIndex = 3;
+            patientNameTextBox.TabStop = false;
+            // 
+            // patientDobLabel
+            // 
+            patientDobLabel.AutoSize = true;
+            patientDobLabel.Location = new Point(6, 409);
+            patientDobLabel.Name = "patientDobLabel";
+            patientDobLabel.Size = new Size(76, 15);
+            patientDobLabel.TabIndex = 4;
+            patientDobLabel.Text = "Date of birth:";
+            // 
+            // patientDobTextBox
+            // 
+            patientDobTextBox.Location = new Point(116, 406);
+            patientDobTextBox.Name = "patientDobTextBox";
+            patientDobTextBox.ReadOnly = true;
+            patientDobTextBox.Size = new Size(300, 23);
+            patientDobTextBox.TabIndex = 5;
+            patientDobTextBox.TabStop = false;
+            // 
+            // inactivePatientLabel
+            // 
+            inactivePatientLabel.AutoSize = true;
+            inactivePatientLabel.ForeColor = Color.Firebrick;
+            inactivePatientLabel.Location = new Point(116, 434);
+            inactivePatientLabel.Name = "inactivePatientLabel";
+            inactivePatientLabel.Size = new Size(0, 15);
+            inactivePatientLabel.TabIndex = 6;
+            // 
+            // doctorLabel
+            // 
+            doctorLabel.AutoSize = true;
+            doctorLabel.Location = new Point(6, 466);
+            doctorLabel.Name = "doctorLabel";
+            doctorLabel.Size = new Size(46, 15);
+            doctorLabel.TabIndex = 3;
+            doctorLabel.Text = "Doctor:";
+            // 
+            // doctorComboBox
+            // 
+            doctorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            doctorComboBox.Location = new Point(116, 463);
+            doctorComboBox.Name = "doctorComboBox";
+            doctorComboBox.Size = new Size(300, 23);
+            doctorComboBox.TabIndex = 1;
+            doctorComboBox.SelectedIndexChanged += doctorComboBox_SelectedIndexChanged;
+            // 
+            // dateLabel
+            // 
+            dateLabel.AutoSize = true;
+            dateLabel.Location = new Point(6, 520);
+            dateLabel.Name = "dateLabel";
+            dateLabel.Size = new Size(34, 15);
+            dateLabel.TabIndex = 7;
+            dateLabel.Text = "Date:";
+            // 
+            // appointmentDatePicker
+            // 
+            appointmentDatePicker.Format = DateTimePickerFormat.Short;
+            appointmentDatePicker.Location = new Point(116, 517);
+            appointmentDatePicker.Name = "appointmentDatePicker";
+            appointmentDatePicker.Size = new Size(300, 23);
+            appointmentDatePicker.TabIndex = 2;
+            appointmentDatePicker.ValueChanged += appointmentDatePicker_ValueChanged;
+            // 
+            // timeSlotLabel
+            // 
+            timeSlotLabel.AutoSize = true;
+            timeSlotLabel.Location = new Point(6, 574);
+            timeSlotLabel.Name = "timeSlotLabel";
+            timeSlotLabel.Size = new Size(59, 15);
+            timeSlotLabel.TabIndex = 8;
+            timeSlotLabel.Text = "Time slot:";
+            // 
+            // appointmentTimeComboBox
+            // 
+            appointmentTimeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            appointmentTimeComboBox.FormattingEnabled = true;
+            appointmentTimeComboBox.Location = new Point(116, 571);
+            appointmentTimeComboBox.Name = "appointmentTimeComboBox";
+            appointmentTimeComboBox.Size = new Size(300, 23);
+            appointmentTimeComboBox.TabIndex = 3;
+            // 
+            // availabilityStatusLabel
+            // 
+            availabilityStatusLabel.AutoSize = true;
+            availabilityStatusLabel.ForeColor = Color.Firebrick;
+            availabilityStatusLabel.Location = new Point(116, 625);
+            availabilityStatusLabel.Name = "availabilityStatusLabel";
+            availabilityStatusLabel.Size = new Size(0, 15);
+            availabilityStatusLabel.TabIndex = 9;
+            // 
+            // reasonLabel
+            // 
+            reasonLabel.AutoSize = true;
+            reasonLabel.Location = new Point(6, 660);
+            reasonLabel.Name = "reasonLabel";
+            reasonLabel.Size = new Size(48, 15);
+            reasonLabel.TabIndex = 5;
+            reasonLabel.Text = "Reason:";
+            // 
+            // reasonTextBox
+            // 
+            reasonTextBox.Location = new Point(116, 657);
+            reasonTextBox.MaxLength = 255;
+            reasonTextBox.Multiline = true;
+            reasonTextBox.Name = "reasonTextBox";
+            reasonTextBox.ScrollBars = ScrollBars.Vertical;
+            reasonTextBox.Size = new Size(300, 80);
+            reasonTextBox.TabIndex = 4;
+            // 
+            // errorLabel
+            // 
+            errorLabel.AutoSize = true;
+            errorLabel.ForeColor = Color.Firebrick;
+            errorLabel.Location = new Point(16, 830);
+            errorLabel.MaximumSize = new Size(740, 0);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(0, 15);
+            errorLabel.TabIndex = 10;
+            // 
+            // bookButton
+            // 
+            bookButton.Location = new Point(236, 790);
+            bookButton.Name = "bookButton";
+            bookButton.Size = new Size(85, 30);
+            bookButton.TabIndex = 5;
+            bookButton.Text = "Book";
+            bookButton.UseVisualStyleBackColor = true;
+            bookButton.Click += bookButton_Click;
+            // 
+            // cancelButton
+            // 
+            cancelButton.Location = new Point(331, 790);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(85, 30);
+            cancelButton.TabIndex = 6;
+            cancelButton.Text = "Cancel";
+            cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click;
+            // 
+            // appointmentTabControl
+            // 
+            appointmentTabControl.Controls.Add(createAppointmentTabPage);
+            appointmentTabControl.Controls.Add(orderTestTabPage);
+            appointmentTabControl.Controls.Add(orderTestsTabPage);
+            appointmentTabControl.Controls.Add(testResultsTabPage);
+            appointmentTabControl.Controls.Add(viewVisitsTabPage);
+            appointmentTabControl.Location = new Point(0, 18);
+            appointmentTabControl.Name = "appointmentTabControl";
+            appointmentTabControl.SelectedIndex = 0;
+            appointmentTabControl.Size = new Size(799, 742);
+            appointmentTabControl.TabIndex = 10;
+            // 
+            // createAppointmentTabPage
+            // 
+            createAppointmentTabPage.Controls.Add(titleLabel);
+            createAppointmentTabPage.Controls.Add(cancelButton);
+            createAppointmentTabPage.Controls.Add(bookButton);
+            createAppointmentTabPage.Controls.Add(errorLabel);
+            createAppointmentTabPage.Controls.Add(createAppointmentPatientSearchControl);
+            createAppointmentTabPage.Controls.Add(reasonTextBox);
+            createAppointmentTabPage.Controls.Add(patientNameLabel);
+            createAppointmentTabPage.Controls.Add(reasonLabel);
+            createAppointmentTabPage.Controls.Add(patientNameTextBox);
+            createAppointmentTabPage.Controls.Add(availabilityStatusLabel);
+            createAppointmentTabPage.Controls.Add(patientDobLabel);
+            createAppointmentTabPage.Controls.Add(appointmentTimeComboBox);
+            createAppointmentTabPage.Controls.Add(patientDobTextBox);
+            createAppointmentTabPage.Controls.Add(timeSlotLabel);
+            createAppointmentTabPage.Controls.Add(inactivePatientLabel);
+            createAppointmentTabPage.Controls.Add(appointmentDatePicker);
+            createAppointmentTabPage.Controls.Add(doctorLabel);
+            createAppointmentTabPage.Controls.Add(dateLabel);
+            createAppointmentTabPage.Controls.Add(doctorComboBox);
+            createAppointmentTabPage.Location = new Point(4, 24);
+            createAppointmentTabPage.Name = "createAppointmentTabPage";
+            createAppointmentTabPage.Padding = new Padding(3);
+            createAppointmentTabPage.Size = new Size(791, 714);
+            createAppointmentTabPage.TabIndex = 0;
+            createAppointmentTabPage.Text = "Create Appointment";
+            createAppointmentTabPage.UseVisualStyleBackColor = true;
+            // 
+            // orderTestTabPage
+            // 
+            orderTestTabPage.AutoScroll = true;
+            orderTestTabPage.Controls.Add(visitCheckupFinalDiagnosisTextBox);
+            orderTestTabPage.Controls.Add(visitCheckupFinalDiagnosisLabel);
+            orderTestTabPage.Controls.Add(visitAndOrderTestErrorLabel);
+            orderTestTabPage.Controls.Add(label2);
+            orderTestTabPage.Controls.Add(visitCheckupAppointmentDataGridView);
+            orderTestTabPage.Controls.Add(label1);
+            orderTestTabPage.Controls.Add(visitCheckupPatientSearchControl);
+            orderTestTabPage.Controls.Add(visitDetailsLabel);
+            orderTestTabPage.Controls.Add(systolicLabel);
+            orderTestTabPage.Controls.Add(systolicTextBox);
+            orderTestTabPage.Controls.Add(diastolicLabel);
+            orderTestTabPage.Controls.Add(diastolicTextBox);
+            orderTestTabPage.Controls.Add(pulseLabel);
+            orderTestTabPage.Controls.Add(pulseTextBox);
+            orderTestTabPage.Controls.Add(bodyTemperatureLabel);
+            orderTestTabPage.Controls.Add(bodyTemperatureTextBox);
+            orderTestTabPage.Controls.Add(heightLabel);
+            orderTestTabPage.Controls.Add(heightTextBox);
+            orderTestTabPage.Controls.Add(weightLabel);
+            orderTestTabPage.Controls.Add(weightTextBox);
+            orderTestTabPage.Controls.Add(symptomsLabel);
+            orderTestTabPage.Controls.Add(symptomsTextBox);
+            orderTestTabPage.Controls.Add(initialDiagnosisLabel);
+            orderTestTabPage.Controls.Add(initialDiagnosisTextBox);
+            orderTestTabPage.Controls.Add(submitVisitButton);
+            orderTestTabPage.Location = new Point(4, 24);
+            orderTestTabPage.Name = "orderTestTabPage";
+            orderTestTabPage.Padding = new Padding(3);
+            orderTestTabPage.Size = new Size(791, 714);
+            orderTestTabPage.TabIndex = 1;
+            orderTestTabPage.Text = "Visit Checkup";
+            orderTestTabPage.UseVisualStyleBackColor = true;
+            // 
+            // visitCheckupFinalDiagnosisTextBox
+            // 
+            visitCheckupFinalDiagnosisTextBox.Location = new Point(110, 953);
+            visitCheckupFinalDiagnosisTextBox.Multiline = true;
+            visitCheckupFinalDiagnosisTextBox.Name = "visitCheckupFinalDiagnosisTextBox";
+            visitCheckupFinalDiagnosisTextBox.ScrollBars = ScrollBars.Vertical;
+            visitCheckupFinalDiagnosisTextBox.Size = new Size(630, 48);
+            visitCheckupFinalDiagnosisTextBox.TabIndex = 17;
+            // 
+            // visitCheckupFinalDiagnosisLabel
+            // 
+            visitCheckupFinalDiagnosisLabel.AutoSize = true;
+            visitCheckupFinalDiagnosisLabel.Location = new Point(16, 956);
+            visitCheckupFinalDiagnosisLabel.Name = "visitCheckupFinalDiagnosisLabel";
+            visitCheckupFinalDiagnosisLabel.Size = new Size(88, 15);
+            visitCheckupFinalDiagnosisLabel.TabIndex = 16;
+            visitCheckupFinalDiagnosisLabel.Text = "Final diagnosis:";
+            // 
+            // visitAndOrderTestErrorLabel
+            // 
+            visitAndOrderTestErrorLabel.AutoEllipsis = true;
+            visitAndOrderTestErrorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            visitAndOrderTestErrorLabel.ForeColor = Color.Red;
+            visitAndOrderTestErrorLabel.Location = new Point(16, 341);
+            visitAndOrderTestErrorLabel.Name = "visitAndOrderTestErrorLabel";
+            visitAndOrderTestErrorLabel.Size = new Size(740, 23);
+            visitAndOrderTestErrorLabel.TabIndex = 4;
+            visitAndOrderTestErrorLabel.Text = "ERROR";
+            visitAndOrderTestErrorLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(16, 366);
+            label2.Name = "label2";
+            label2.Size = new Size(162, 21);
+            label2.TabIndex = 3;
+            label2.Text = "Select Appointment";
+            // 
+            // visitCheckupAppointmentDataGridView
+            // 
+            visitCheckupAppointmentDataGridView.AllowUserToAddRows = false;
+            visitCheckupAppointmentDataGridView.AllowUserToDeleteRows = false;
+            visitCheckupAppointmentDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            visitCheckupAppointmentDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            visitCheckupAppointmentDataGridView.Columns.AddRange(new DataGridViewColumn[] { appointmentIdColumn, doctorNameColumn, timeColumn, reasonColumn });
+            visitCheckupAppointmentDataGridView.Location = new Point(16, 390);
+            visitCheckupAppointmentDataGridView.MultiSelect = false;
+            visitCheckupAppointmentDataGridView.Name = "visitCheckupAppointmentDataGridView";
+            visitCheckupAppointmentDataGridView.ReadOnly = true;
+            visitCheckupAppointmentDataGridView.RowHeadersVisible = false;
+            visitCheckupAppointmentDataGridView.RowHeadersWidth = 62;
+            visitCheckupAppointmentDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            visitCheckupAppointmentDataGridView.Size = new Size(330, 134);
+            visitCheckupAppointmentDataGridView.TabIndex = 2;
+            visitCheckupAppointmentDataGridView.SelectionChanged += visitCheckupAppointmentDataGridView_SelectionChanged;
+            // 
+            // appointmentIdColumn
+            // 
+            appointmentIdColumn.HeaderText = "Appointment ID";
+            appointmentIdColumn.MinimumWidth = 8;
+            appointmentIdColumn.Name = "appointmentIdColumn";
+            appointmentIdColumn.ReadOnly = true;
+            appointmentIdColumn.Visible = false;
+            appointmentIdColumn.Width = 150;
+            // 
+            // doctorNameColumn
+            // 
+            doctorNameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            doctorNameColumn.HeaderText = "Doctor Name";
+            doctorNameColumn.MinimumWidth = 8;
+            doctorNameColumn.Name = "doctorNameColumn";
+            doctorNameColumn.ReadOnly = true;
+            doctorNameColumn.Width = 95;
+            // 
+            // timeColumn
+            // 
+            timeColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            timeColumn.HeaderText = "Appointment Time";
+            timeColumn.MinimumWidth = 8;
+            timeColumn.Name = "timeColumn";
+            timeColumn.ReadOnly = true;
+            timeColumn.Width = 122;
+            // 
+            // reasonColumn
+            // 
+            reasonColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            reasonColumn.HeaderText = "Reason";
+            reasonColumn.MinimumWidth = 8;
+            reasonColumn.Name = "reasonColumn";
+            reasonColumn.ReadOnly = true;
+            reasonColumn.Width = 70;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(3, 3);
+            label1.Name = "label1";
+            label1.Size = new Size(148, 21);
+            label1.TabIndex = 1;
+            label1.Text = "Search For Patient";
+            // 
+            // visitCheckupPatientSearchControl
+            // 
+            visitCheckupPatientSearchControl.Location = new Point(6, 38);
+            visitCheckupPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            visitCheckupPatientSearchControl.Name = "visitCheckupPatientSearchControl";
+            visitCheckupPatientSearchControl.Size = new Size(760, 300);
+            visitCheckupPatientSearchControl.TabIndex = 0;
+            visitCheckupPatientSearchControl.PatientSelected += visitCheckupPatientSearch_PatientSelected;
+            // 
+            // visitDetailsLabel
+            // 
+            visitDetailsLabel.AutoSize = true;
+            visitDetailsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            visitDetailsLabel.Location = new Point(16, 558);
+            visitDetailsLabel.Name = "visitDetailsLabel";
+            visitDetailsLabel.Size = new Size(181, 21);
+            visitDetailsLabel.TabIndex = 7;
+            visitDetailsLabel.Text = "Visit Vitals and Details";
+            // 
+            // systolicLabel
+            // 
+            systolicLabel.AutoSize = true;
+            systolicLabel.Location = new Point(16, 592);
+            systolicLabel.Name = "systolicLabel";
+            systolicLabel.Size = new Size(104, 15);
+            systolicLabel.TabIndex = 8;
+            systolicLabel.Text = "Systolic (mm/Hg):";
+            // 
+            // systolicTextBox
+            // 
+            systolicTextBox.Location = new Point(16, 610);
+            systolicTextBox.Name = "systolicTextBox";
+            systolicTextBox.Size = new Size(165, 23);
+            systolicTextBox.TabIndex = 7;
+            // 
+            // diastolicLabel
+            // 
+            diastolicLabel.AutoSize = true;
+            diastolicLabel.Location = new Point(205, 592);
+            diastolicLabel.Name = "diastolicLabel";
+            diastolicLabel.Size = new Size(109, 15);
+            diastolicLabel.TabIndex = 9;
+            diastolicLabel.Text = "Diastolic (mm/Hg):";
+            // 
+            // diastolicTextBox
+            // 
+            diastolicTextBox.Location = new Point(205, 610);
+            diastolicTextBox.Name = "diastolicTextBox";
+            diastolicTextBox.Size = new Size(165, 23);
+            diastolicTextBox.TabIndex = 8;
+            // 
+            // pulseLabel
+            // 
+            pulseLabel.AutoSize = true;
+            pulseLabel.Location = new Point(400, 592);
+            pulseLabel.Name = "pulseLabel";
+            pulseLabel.Size = new Size(74, 15);
+            pulseLabel.TabIndex = 10;
+            pulseLabel.Text = "Pulse (BPM):";
+            // 
+            // pulseTextBox
+            // 
+            pulseTextBox.Location = new Point(400, 610);
+            pulseTextBox.Name = "pulseTextBox";
+            pulseTextBox.Size = new Size(120, 23);
+            pulseTextBox.TabIndex = 9;
+            // 
+            // bodyTemperatureLabel
+            // 
+            bodyTemperatureLabel.AutoSize = true;
+            bodyTemperatureLabel.Location = new Point(540, 592);
+            bodyTemperatureLabel.Name = "bodyTemperatureLabel";
+            bodyTemperatureLabel.Size = new Size(84, 15);
+            bodyTemperatureLabel.TabIndex = 11;
+            bodyTemperatureLabel.Text = "Body temp (°):";
+            // 
+            // bodyTemperatureTextBox
+            // 
+            bodyTemperatureTextBox.Location = new Point(540, 610);
+            bodyTemperatureTextBox.Name = "bodyTemperatureTextBox";
+            bodyTemperatureTextBox.Size = new Size(195, 23);
+            bodyTemperatureTextBox.TabIndex = 10;
+            // 
+            // heightLabel
+            // 
+            heightLabel.AutoSize = true;
+            heightLabel.Location = new Point(16, 697);
+            heightLabel.Name = "heightLabel";
+            heightLabel.Size = new Size(67, 15);
+            heightLabel.TabIndex = 12;
+            heightLabel.Text = "Height (in):";
+            // 
+            // heightTextBox
+            // 
+            heightTextBox.Location = new Point(16, 715);
+            heightTextBox.Name = "heightTextBox";
+            heightTextBox.Size = new Size(165, 23);
+            heightTextBox.TabIndex = 11;
+            // 
+            // weightLabel
+            // 
+            weightLabel.AutoSize = true;
+            weightLabel.Location = new Point(205, 697);
+            weightLabel.Name = "weightLabel";
+            weightLabel.Size = new Size(77, 15);
+            weightLabel.TabIndex = 13;
+            weightLabel.Text = "Weight (Lbs):";
+            // 
+            // weightTextBox
+            // 
+            weightTextBox.Location = new Point(205, 715);
+            weightTextBox.Name = "weightTextBox";
+            weightTextBox.Size = new Size(165, 23);
+            weightTextBox.TabIndex = 12;
+            // 
+            // symptomsLabel
+            // 
+            symptomsLabel.AutoSize = true;
+            symptomsLabel.Location = new Point(16, 800);
+            symptomsLabel.Name = "symptomsLabel";
+            symptomsLabel.Size = new Size(67, 15);
+            symptomsLabel.TabIndex = 14;
+            symptomsLabel.Text = "Symptoms:";
+            // 
+            // symptomsTextBox
+            // 
+            symptomsTextBox.Location = new Point(110, 797);
+            symptomsTextBox.Multiline = true;
+            symptomsTextBox.Name = "symptomsTextBox";
+            symptomsTextBox.ScrollBars = ScrollBars.Vertical;
+            symptomsTextBox.Size = new Size(630, 48);
+            symptomsTextBox.TabIndex = 13;
+            // 
+            // initialDiagnosisLabel
+            // 
+            initialDiagnosisLabel.AutoSize = true;
+            initialDiagnosisLabel.Location = new Point(16, 888);
+            initialDiagnosisLabel.Name = "initialDiagnosisLabel";
+            initialDiagnosisLabel.Size = new Size(92, 15);
+            initialDiagnosisLabel.TabIndex = 15;
+            initialDiagnosisLabel.Text = "Initial diagnosis:";
+            // 
+            // initialDiagnosisTextBox
+            // 
+            initialDiagnosisTextBox.Location = new Point(110, 885);
+            initialDiagnosisTextBox.Multiline = true;
+            initialDiagnosisTextBox.Name = "initialDiagnosisTextBox";
+            initialDiagnosisTextBox.ScrollBars = ScrollBars.Vertical;
+            initialDiagnosisTextBox.Size = new Size(630, 48);
+            initialDiagnosisTextBox.TabIndex = 14;
+            // 
+            // submitVisitButton
+            // 
+            submitVisitButton.Location = new Point(620, 1020);
+            submitVisitButton.Name = "submitVisitButton";
+            submitVisitButton.Size = new Size(115, 32);
+            submitVisitButton.TabIndex = 15;
+            submitVisitButton.Text = "Submit Visit";
+            submitVisitButton.UseVisualStyleBackColor = true;
+            submitVisitButton.Click += submitVisitButton_Click;
+            // 
+            // orderTestsTabPage
+            // 
+            orderTestsTabPage.AutoScroll = true;
+            orderTestsTabPage.Controls.Add(label5);
+            orderTestsTabPage.Controls.Add(orderTestsAlreadyOrderedTestsCheckedListBox);
+            orderTestsTabPage.Controls.Add(orderTestsTitleLabel);
+            orderTestsTabPage.Controls.Add(orderTestsPatientSearchControl);
+            orderTestsTabPage.Controls.Add(orderTestsSelectVisitLabel);
+            orderTestsTabPage.Controls.Add(orderTestsVisitGrid);
+            orderTestsTabPage.Controls.Add(availableTestsLabel);
+            orderTestsTabPage.Controls.Add(orderTestsUnorderedTestsCheckedListBox);
+            orderTestsTabPage.Controls.Add(orderTestsErrorLabel);
+            orderTestsTabPage.Controls.Add(orderTestsSubmitButton);
+            orderTestsTabPage.Location = new Point(4, 24);
+            orderTestsTabPage.Name = "orderTestsTabPage";
+            orderTestsTabPage.Padding = new Padding(3);
+            orderTestsTabPage.Size = new Size(791, 714);
+            orderTestsTabPage.TabIndex = 2;
+            orderTestsTabPage.Text = "Order Tests";
+            orderTestsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(420, 425);
+            label5.Name = "label5";
+            label5.Size = new Size(176, 21);
+            label5.TabIndex = 7;
+            label5.Text = "Already Ordered Tests";
+            // 
+            // orderTestsAlreadyOrderedTestsCheckedListBox
+            // 
+            orderTestsAlreadyOrderedTestsCheckedListBox.Enabled = false;
+            orderTestsAlreadyOrderedTestsCheckedListBox.FormattingEnabled = true;
+            orderTestsAlreadyOrderedTestsCheckedListBox.Location = new Point(420, 452);
+            orderTestsAlreadyOrderedTestsCheckedListBox.Name = "orderTestsAlreadyOrderedTestsCheckedListBox";
+            orderTestsAlreadyOrderedTestsCheckedListBox.Size = new Size(329, 112);
+            orderTestsAlreadyOrderedTestsCheckedListBox.TabIndex = 8;
+            // 
+            // orderTestsTitleLabel
+            // 
+            orderTestsTitleLabel.AutoSize = true;
+            orderTestsTitleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            orderTestsTitleLabel.Location = new Point(16, 12);
+            orderTestsTitleLabel.Name = "orderTestsTitleLabel";
+            orderTestsTitleLabel.Size = new Size(146, 21);
+            orderTestsTitleLabel.TabIndex = 0;
+            orderTestsTitleLabel.Text = "Search for Patient";
+            // 
+            // orderTestsPatientSearchControl
+            // 
+            orderTestsPatientSearchControl.Location = new Point(16, 40);
+            orderTestsPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            orderTestsPatientSearchControl.Name = "orderTestsPatientSearchControl";
+            orderTestsPatientSearchControl.Size = new Size(749, 170);
+            orderTestsPatientSearchControl.TabIndex = 1;
+            orderTestsPatientSearchControl.PatientSelected += orderTestsPatientSearchControl_PatientSelected;
+            // 
+            // orderTestsSelectVisitLabel
+            // 
+            orderTestsSelectVisitLabel.AutoSize = true;
+            orderTestsSelectVisitLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            orderTestsSelectVisitLabel.Location = new Point(16, 225);
+            orderTestsSelectVisitLabel.Name = "orderTestsSelectVisitLabel";
+            orderTestsSelectVisitLabel.Size = new Size(94, 21);
+            orderTestsSelectVisitLabel.TabIndex = 2;
+            orderTestsSelectVisitLabel.Text = "Select Visit";
+            // 
+            // orderTestsVisitGrid
+            // 
+            orderTestsVisitGrid.AllowUserToAddRows = false;
+            orderTestsVisitGrid.AllowUserToDeleteRows = false;
+            orderTestsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            orderTestsVisitGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            orderTestsVisitGrid.Columns.AddRange(new DataGridViewColumn[] { orderTestsAppointmentIdColumn, orderTestsDoctorColumn, orderTestsDateColumn });
+            orderTestsVisitGrid.Location = new Point(16, 252);
+            orderTestsVisitGrid.MultiSelect = false;
+            orderTestsVisitGrid.Name = "orderTestsVisitGrid";
+            orderTestsVisitGrid.ReadOnly = true;
+            orderTestsVisitGrid.RowHeadersVisible = false;
+            orderTestsVisitGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            orderTestsVisitGrid.Size = new Size(749, 150);
+            orderTestsVisitGrid.TabIndex = 3;
+            orderTestsVisitGrid.SelectionChanged += orderTestsAppointmentGrid_SelectionChanged;
+            // 
+            // orderTestsAppointmentIdColumn
+            // 
+            orderTestsAppointmentIdColumn.HeaderText = "Visit ID";
+            orderTestsAppointmentIdColumn.Name = "orderTestsAppointmentIdColumn";
+            orderTestsAppointmentIdColumn.ReadOnly = true;
+            orderTestsAppointmentIdColumn.Visible = false;
+            // 
+            // orderTestsDoctorColumn
+            // 
+            orderTestsDoctorColumn.HeaderText = "Doctor";
+            orderTestsDoctorColumn.Name = "orderTestsDoctorColumn";
+            orderTestsDoctorColumn.ReadOnly = true;
+            // 
+            // orderTestsDateColumn
+            // 
+            orderTestsDateColumn.HeaderText = "Visit Date";
+            orderTestsDateColumn.Name = "orderTestsDateColumn";
+            orderTestsDateColumn.ReadOnly = true;
+            // 
+            // availableTestsLabel
+            // 
+            availableTestsLabel.AutoSize = true;
+            availableTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            availableTestsLabel.Location = new Point(40, 425);
+            availableTestsLabel.Name = "availableTestsLabel";
+            availableTestsLabel.Size = new Size(123, 21);
+            availableTestsLabel.TabIndex = 5;
+            availableTestsLabel.Text = "Available Tests";
+            // 
+            // orderTestsUnorderedTestsCheckedListBox
+            // 
+            orderTestsUnorderedTestsCheckedListBox.FormattingEnabled = true;
+            orderTestsUnorderedTestsCheckedListBox.Location = new Point(40, 452);
+            orderTestsUnorderedTestsCheckedListBox.Name = "orderTestsUnorderedTestsCheckedListBox";
+            orderTestsUnorderedTestsCheckedListBox.Size = new Size(329, 112);
+            orderTestsUnorderedTestsCheckedListBox.TabIndex = 6;
+            // 
+            // orderTestsErrorLabel
+            // 
+            orderTestsErrorLabel.AutoEllipsis = true;
+            orderTestsErrorLabel.ForeColor = Color.Red;
+            orderTestsErrorLabel.Location = new Point(16, 650);
+            orderTestsErrorLabel.Name = "orderTestsErrorLabel";
+            orderTestsErrorLabel.Size = new Size(749, 30);
+            orderTestsErrorLabel.TabIndex = 5;
+            orderTestsErrorLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // orderTestsSubmitButton
+            // 
+            orderTestsSubmitButton.Location = new Point(620, 600);
+            orderTestsSubmitButton.Name = "orderTestsSubmitButton";
+            orderTestsSubmitButton.Size = new Size(145, 32);
+            orderTestsSubmitButton.TabIndex = 6;
+            orderTestsSubmitButton.Text = "Submit Test Orders";
+            orderTestsSubmitButton.UseVisualStyleBackColor = true;
+            orderTestsSubmitButton.Click += orderTestsSubmitButton_Click;
+            // 
+            // testResultsTabPage
+            // 
+            testResultsTabPage.AutoScroll = true;
+            testResultsTabPage.Controls.Add(testResultsTitleLabel);
+            testResultsTabPage.Controls.Add(testResultsPatientSearchControl);
+            testResultsTabPage.Controls.Add(testResultsErrorLabel);
+            testResultsTabPage.Controls.Add(testResultsSelectVisitLabel);
+            testResultsTabPage.Controls.Add(testResultsVisitGrid);
+            testResultsTabPage.Controls.Add(testResultsOrderedTestsLabel);
+            testResultsTabPage.Controls.Add(testResultsTestsGrid);
+            testResultsTabPage.Controls.Add(testResultsPatientInfoLabel);
+            testResultsTabPage.Controls.Add(testResultsSelectedTestLabel);
+            testResultsTabPage.Controls.Add(testResultsDatePerformedLabel);
+            testResultsTabPage.Controls.Add(testResultsDatePerformedPicker);
+            testResultsTabPage.Controls.Add(testResultsResultLabel);
+            testResultsTabPage.Controls.Add(testResultsResultTextBox);
+            testResultsTabPage.Controls.Add(testResultsAbnormalCheckBox);
+            testResultsTabPage.Controls.Add(testResultsSaveButton);
+            testResultsTabPage.Location = new Point(4, 24);
+            testResultsTabPage.Name = "testResultsTabPage";
+            testResultsTabPage.Padding = new Padding(3);
+            testResultsTabPage.Size = new Size(791, 714);
+            testResultsTabPage.TabIndex = 3;
+            testResultsTabPage.Text = "Enter Test Results";
+            testResultsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // testResultsTitleLabel
+            // 
+            testResultsTitleLabel.AutoSize = true;
+            testResultsTitleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            testResultsTitleLabel.Location = new Point(3, 3);
+            testResultsTitleLabel.Name = "testResultsTitleLabel";
+            testResultsTitleLabel.Size = new Size(148, 21);
+            testResultsTitleLabel.TabIndex = 1;
+            testResultsTitleLabel.Text = "Search For Patient";
+            // 
+            // testResultsPatientSearchControl
+            // 
+            testResultsPatientSearchControl.Location = new Point(6, 38);
+            testResultsPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            testResultsPatientSearchControl.Name = "testResultsPatientSearchControl";
+            testResultsPatientSearchControl.Size = new Size(760, 300);
+            testResultsPatientSearchControl.TabIndex = 0;
+            testResultsPatientSearchControl.PatientSelected += testResultsPatientSearchControl_PatientSelected;
+            // 
+            // testResultsErrorLabel
+            // 
+            testResultsErrorLabel.AutoEllipsis = true;
+            testResultsErrorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            testResultsErrorLabel.ForeColor = Color.Red;
+            testResultsErrorLabel.Location = new Point(16, 341);
+            testResultsErrorLabel.Name = "testResultsErrorLabel";
+            testResultsErrorLabel.Size = new Size(740, 23);
+            testResultsErrorLabel.TabIndex = 2;
+            testResultsErrorLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // testResultsSelectVisitLabel
+            // 
+            testResultsSelectVisitLabel.AutoSize = true;
+            testResultsSelectVisitLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            testResultsSelectVisitLabel.Location = new Point(16, 366);
+            testResultsSelectVisitLabel.Name = "testResultsSelectVisitLabel";
+            testResultsSelectVisitLabel.Size = new Size(94, 21);
+            testResultsSelectVisitLabel.TabIndex = 3;
+            testResultsSelectVisitLabel.Text = "Select Visit";
+            // 
+            // testResultsVisitGrid
+            // 
+            testResultsVisitGrid.AllowUserToAddRows = false;
+            testResultsVisitGrid.AllowUserToDeleteRows = false;
+            testResultsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            testResultsVisitGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            testResultsVisitGrid.Location = new Point(16, 390);
+            testResultsVisitGrid.MultiSelect = false;
+            testResultsVisitGrid.Name = "testResultsVisitGrid";
+            testResultsVisitGrid.ReadOnly = true;
+            testResultsVisitGrid.RowHeadersVisible = false;
+            testResultsVisitGrid.ScrollBars = ScrollBars.Both;
+            testResultsVisitGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            testResultsVisitGrid.Size = new Size(749, 120);
+            testResultsVisitGrid.TabIndex = 4;
+            testResultsVisitGrid.DataBindingComplete += testResultsVisitGrid_DataBindingComplete;
+            testResultsVisitGrid.SelectionChanged += testResultsVisitGrid_SelectionChanged;
+            // 
+            // testResultsOrderedTestsLabel
+            // 
+            testResultsOrderedTestsLabel.AutoSize = true;
+            testResultsOrderedTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            testResultsOrderedTestsLabel.Location = new Point(16, 525);
+            testResultsOrderedTestsLabel.Name = "testResultsOrderedTestsLabel";
+            testResultsOrderedTestsLabel.Size = new Size(113, 21);
+            testResultsOrderedTestsLabel.TabIndex = 5;
+            testResultsOrderedTestsLabel.Text = "Ordered Tests";
+            // 
+            // testResultsTestsGrid
+            // 
+            testResultsTestsGrid.AllowUserToAddRows = false;
+            testResultsTestsGrid.AllowUserToDeleteRows = false;
+            testResultsTestsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            testResultsTestsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            testResultsTestsGrid.Location = new Point(16, 549);
+            testResultsTestsGrid.MultiSelect = false;
+            testResultsTestsGrid.Name = "testResultsTestsGrid";
+            testResultsTestsGrid.ReadOnly = true;
+            testResultsTestsGrid.RowHeadersVisible = false;
+            testResultsTestsGrid.ScrollBars = ScrollBars.Both;
+            testResultsTestsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            testResultsTestsGrid.Size = new Size(749, 120);
+            testResultsTestsGrid.TabIndex = 6;
+            testResultsTestsGrid.DataBindingComplete += testResultsTestsGrid_DataBindingComplete;
+            testResultsTestsGrid.SelectionChanged += testResultsTestsGrid_SelectionChanged;
+            // 
+            // testResultsPatientInfoLabel
+            // 
+            testResultsPatientInfoLabel.AutoSize = true;
+            testResultsPatientInfoLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            testResultsPatientInfoLabel.Location = new Point(16, 684);
+            testResultsPatientInfoLabel.Name = "testResultsPatientInfoLabel";
+            testResultsPatientInfoLabel.Size = new Size(0, 15);
+            testResultsPatientInfoLabel.TabIndex = 7;
+            // 
+            // testResultsSelectedTestLabel
+            // 
+            testResultsSelectedTestLabel.AutoSize = true;
+            testResultsSelectedTestLabel.Location = new Point(16, 709);
+            testResultsSelectedTestLabel.MaximumSize = new Size(750, 0);
+            testResultsSelectedTestLabel.Name = "testResultsSelectedTestLabel";
+            testResultsSelectedTestLabel.Size = new Size(0, 15);
+            testResultsSelectedTestLabel.TabIndex = 8;
+            // 
+            // testResultsDatePerformedLabel
+            // 
+            testResultsDatePerformedLabel.AutoSize = true;
+            testResultsDatePerformedLabel.Location = new Point(16, 765);
+            testResultsDatePerformedLabel.Name = "testResultsDatePerformedLabel";
+            testResultsDatePerformedLabel.Size = new Size(122, 15);
+            testResultsDatePerformedLabel.TabIndex = 9;
+            testResultsDatePerformedLabel.Text = "Date/time performed:";
+            // 
+            // testResultsDatePerformedPicker
+            // 
+            testResultsDatePerformedPicker.CustomFormat = "MM/dd/yyyy hh:mm tt";
+            testResultsDatePerformedPicker.Format = DateTimePickerFormat.Custom;
+            testResultsDatePerformedPicker.Location = new Point(150, 762);
+            testResultsDatePerformedPicker.Name = "testResultsDatePerformedPicker";
+            testResultsDatePerformedPicker.Size = new Size(220, 23);
+            testResultsDatePerformedPicker.TabIndex = 10;
+            // 
+            // testResultsResultLabel
+            // 
+            testResultsResultLabel.AutoSize = true;
+            testResultsResultLabel.Location = new Point(16, 810);
+            testResultsResultLabel.Name = "testResultsResultLabel";
+            testResultsResultLabel.Size = new Size(42, 15);
+            testResultsResultLabel.TabIndex = 11;
+            testResultsResultLabel.Text = "Result:";
+            // 
+            // testResultsResultTextBox
+            // 
+            testResultsResultTextBox.Location = new Point(150, 807);
+            testResultsResultTextBox.MaxLength = 100;
+            testResultsResultTextBox.Name = "testResultsResultTextBox";
+            testResultsResultTextBox.Size = new Size(220, 23);
+            testResultsResultTextBox.TabIndex = 12;
+            testResultsResultTextBox.TextChanged += testResultsResultTextBox_TextChanged;
+            // 
+            // testResultsAbnormalCheckBox
+            // 
+            testResultsAbnormalCheckBox.AutoSize = true;
+            testResultsAbnormalCheckBox.Location = new Point(390, 809);
+            testResultsAbnormalCheckBox.Name = "testResultsAbnormalCheckBox";
+            testResultsAbnormalCheckBox.Size = new Size(79, 19);
+            testResultsAbnormalCheckBox.TabIndex = 13;
+            testResultsAbnormalCheckBox.Text = "Abnormal";
+            testResultsAbnormalCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // testResultsSaveButton
+            // 
+            testResultsSaveButton.Location = new Point(650, 921);
+            testResultsSaveButton.Name = "testResultsSaveButton";
+            testResultsSaveButton.Size = new Size(115, 32);
+            testResultsSaveButton.TabIndex = 14;
+            testResultsSaveButton.Text = "Save Result";
+            testResultsSaveButton.UseVisualStyleBackColor = true;
+            testResultsSaveButton.Click += testResultsSaveButton_Click;
+            // 
+            // viewVisitsTabPage
+            // 
+            viewVisitsTabPage.Controls.Add(viewVisitsTitleLabel);
+            viewVisitsTabPage.Controls.Add(viewVisitsPatientSearchControl);
+            viewVisitsTabPage.Controls.Add(viewVisitsErrorLabel);
+            viewVisitsTabPage.Controls.Add(viewVisitsSelectVisitLabel);
+            viewVisitsTabPage.Controls.Add(viewVisitsVisitGrid);
+            viewVisitsTabPage.Controls.Add(viewVisitsDetailsLabel);
+            viewVisitsTabPage.Controls.Add(viewVisitsDetailsTextBox);
+            viewVisitsTabPage.Controls.Add(viewVisitsTestsLabel);
+            viewVisitsTabPage.Controls.Add(viewVisitsTestsGrid);
+            viewVisitsTabPage.Location = new Point(4, 24);
+            viewVisitsTabPage.Name = "viewVisitsTabPage";
+            viewVisitsTabPage.Padding = new Padding(3);
+            viewVisitsTabPage.Size = new Size(791, 714);
+            viewVisitsTabPage.TabIndex = 4;
+            viewVisitsTabPage.Text = "View Visits";
+            viewVisitsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // viewVisitsTitleLabel
+            // 
+            viewVisitsTitleLabel.AutoSize = true;
+            viewVisitsTitleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            viewVisitsTitleLabel.Location = new Point(3, 3);
+            viewVisitsTitleLabel.Name = "viewVisitsTitleLabel";
+            viewVisitsTitleLabel.Size = new Size(148, 21);
+            viewVisitsTitleLabel.TabIndex = 1;
+            viewVisitsTitleLabel.Text = "Search For Patient";
+            // 
+            // viewVisitsPatientSearchControl
+            // 
+            viewVisitsPatientSearchControl.Location = new Point(6, 38);
+            viewVisitsPatientSearchControl.Margin = new Padding(4, 5, 4, 5);
+            viewVisitsPatientSearchControl.Name = "viewVisitsPatientSearchControl";
+            viewVisitsPatientSearchControl.Size = new Size(760, 300);
+            viewVisitsPatientSearchControl.TabIndex = 0;
+            viewVisitsPatientSearchControl.PatientSelected += viewVisitsPatientSearchControl_PatientSelected;
+            // 
+            // viewVisitsErrorLabel
+            // 
+            viewVisitsErrorLabel.AutoEllipsis = true;
+            viewVisitsErrorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            viewVisitsErrorLabel.ForeColor = Color.Red;
+            viewVisitsErrorLabel.Location = new Point(16, 341);
+            viewVisitsErrorLabel.Name = "viewVisitsErrorLabel";
+            viewVisitsErrorLabel.Size = new Size(740, 23);
+            viewVisitsErrorLabel.TabIndex = 2;
+            viewVisitsErrorLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // viewVisitsSelectVisitLabel
+            // 
+            viewVisitsSelectVisitLabel.AutoSize = true;
+            viewVisitsSelectVisitLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            viewVisitsSelectVisitLabel.Location = new Point(16, 366);
+            viewVisitsSelectVisitLabel.Name = "viewVisitsSelectVisitLabel";
+            viewVisitsSelectVisitLabel.Size = new Size(94, 21);
+            viewVisitsSelectVisitLabel.TabIndex = 3;
+            viewVisitsSelectVisitLabel.Text = "Select Visit";
+            // 
+            // viewVisitsVisitGrid
+            // 
+            viewVisitsVisitGrid.AllowUserToAddRows = false;
+            viewVisitsVisitGrid.AllowUserToDeleteRows = false;
+            viewVisitsVisitGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            viewVisitsVisitGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            viewVisitsVisitGrid.Location = new Point(16, 390);
+            viewVisitsVisitGrid.MultiSelect = false;
+            viewVisitsVisitGrid.Name = "viewVisitsVisitGrid";
+            viewVisitsVisitGrid.ReadOnly = true;
+            viewVisitsVisitGrid.RowHeadersVisible = false;
+            viewVisitsVisitGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            viewVisitsVisitGrid.Size = new Size(360, 170);
+            viewVisitsVisitGrid.TabIndex = 4;
+            viewVisitsVisitGrid.DataBindingComplete += viewVisitsVisitGrid_DataBindingComplete;
+            viewVisitsVisitGrid.SelectionChanged += viewVisitsVisitGrid_SelectionChanged;
+            // 
+            // viewVisitsDetailsLabel
+            // 
+            viewVisitsDetailsLabel.AutoSize = true;
+            viewVisitsDetailsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            viewVisitsDetailsLabel.Location = new Point(390, 366);
+            viewVisitsDetailsLabel.Name = "viewVisitsDetailsLabel";
+            viewVisitsDetailsLabel.Size = new Size(101, 21);
+            viewVisitsDetailsLabel.TabIndex = 5;
+            viewVisitsDetailsLabel.Text = "Visit Details";
+            // 
+            // viewVisitsDetailsTextBox
+            // 
+            viewVisitsDetailsTextBox.BackColor = SystemColors.Window;
+            viewVisitsDetailsTextBox.Location = new Point(390, 390);
+            viewVisitsDetailsTextBox.Multiline = true;
+            viewVisitsDetailsTextBox.Name = "viewVisitsDetailsTextBox";
+            viewVisitsDetailsTextBox.ReadOnly = true;
+            viewVisitsDetailsTextBox.ScrollBars = ScrollBars.Vertical;
+            viewVisitsDetailsTextBox.Size = new Size(375, 170);
+            viewVisitsDetailsTextBox.TabIndex = 6;
+            viewVisitsDetailsTextBox.TabStop = false;
+            // 
+            // viewVisitsTestsLabel
+            // 
+            viewVisitsTestsLabel.AutoSize = true;
+            viewVisitsTestsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            viewVisitsTestsLabel.Location = new Point(16, 568);
+            viewVisitsTestsLabel.Name = "viewVisitsTestsLabel";
+            viewVisitsTestsLabel.Size = new Size(47, 21);
+            viewVisitsTestsLabel.TabIndex = 7;
+            viewVisitsTestsLabel.Text = "Tests";
+            // 
+            // viewVisitsTestsGrid
+            // 
+            viewVisitsTestsGrid.AllowUserToAddRows = false;
+            viewVisitsTestsGrid.AllowUserToDeleteRows = false;
+            viewVisitsTestsGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            viewVisitsTestsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            viewVisitsTestsGrid.Location = new Point(16, 592);
+            viewVisitsTestsGrid.MultiSelect = false;
+            viewVisitsTestsGrid.Name = "viewVisitsTestsGrid";
+            viewVisitsTestsGrid.ReadOnly = true;
+            viewVisitsTestsGrid.RowHeadersVisible = false;
+            viewVisitsTestsGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            viewVisitsTestsGrid.Size = new Size(749, 112);
+            viewVisitsTestsGrid.TabIndex = 8;
+            viewVisitsTestsGrid.CellFormatting += viewVisitsTestsGrid_CellFormatting;
+            viewVisitsTestsGrid.DataBindingComplete += viewVisitsTestsGrid_DataBindingComplete;
+            // 
+            // appointmentPatientErrorLabel: field-level validation message
+            appointmentPatientErrorLabel.AutoSize = true;
+            appointmentPatientErrorLabel.ForeColor = Color.Red;
+            appointmentPatientErrorLabel.Location = new Point(116, 379);
+            appointmentPatientErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentPatientErrorLabel.Name = "appointmentPatientErrorLabel";
+            appointmentPatientErrorLabel.Size = new Size(0, 15);
+            appointmentPatientErrorLabel.TabIndex = 100;
+            appointmentPatientErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentPatientErrorLabel);
+            // appointmentDoctorErrorLabel: field-level validation message
+            appointmentDoctorErrorLabel.AutoSize = true;
+            appointmentDoctorErrorLabel.ForeColor = Color.Red;
+            appointmentDoctorErrorLabel.Location = new Point(116, 489);
+            appointmentDoctorErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentDoctorErrorLabel.Name = "appointmentDoctorErrorLabel";
+            appointmentDoctorErrorLabel.Size = new Size(0, 15);
+            appointmentDoctorErrorLabel.TabIndex = 101;
+            appointmentDoctorErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentDoctorErrorLabel);
+            // appointmentDateErrorLabel: field-level validation message
+            appointmentDateErrorLabel.AutoSize = true;
+            appointmentDateErrorLabel.ForeColor = Color.Red;
+            appointmentDateErrorLabel.Location = new Point(116, 543);
+            appointmentDateErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentDateErrorLabel.Name = "appointmentDateErrorLabel";
+            appointmentDateErrorLabel.Size = new Size(0, 15);
+            appointmentDateErrorLabel.TabIndex = 102;
+            appointmentDateErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentDateErrorLabel);
+            // appointmentTimeErrorLabel: field-level validation message
+            appointmentTimeErrorLabel.AutoSize = true;
+            appointmentTimeErrorLabel.ForeColor = Color.Red;
+            appointmentTimeErrorLabel.Location = new Point(116, 597);
+            appointmentTimeErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentTimeErrorLabel.Name = "appointmentTimeErrorLabel";
+            appointmentTimeErrorLabel.Size = new Size(0, 15);
+            appointmentTimeErrorLabel.TabIndex = 103;
+            appointmentTimeErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentTimeErrorLabel);
+            // appointmentReasonErrorLabel: field-level validation message
+            appointmentReasonErrorLabel.AutoSize = true;
+            appointmentReasonErrorLabel.ForeColor = Color.Red;
+            appointmentReasonErrorLabel.Location = new Point(116, 741);
+            appointmentReasonErrorLabel.MaximumSize = new Size(630, 0);
+            appointmentReasonErrorLabel.Name = "appointmentReasonErrorLabel";
+            appointmentReasonErrorLabel.Size = new Size(0, 15);
+            appointmentReasonErrorLabel.TabIndex = 104;
+            appointmentReasonErrorLabel.Text = string.Empty;
+            createAppointmentTabPage.Controls.Add(appointmentReasonErrorLabel);
+            // visitAppointmentErrorLabel: field-level validation message
+            visitAppointmentErrorLabel.AutoSize = true;
+            visitAppointmentErrorLabel.ForeColor = Color.Red;
+            visitAppointmentErrorLabel.Location = new Point(16, 529);
+            visitAppointmentErrorLabel.MaximumSize = new Size(740, 0);
+            visitAppointmentErrorLabel.Name = "visitAppointmentErrorLabel";
+            visitAppointmentErrorLabel.Size = new Size(0, 15);
+            visitAppointmentErrorLabel.TabIndex = 105;
+            visitAppointmentErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(visitAppointmentErrorLabel);
+            // systolicErrorLabel: field-level validation message
+            systolicErrorLabel.AutoSize = true;
+            systolicErrorLabel.ForeColor = Color.Red;
+            systolicErrorLabel.Location = new Point(16, 636);
+            systolicErrorLabel.MaximumSize = new Size(175, 0);
+            systolicErrorLabel.Name = "systolicErrorLabel";
+            systolicErrorLabel.Size = new Size(0, 15);
+            systolicErrorLabel.TabIndex = 106;
+            systolicErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(systolicErrorLabel);
+            // diastolicErrorLabel: field-level validation message
+            diastolicErrorLabel.AutoSize = true;
+            diastolicErrorLabel.ForeColor = Color.Red;
+            diastolicErrorLabel.Location = new Point(205, 636);
+            diastolicErrorLabel.MaximumSize = new Size(175, 0);
+            diastolicErrorLabel.Name = "diastolicErrorLabel";
+            diastolicErrorLabel.Size = new Size(0, 15);
+            diastolicErrorLabel.TabIndex = 107;
+            diastolicErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(diastolicErrorLabel);
+            // pulseErrorLabel: field-level validation message
+            pulseErrorLabel.AutoSize = true;
+            pulseErrorLabel.ForeColor = Color.Red;
+            pulseErrorLabel.Location = new Point(400, 636);
+            pulseErrorLabel.MaximumSize = new Size(125, 0);
+            pulseErrorLabel.Name = "pulseErrorLabel";
+            pulseErrorLabel.Size = new Size(0, 15);
+            pulseErrorLabel.TabIndex = 108;
+            pulseErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(pulseErrorLabel);
+            // bodyTemperatureErrorLabel: field-level validation message
+            bodyTemperatureErrorLabel.AutoSize = true;
+            bodyTemperatureErrorLabel.ForeColor = Color.Red;
+            bodyTemperatureErrorLabel.Location = new Point(540, 636);
+            bodyTemperatureErrorLabel.MaximumSize = new Size(195, 0);
+            bodyTemperatureErrorLabel.Name = "bodyTemperatureErrorLabel";
+            bodyTemperatureErrorLabel.Size = new Size(0, 15);
+            bodyTemperatureErrorLabel.TabIndex = 109;
+            bodyTemperatureErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(bodyTemperatureErrorLabel);
+            // heightErrorLabel: field-level validation message
+            heightErrorLabel.AutoSize = true;
+            heightErrorLabel.ForeColor = Color.Red;
+            heightErrorLabel.Location = new Point(16, 741);
+            heightErrorLabel.MaximumSize = new Size(175, 0);
+            heightErrorLabel.Name = "heightErrorLabel";
+            heightErrorLabel.Size = new Size(0, 15);
+            heightErrorLabel.TabIndex = 110;
+            heightErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(heightErrorLabel);
+            // weightErrorLabel: field-level validation message
+            weightErrorLabel.AutoSize = true;
+            weightErrorLabel.ForeColor = Color.Red;
+            weightErrorLabel.Location = new Point(205, 741);
+            weightErrorLabel.MaximumSize = new Size(175, 0);
+            weightErrorLabel.Name = "weightErrorLabel";
+            weightErrorLabel.Size = new Size(0, 15);
+            weightErrorLabel.TabIndex = 111;
+            weightErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(weightErrorLabel);
+            // symptomsErrorLabel: field-level validation message
+            symptomsErrorLabel.AutoSize = true;
+            symptomsErrorLabel.ForeColor = Color.Red;
+            symptomsErrorLabel.Location = new Point(110, 848);
+            symptomsErrorLabel.MaximumSize = new Size(630, 0);
+            symptomsErrorLabel.Name = "symptomsErrorLabel";
+            symptomsErrorLabel.Size = new Size(0, 15);
+            symptomsErrorLabel.TabIndex = 117;
+            symptomsErrorLabel.Text = string.Empty;
+            orderTestTabPage.Controls.Add(symptomsErrorLabel);
+            // orderTestsVisitErrorLabel: field-level validation message
+            orderTestsVisitErrorLabel.AutoSize = true;
+            orderTestsVisitErrorLabel.ForeColor = Color.Red;
+            orderTestsVisitErrorLabel.Location = new Point(16, 405);
+            orderTestsVisitErrorLabel.MaximumSize = new Size(749, 0);
+            orderTestsVisitErrorLabel.Name = "orderTestsVisitErrorLabel";
+            orderTestsVisitErrorLabel.Size = new Size(0, 15);
+            orderTestsVisitErrorLabel.TabIndex = 112;
+            orderTestsVisitErrorLabel.Text = string.Empty;
+            orderTestsTabPage.Controls.Add(orderTestsVisitErrorLabel);
+            // orderTestsSelectionErrorLabel: field-level validation message
+            orderTestsSelectionErrorLabel.AutoSize = true;
+            orderTestsSelectionErrorLabel.ForeColor = Color.Red;
+            orderTestsSelectionErrorLabel.Location = new Point(40, 567);
+            orderTestsSelectionErrorLabel.MaximumSize = new Size(329, 0);
+            orderTestsSelectionErrorLabel.Name = "orderTestsSelectionErrorLabel";
+            orderTestsSelectionErrorLabel.Size = new Size(0, 15);
+            orderTestsSelectionErrorLabel.TabIndex = 113;
+            orderTestsSelectionErrorLabel.Text = string.Empty;
+            orderTestsTabPage.Controls.Add(orderTestsSelectionErrorLabel);
+            // testResultsVisitErrorLabel: field-level validation message
+            testResultsVisitErrorLabel.AutoSize = true;
+            testResultsVisitErrorLabel.ForeColor = Color.Red;
+            testResultsVisitErrorLabel.Location = new Point(16, 543);
+            testResultsVisitErrorLabel.MaximumSize = new Size(360, 0);
+            testResultsVisitErrorLabel.Name = "testResultsVisitErrorLabel";
+            testResultsVisitErrorLabel.Size = new Size(0, 15);
+            testResultsVisitErrorLabel.TabIndex = 114;
+            testResultsVisitErrorLabel.Text = string.Empty;
+            testResultsTabPage.Controls.Add(testResultsVisitErrorLabel);
+            // testResultsTestErrorLabel: field-level validation message
+            testResultsTestErrorLabel.AutoSize = true;
+            testResultsTestErrorLabel.ForeColor = Color.Red;
+            testResultsTestErrorLabel.Location = new Point(390, 543);
+            testResultsTestErrorLabel.MaximumSize = new Size(375, 0);
+            testResultsTestErrorLabel.Name = "testResultsTestErrorLabel";
+            testResultsTestErrorLabel.Size = new Size(0, 15);
+            testResultsTestErrorLabel.TabIndex = 115;
+            testResultsTestErrorLabel.Text = string.Empty;
+            testResultsTabPage.Controls.Add(testResultsTestErrorLabel);
+            // testResultsValueErrorLabel: field-level validation message
+            testResultsValueErrorLabel.AutoSize = true;
+            testResultsValueErrorLabel.ForeColor = Color.Red;
+            testResultsValueErrorLabel.Location = new Point(150, 723);
+            testResultsValueErrorLabel.MaximumSize = new Size(600, 0);
+            testResultsValueErrorLabel.Name = "testResultsValueErrorLabel";
+            testResultsValueErrorLabel.Size = new Size(0, 15);
+            testResultsValueErrorLabel.TabIndex = 116;
+            testResultsValueErrorLabel.Text = string.Empty;
+            testResultsTabPage.Controls.Add(testResultsValueErrorLabel);
+            // Additional error rows stay reachable on smaller windows.
+            createAppointmentTabPage.AutoScroll = true;
+            createAppointmentTabPage.AutoScrollMinSize = new Size(0, 880);
+            orderTestTabPage.AutoScrollMinSize = new Size(0, 1080);
+            testResultsTabPage.AutoScroll = true;
+            testResultsTabPage.AutoScrollMinSize = new Size(0, 860);
+
+            // AppointmentForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = cancelButton;
+            ClientSize = new Size(800, 760);
+            Controls.Add(appointmentTabControl);
+            Controls.Add(loggedInLabel);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "AppointmentForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Create Appointment";
+            appointmentTabControl.ResumeLayout(false);
+            createAppointmentTabPage.ResumeLayout(false);
+            createAppointmentTabPage.PerformLayout();
+            orderTestTabPage.ResumeLayout(false);
+            orderTestTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)visitCheckupAppointmentDataGridView).EndInit();
+            orderTestsTabPage.ResumeLayout(false);
+            orderTestsTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)orderTestsVisitGrid).EndInit();
+            testResultsTabPage.ResumeLayout(false);
+            testResultsTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)testResultsVisitGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)testResultsTestsGrid).EndInit();
+            viewVisitsTabPage.ResumeLayout(false);
+            viewVisitsTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)viewVisitsVisitGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)viewVisitsTestsGrid).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private Label loggedInLabel;
+        private Label titleLabel;
+        private PatientSearchControl createAppointmentPatientSearchControl;
+        private Label patientNameLabel;
+        private TextBox patientNameTextBox;
+        private Label patientDobLabel;
+        private TextBox patientDobTextBox;
+        private Label inactivePatientLabel;
+        private Label doctorLabel;
+        private ComboBox doctorComboBox;
+        private Label dateLabel;
+        private DateTimePicker appointmentDatePicker;
+        private Label timeSlotLabel;
+        private ComboBox appointmentTimeComboBox;
+        private Label availabilityStatusLabel;
+        private Label reasonLabel;
+        private TextBox reasonTextBox;
+        private Label errorLabel;
+        private Button bookButton;
+        private Button cancelButton;
+        private TabControl appointmentTabControl;
+        private TabPage createAppointmentTabPage;
+        private TabPage orderTestTabPage;
+        private TabPage orderTestsTabPage;
+        private PatientSearchControl orderTestsPatientSearchControl;
+        private DataGridView orderTestsVisitGrid;
+        private DataGridViewTextBoxColumn orderTestsAppointmentIdColumn;
+        private DataGridViewTextBoxColumn orderTestsDoctorColumn;
+        private DataGridViewTextBoxColumn orderTestsDateColumn;
+        private Label orderTestsErrorLabel;
+        private Label orderTestsTitleLabel;
+        private Label orderTestsSelectVisitLabel;
+        private Button orderTestsSubmitButton;
+        private Label label1;
+        private PatientSearchControl visitCheckupPatientSearchControl;
+        private DataGridView visitCheckupAppointmentDataGridView;
+        private DataGridViewTextBoxColumn appointmentIdColumn;
+        private DataGridViewTextBoxColumn doctorNameColumn;
+        private DataGridViewTextBoxColumn timeColumn;
+        private DataGridViewTextBoxColumn reasonColumn;
+        private Label visitAndOrderTestErrorLabel;
+        private Label label2;
+        private Label availableTestsLabel;
+        private CheckedListBox orderTestsUnorderedTestsCheckedListBox;
+        private Label visitDetailsLabel;
+        private Label systolicLabel;
+        private TextBox systolicTextBox;
+        private Label diastolicLabel;
+        private TextBox diastolicTextBox;
+        private Label pulseLabel;
+        private TextBox pulseTextBox;
+        private Label bodyTemperatureLabel;
+        private TextBox bodyTemperatureTextBox;
+        private Label heightLabel;
+        private TextBox heightTextBox;
+        private Label weightLabel;
+        private TextBox weightTextBox;
+        private Label symptomsLabel;
+        private TextBox symptomsTextBox;
+        private Label initialDiagnosisLabel;
+        private TextBox initialDiagnosisTextBox;
+        private Button submitVisitButton;
+        private TabPage testResultsTabPage;
+        private Label testResultsTitleLabel;
+        private PatientSearchControl testResultsPatientSearchControl;
+        private Label testResultsErrorLabel;
+        private Label testResultsSelectVisitLabel;
+        private DataGridView testResultsVisitGrid;
+        private DataGridViewTextBoxColumn testResultsVisitDateColumn;
+        private DataGridViewTextBoxColumn testResultsVisitDoctorColumn;
+        private DataGridViewTextBoxColumn testResultsVisitStatusColumn;
+        private Label testResultsOrderedTestsLabel;
+        private DataGridView testResultsTestsGrid;
+        private DataGridViewTextBoxColumn testResultsTestNameColumn;
+        private DataGridViewTextBoxColumn testResultsNormalRangeColumn;
+        private DataGridViewTextBoxColumn testResultsResultColumn;
+        private DataGridViewTextBoxColumn testResultsAbnormalColumn;
+        private DataGridViewTextBoxColumn testResultsPerformedColumn;
+        private Label testResultsPatientInfoLabel;
+        private Label testResultsSelectedTestLabel;
+        private Label testResultsDatePerformedLabel;
+        private DateTimePicker testResultsDatePerformedPicker;
+        private Label testResultsResultLabel;
+        private TextBox testResultsResultTextBox;
+        private CheckBox testResultsAbnormalCheckBox;
+        private Button testResultsSaveButton;
+        private TabPage viewVisitsTabPage;
+        private Label viewVisitsTitleLabel;
+        private PatientSearchControl viewVisitsPatientSearchControl;
+        private Label viewVisitsErrorLabel;
+        private Label viewVisitsSelectVisitLabel;
+        private DataGridView viewVisitsVisitGrid;
+        private DataGridViewTextBoxColumn viewVisitsVisitDateColumn;
+        private DataGridViewTextBoxColumn viewVisitsVisitDoctorColumn;
+        private DataGridViewTextBoxColumn viewVisitsVisitStatusColumn;
+        private Label viewVisitsDetailsLabel;
+        private TextBox viewVisitsDetailsTextBox;
+        private Label viewVisitsTestsLabel;
+        private DataGridView viewVisitsTestsGrid;
+        private DataGridViewTextBoxColumn viewVisitsTestNameColumn;
+        private DataGridViewTextBoxColumn viewVisitsNormalRangeColumn;
+        private DataGridViewTextBoxColumn viewVisitsResultColumn;
+        private DataGridViewTextBoxColumn viewVisitsAbnormalColumn;
+        private DataGridViewTextBoxColumn viewVisitsPerformedColumn;
+        private TextBox visitCheckupFinalDiagnosisTextBox;
+        private Label visitCheckupFinalDiagnosisLabel;
+        private Label label5;
+        private CheckedListBox orderTestsAlreadyOrderedTestsCheckedListBox;
+        // Individual field-level validation messages.
+        private Label appointmentPatientErrorLabel;
+        private Label appointmentDoctorErrorLabel;
+        private Label appointmentDateErrorLabel;
+        private Label appointmentTimeErrorLabel;
+        private Label appointmentReasonErrorLabel;
+        private Label visitAppointmentErrorLabel;
+        private Label systolicErrorLabel;
+        private Label diastolicErrorLabel;
+        private Label pulseErrorLabel;
+        private Label bodyTemperatureErrorLabel;
+        private Label heightErrorLabel;
+        private Label weightErrorLabel;
+        private Label symptomsErrorLabel;
+        private Label orderTestsVisitErrorLabel;
+        private Label orderTestsSelectionErrorLabel;
+        private Label testResultsVisitErrorLabel;
+        private Label testResultsTestErrorLabel;
+        private Label testResultsValueErrorLabel;
+
+    }
+}

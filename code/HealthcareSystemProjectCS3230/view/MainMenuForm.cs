@@ -1,0 +1,139 @@
+﻿using HealthcareSystemProjectCS3230.model;
+
+namespace HealthcareSystemProjectCS3230.view
+{
+    public partial class MainMenuForm : Form
+    {
+        private LoginSession _loginSession;
+        public MainMenuForm(LoginSession loginSession)
+        {
+            _loginSession = loginSession;
+            InitializeComponent();
+            SetupSession();
+        }
+
+
+        private void SetupSession()
+        {
+            FormatUsernameLabel(_loginSession.FullName, _loginSession.Username, _loginSession.id);
+            SetButtonVisibility();
+        }
+
+        private void FormatUsernameLabel(string fullName, string username, int id)
+        {
+            usernameLabel.Text = @"Hello, " + fullName + @"!" + Environment.NewLine + @"Username: " + username + Environment.NewLine + @"ID: " + id;
+        }
+
+        private void SetButtonVisibility()
+        {
+            DisableAllButtons();
+            if (string.Equals(_loginSession.AccountType, "nurse", StringComparison.CurrentCultureIgnoreCase))
+            {
+                EnableNurseButtons();
+            }
+            else
+            {
+                nurseManagerButton.Visible = true;
+                nurseManagerButton.Enabled = true;
+                statisticsButton.Visible = true;
+                statisticsButton.Enabled = true;
+            }
+        }
+
+        private void DisableAllButtons()
+        {
+            registerPatientButton.Enabled = false;
+            appointmentButton.Enabled = false;
+            editPatientButton.Enabled = false;
+            findAppointmentButton.Enabled = false;
+            registerPatientButton.Visible = false;
+            appointmentButton.Visible = false;
+            editPatientButton.Visible = false;
+            findAppointmentButton.Visible = false;
+            nurseManagerButton.Enabled = false;
+            nurseManagerButton.Visible = false;
+            statisticsButton.Enabled = false;
+            statisticsButton.Visible = false;
+        }
+
+        private void EnableNurseButtons()
+        {
+            registerPatientButton.Enabled = true;
+            appointmentButton.Enabled = true;
+            editPatientButton.Enabled = true;
+            findAppointmentButton.Enabled = true;
+            registerPatientButton.Visible = true;
+            appointmentButton.Visible = true;
+            editPatientButton.Visible = true;
+            findAppointmentButton.Visible = true;
+        }
+
+        private void appointmentButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            var appointmentForm = new AppointmentForm();
+            appointmentForm.setLoginSession(_loginSession);
+            appointmentForm.ShowDialog();
+
+
+            Show();
+        }
+
+
+
+        private void registerPatientButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+            using var reg = new RegisterPatientForm(_loginSession);
+            reg.ShowDialog();
+            Show();
+        }
+
+        private void editPatientButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+            using var edit = new EditPatientForm(_loginSession);
+            edit.ShowDialog();
+            Show();
+        }
+
+        private void findAppointmentButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            using (var form = new FindAppointmentForm())
+            {
+                form.setLoginSession(_loginSession);
+                form.ShowDialog();
+            }
+
+            Show();
+        }
+
+        private void nurseManagerButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            var nurseForm = new NurseForm();
+            nurseForm.ShowDialog();
+
+            Show();
+        }
+
+        private void LogoutButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void statisticsButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+
+            var adminStatsForm = new AdminStatsForm();
+            adminStatsForm.ShowDialog();
+
+            Show();
+        }
+    }
+}
